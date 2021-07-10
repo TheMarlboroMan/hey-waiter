@@ -1,0 +1,13 @@
+world 400 400
+table_margin 10
+table_size 40 40
+player 0 0 20 20
+player_speed 200
+table 80 80
+table 80 180
+table 80 280
+table 320 40
+table 320 120
+table 320 220
+bar 100 350 100 50 10
+trash 100 0 20 20 10

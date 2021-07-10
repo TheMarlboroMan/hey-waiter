@@ -1,0 +1,6 @@
+[[game-pick_consumables]]{{Fill tray}}
+[[game-empty_tray]]{{Empty tray}}
+[[game-take_order]]{{Take order}}
+[[game-serve_order]]{{Serve}}
+[[game-clean_table]]{{Clean table}}
+[[game-drop_trash]]{{Drop trash}}

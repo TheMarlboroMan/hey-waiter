@@ -1,0 +1,16 @@
+Setup was succesful!.
+
+Before compiling you must have built all previous dependencies as stated in the original project's README.md file.
+
+Once the dependencies are ready you will be able to compile and try the project with make -f makefile_linux|win all. The flags of the compiler will be set to enable debugging.
+
+If you haven't do so yet, please, build the libdansdl2, dfw, log and tools documentation with doxygen!.
+
+If you want to, you cd into scripts and do "./create_controller controller_name" to automatically create a controller and add it to the dependency list. This will also add the controller to the states.h file and the state_driver.* files through the magic of sed. If no initial controller was setup, this script will set it.
+
+You can many wonderful examples and information in the original project.
+
+To build the project, head to the build directory and execute "make". Remember that the project won't be functional until a starting controller is set!.
+
+Happy hacking :).
+

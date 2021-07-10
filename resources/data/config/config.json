@@ -1,0 +1,42 @@
+{
+	"app":{
+		"dummy":true
+	}, 
+	"audio":{
+		"audio_buffers":1024, 
+		"audio_channels":16, 
+		"audio_out":2, 
+		"audio_ratio":44100, 
+		"music_volume":127, 
+		"sound_volume":127
+	}, 
+	"input":{
+		"down":[
+			0, 0, 81
+		], 
+		"left":[
+			0, 0, 80
+		], 
+		"right":[
+			0, 0, 79
+		], 
+		"up":[
+			0, 0, 82
+		],
+		"interact":[
+			0, 0, 44
+		]
+	}, 
+	"meta":{
+		"v":1
+	}, 
+	"video":{
+		"double_buffer":1, 
+		"fullscreen":false, 
+		"vsync":false, 
+		"window_show_cursor":false, 
+		"window_title":"Hey waiter!", 
+		"window_h_px":500, 
+		"window_w_px":500
+	}
+}
