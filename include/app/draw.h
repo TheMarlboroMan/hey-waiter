@@ -22,6 +22,7 @@ class draw {
 
 	void				draw_interactions(ldv::screen&, const app::game&);
 	void				draw_fill_tray(ldv::screen&, const app::game&);
+	void				draw_serve(ldv::screen&, const app::game&);
 	ldv::rect			to_video(const box&) const;
 
 	const ldtools::ttf_manager&	ttf_manager;

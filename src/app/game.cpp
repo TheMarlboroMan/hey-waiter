@@ -27,6 +27,8 @@ void game::tick(
 	float _delta
 ) {
 
+	//TODO: Tick the tables, of course.
+
 	switch(current_mode) {
 
 		case modes::movement: tick_movement(_delta); break;
@@ -53,7 +55,7 @@ void game::tick_movement(
 }
 
 void game::tick_fill_tray(
-	float _delta
+	float /*_delta*/
 ) {
 
 	if(game_input.select_left) {
@@ -93,7 +95,7 @@ void game::tick_fill_tray(
 }
 
 void game::tick_serve(
-	float _delta
+	float
 ) {
 	//TODO:
 }

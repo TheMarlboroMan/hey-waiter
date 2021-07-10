@@ -40,30 +40,32 @@ void draw::do_draw(
 	const app::game& _game
 ) {
 
-	_screen.clear(ldv::rgba8(0,0,255,255));
+	_screen.clear(ldv::rgba8(0,0,0,255));
 
 	const auto wbox=_game.world_instance.get_collision_box();
 	
 	ldv::box_representation bg_box(
 		to_video(wbox),
-		ldv::rgba8(32, 32, 32, 255)
+		ldv::rgba8(192, 192, 192, 255)
 	);
 
 	bg_box.draw(_screen, _camera);
 
 	for(const auto& table : _game.tables) {
 
-		ldv::box_representation interaction_box(
-			to_video(table.get_interaction_box()),
-			ldv::rgba8(128, 255, 32, 64)
-		);
+		auto table_color=ldv::rgba8(64, 64, 64, 255);
+
+		//TODO: 
+		//demanding table: blue,
+		//waiting table: yellow
+		//dirty table: red
+		//eating table: green
 
 		ldv::box_representation collision_box(
 			to_video(table.get_collision_box()),
-			ldv::rgba8(255, 32, 32, 255)
+			table_color
 		);
 
-		interaction_box.draw(_screen, _camera);
 		collision_box.draw(_screen, _camera);
 	}
 
@@ -104,11 +106,10 @@ void draw::do_draw(
 		case game::modes::fill_tray:
 
 			draw_fill_tray(_screen, _game);
-			//TODO: draw selection and tray and shit.
 		break;
 		case game::modes::serve:
 
-			//TODO:
+			draw_serve(_screen, _game);
 		break;
 	}
 }
@@ -211,4 +212,12 @@ void draw::draw_fill_tray(
 	};
 
 	txt.draw(_screen);
+}
+
+void draw::draw_serve(
+	ldv::screen&, 
+	const app::game&
+) {
+
+	//TODO: draw tray and table and shit (up to pull order)
 }

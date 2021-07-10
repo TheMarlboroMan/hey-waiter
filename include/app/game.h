@@ -64,6 +64,7 @@ class game {
 	app::input		game_input;
 	app::bar_selector bar_selector_instance;
 	interaction_types current_interaction_type{interaction_types::none};
+	app::table *	current_table{nullptr};
 
 	friend class 	draw; //Yeah that's right!
 };
