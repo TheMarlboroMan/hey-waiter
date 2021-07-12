@@ -11,7 +11,7 @@ class table {
 
 	public:
 
-								table(int, int, int, int, int);
+								table(int, int, int, int, int, directions);
 	bool						is_demanding_attention() const {return state==states::demanding_attention;}
 	bool						is_waiting_order() const {return state==states::waiting_order;}
 	bool						is_dirty() const {return state==states::dirty;}
@@ -27,6 +27,7 @@ class table {
 	states 						state{states::free};
 	box							collision_box,
 								interaction_box;
+	directions					customer_direction;
 	std::unique_ptr<customer>	customer_instance{nullptr};
 };
 

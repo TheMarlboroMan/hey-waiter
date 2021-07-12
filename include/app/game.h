@@ -8,6 +8,7 @@
 #include "tray.h"
 #include "bar_selector.h"
 #include "input.h"
+#include "loop_stage.h"
 
 #include <vector>
 #include <optional>
@@ -60,11 +61,13 @@ class game {
 	app::bar		bar_instance;
 	app::trash		trash_instance;
 	std::vector<table>	tables;
+	std::vector<loop_stage>	stages;
 	app::tray		player_tray;
 	app::input		game_input;
 	app::bar_selector bar_selector_instance;
 	interaction_types current_interaction_type{interaction_types::none};
 	app::table *	current_table{nullptr};
+	int				game_seconds{0};
 
 	friend class 	draw; //Yeah that's right!
 };

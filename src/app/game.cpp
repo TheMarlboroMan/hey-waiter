@@ -20,7 +20,16 @@ void game::init(
 ) {
 
 	app::world_reader wr;
-	wr.read(_path, world_instance, player_instance, bar_instance, trash_instance, tables);
+	wr.read(
+		_path, 
+		world_instance, 
+		player_instance, 
+		bar_instance, 
+		trash_instance, 
+		tables, 
+		stages,
+		game_seconds
+	);
 }
 
 void game::tick(

@@ -15,7 +15,9 @@ void world_reader::read(
 	app::player& _player,
 	app::bar& _bar,
 	app::trash& _trash,
-	std::vector<table>& _tables
+	std::vector<table>& _tables,
+	std::vector<loop_stage>& _stages,
+	int& _game_length
 ) {
 
 	std::ifstream infile(_path);
@@ -39,6 +41,11 @@ void world_reader::read(
 		tools::trim(line);
 
 		if(!line.size()) {
+
+			continue;
+		}
+
+		if(line[0]=='#') {
 
 			continue;
 		}
@@ -78,11 +85,29 @@ void world_reader::read(
 
 			read_as_trash(ss, _trash);
 		}
+		else if(word=="game_length") {
+
+			_game_length=read_as_game_length(ss);
+		}
+		else if(word=="loop") {
+
+			read_as_loop_stage(ss, _stages);
+		}
 		else {
 
 			throw std::runtime_error(std::string{"world_reader cannot interpret line '"}+line+"'");
 		}
 	}
+
+	if(!_stages.size()) {
+
+		throw std::runtime_error("no game loop entries!");
+	}
+
+	//TODO: sort loop entries.
+
+	//TODO: make sure the times do not overlap.
+
 }
 
 //We don't actually need to pass the whole line, as the stringstream is still
@@ -170,15 +195,25 @@ void world_reader::read_as_table(
 	}
 
 	int x{0}, y{0};
+	char direction{0};
 
-	_ss>>x>>y;
+	_ss>>x>>y>>direction;
 
 	if(_ss.fail()) {
 
 		throw std::runtime_error("failed to read table position");
 	}
 
-	_tables.push_back({x, y, table_w, table_h, table_margin});
+	directions customer_direction{directions::left};
+	
+	switch(direction) {
+		case 'L': customer_direction=directions::left; break;
+		case 'R': customer_direction=directions::right; break;
+		default:
+			throw std::runtime_error("bad table direction");
+	}
+
+	_tables.push_back({x, y, table_w, table_h, table_margin, customer_direction});
 }
 
 void world_reader::read_as_bar(
@@ -213,4 +248,96 @@ void world_reader::read_as_trash(
 	}
 
 	_trash=app::trash(x, y, w, h, margin);
+}
+
+int world_reader::read_as_game_length(
+	std::stringstream& _ss
+) {
+
+	int length{0};
+
+	_ss>>length;
+
+	if(_ss.fail()) {
+
+		throw std::runtime_error("failed to read game length");
+	}
+
+	if(length <= 0) {
+
+		throw std::runtime_error("game length cannot be zero or negative");
+	}
+
+	return length;
+}
+
+void world_reader::read_as_loop_stage(
+	std::stringstream& _ss, 
+	std::vector<loop_stage>& _stages
+) {
+
+	int until{0}, chance{0}, cooloff{0}, min_orders{0},
+		max_orders{0}, min_consumables{0}, max_consumables{0};
+
+	_ss>>until>>chance>>cooloff>>min_orders>>max_orders>>min_consumables>>max_consumables;
+
+	if(_ss.fail()) {
+
+		throw std::runtime_error("failed to read game loop");
+	}
+
+	if(until <= 0) {
+
+		throw std::runtime_error("game loop time cannot be zero or negative");
+	}
+
+	if(chance < 0 || chance > 100) {
+
+		throw std::runtime_error("game loop chance must be between 0 and 100");
+	}
+
+	if(cooloff <= 0) {
+
+		throw std::runtime_error("game loop cooloff cannot be zero or negative");
+	}
+
+	if(min_orders <= 0) {
+
+		throw std::runtime_error("game loop min_orders cannot be zero or negative");
+	}
+
+	if(max_orders <= 0) {
+
+		throw std::runtime_error("game loop max_orders cannot be zero or negative");
+	}
+
+	if(max_orders < min_orders) {
+
+		throw std::runtime_error("game loop max_orders cannot be lesser than min_orders");
+	}
+
+	if(min_consumables <= 0) {
+
+		throw std::runtime_error("game loop min_consumables cannot be zero or negative");
+	}
+
+	if(max_consumables <= 0) {
+
+		throw std::runtime_error("game loop max_consumables cannot be zero or negative");
+	}
+
+	if(max_consumables < min_consumables) {
+
+		throw std::runtime_error("game loop max_consumables cannot be lesser than min_consumables");
+	}
+
+	_stages.push_back({
+		until, 
+		chance, 
+		cooloff, 
+		min_orders,
+		max_orders, 
+		min_consumables, 
+		max_consumables
+	});
 }

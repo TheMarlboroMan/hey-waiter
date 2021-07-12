@@ -14,6 +14,7 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/bar_selector.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/trash.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/tray.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/loop_stage.cpp
 	PARENT_SCOPE
 )
 
