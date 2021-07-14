@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <stdexcept>
+#include <algorithm>
 
 using namespace app;
 
@@ -104,10 +105,33 @@ void world_reader::read(
 		throw std::runtime_error("no game loop entries!");
 	}
 
-	//TODO: sort loop entries.
+	//sort loop entries.
+	std::sort(
+		std::begin(_stages), 
+		std::end(_stages),
+		[](const loop_stage& _a, const loop_stage& _b) {
+			return _a.get_until() < _b.get_until();
+		}
+	);
 
-	//TODO: make sure the times do not overlap.
+	//make sure the times do not overlap.
+	std::vector<int> untils;
+	std::transform(
+		std::begin(_stages),
+		std::end(_stages),
+		std::back_inserter(untils),
+		[](const loop_stage& _item) {return _item.get_until();}
+	);
 
+	untils.erase(
+		std::unique(std::begin(untils), std::end(untils)),
+		std::end(untils)
+	);
+
+	if(untils.size() != _stages.size()) {
+
+		throw std::runtime_error("repeated 'until' in loop entries!");
+	}
 }
 
 //We don't actually need to pass the whole line, as the stringstream is still
