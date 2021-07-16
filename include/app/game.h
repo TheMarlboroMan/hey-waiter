@@ -45,6 +45,7 @@ class game {
 		serve
 	};
 
+	void			reset();
 	void			tick_movement(float _delta);
 	void			tick_fill_tray(float _delta);
 	void			tick_serve(float _delta);
@@ -54,6 +55,8 @@ class game {
 	void			collision_response(app::axes, const app::box&);
 	void			evaluate_interactions();
 	void			process_interactions();
+	void			advance_stage();
+	void			game_over();
 	
 	modes			current_mode{modes::movement};
 	app::world		world_instance;
@@ -68,6 +71,8 @@ class game {
 	interaction_types current_interaction_type{interaction_types::none};
 	app::table *	current_table{nullptr};
 	int				game_seconds{0};
+	std::size_t		current_stage{0};
+	float			current_game_seconds{0.f};
 
 	friend class 	draw; //Yeah that's right!
 };

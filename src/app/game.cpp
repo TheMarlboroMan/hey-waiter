@@ -19,6 +19,9 @@ void game::init(
 	const std::string& _path
 ) {
 
+	tables.clear();
+	stages.clear();
+
 	app::world_reader wr;
 	wr.read(
 		_path, 
@@ -30,6 +33,8 @@ void game::init(
 		stages,
 		game_seconds
 	);
+
+	reset();
 }
 
 void game::tick(
@@ -37,6 +42,25 @@ void game::tick(
 ) {
 
 	//TODO: Tick the tables, of course.
+
+	current_game_seconds+=_delta;
+
+std::cout<<"["<<current_stage<<"] "<<current_game_seconds<<" /"<<game_seconds<<std::endl;
+
+	if(current_game_seconds > game_seconds) {
+
+		std::cout<<"game over"<<std::endl;
+		game_over();
+		return;
+	}
+
+	if(current_game_seconds > stages[current_stage].get_until() && current_stage != stages.size() -1) {
+
+		//TODO:
+		advance_stage();
+	}
+
+
 
 	switch(current_mode) {
 
@@ -342,4 +366,30 @@ void game::collision_response(
 			);
 		break;
 	}
+}
+
+void game::advance_stage() {
+
+	++current_stage;
+}
+
+void game::reset() {
+
+	//TODO: should actually init...
+
+	current_stage=0;
+	current_game_seconds=0.f;
+	current_table=nullptr;
+	
+	//TODO: reset player
+	//TODO: reset tables
+	//TODO: reset player tray
+	//TODO: reset	app::bar_selector bar_selector_instance;
+	current_interaction_type=interaction_types::none;
+	
+}
+
+void game::game_over() {
+
+	std::terminate();
 }
