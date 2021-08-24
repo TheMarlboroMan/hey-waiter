@@ -20,6 +20,7 @@ class tray {
 	void						drop_trash() {trash=false;}
 	void						empty() {contents.clear();}
 	void						pop();
+	void						reset();
 	bool						is_full() const {return size()==max_size;}
 	void						add(consumable _val) {contents.push_back(_val);}
 	const std::vector<consumable> get() const {return contents;}

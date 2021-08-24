@@ -17,6 +17,7 @@ game::game(
 	log(plog),
 	env{_env},
 	camera{ {0,0,500,500},{0,0} },
+	game_instance{plog},
 	draw_instance{_ttf_manager, _i8n}
 {
 

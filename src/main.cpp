@@ -4,7 +4,9 @@
 #include "../include/dfwimpl/state_driver.h"
 
 #include <lm/file_logger.h>
+#include <lm/ostream_logger.h>
 #include <lm/sentry.h>
+#include <lm/definitions.h>
 
 #include <dfw/kernel.h>
 
@@ -16,6 +18,7 @@
 int main(int argc, char ** argv)
 {
 	//Init libdansdl2 log.
+	//TODO: Make void.
 	ldt::log_lsdl::set_type(ldt::log_lsdl::types::file);
 	ldt::log_lsdl::set_filename("logs/libdansdl2.log");
 
@@ -23,7 +26,8 @@ int main(int argc, char ** argv)
 	tools::arg_manager carg(argc, argv);
 
 	//Init application log.
-	lm::file_logger log_app("logs/app.log");
+//	lm::file_logger log_app("logs/app.log");
+	lm::ostream_logger log_app(std::cout);
 	lm::log(log_app, lm::lvl::info)<<"starting main process..."<<std::endl;
 
 	//Init...

@@ -1,12 +1,21 @@
 #include <app/game.h>
 #include <app/space.h>
+#include <app/order.h>
 #include <app/world_reader.h>
+#include <app/order_generator.h>
+#include <app/log.h>
 
+#include <tools/number_generator.h>
+#include <lm/sentry.h>
 #include <iostream>
+#include <vector>
 
 using namespace app;
 
-game::game():
+game::game(
+	lm::logger& _logger
+):
+	log{_logger},
 	world_instance{0,0},
 	player_instance{0,0,0,0},
 	bar_instance{0,0,0,0,0},
@@ -41,11 +50,9 @@ void game::tick(
 	float _delta
 ) {
 
-	//TODO: Tick the tables, of course.
-
 	current_game_seconds+=_delta;
 
-std::cout<<"["<<current_stage<<"] "<<current_game_seconds<<" /"<<game_seconds<<std::endl;
+//std::cout<<"["<<current_stage<<"] "<<current_game_seconds<<" /"<<game_seconds<<std::endl;
 
 	if(current_game_seconds > game_seconds) {
 
@@ -56,18 +63,113 @@ std::cout<<"["<<current_stage<<"] "<<current_game_seconds<<" /"<<game_seconds<<s
 
 	if(current_game_seconds > stages[current_stage].get_until() && current_stage != stages.size() -1) {
 
-		//TODO:
+		log<<lm::debug<<"advancing to next stage "<<std::endl;
 		advance_stage();
 	}
 
-
+	tick_tables(_delta);
 
 	switch(current_mode) {
 
 		case modes::movement: tick_movement(_delta); break;
 		case modes::fill_tray: tick_fill_tray(_delta); break;
 		case modes::serve: tick_serve(_delta); break;
+		case modes::take_order: tick_take_order(_delta); break;
 	}
+}
+
+void game::tick_tables(
+	float _delta
+) {
+
+	for(auto& table : tables) {
+
+		table.tick(_delta);
+		//empty table, ready to roll chances...
+		if(table.can_roll_for_customer()) {
+
+			roll_table(table);
+			continue;
+		}
+
+		//customer finally arrived at table.
+		if(table.is_customer_arrived()) {
+
+			//TODO: should this value be fixed???
+			table.set_to_demand_attention(30.f);
+			continue;
+		}
+
+		//customer got tired of waiting for attention / order and leaves.
+		if(table.is_customer_tired_of_waiting()) {
+
+			//if the customer had something, the table is left dirty
+			//TODO: fixed value??
+			table.set_to_customer_leaving(30.f);
+			continue;
+		}
+
+		if(table.is_done_with_order()) {
+
+			//either demand attention for the next order or leave when done.
+			//TODO: Fixed value??
+			table.set_to_ready_next_order_or_leave(30.f);
+			continue;
+		}
+
+		if(table.has_customer_left()) {
+
+			table.set_free();
+			continue;
+		}
+	}
+}
+
+void game::roll_table(
+	app::table& _table
+) {
+
+	const auto& stage=stages[current_stage];
+
+	auto chance=stage.get_customer_chance();
+	auto gen=tools::int_generator(0, 100);
+	auto val=gen();
+
+	log<<lm::debug<<_table<<" rolled "<<val<<"/"<<chance<<std::endl;
+
+	if(val < chance) {
+
+		log<<lm::debug<<_table<<" will get customer"<<std::endl;
+
+		//calculate the order now...
+		//first, a random timer for how much the customer takes to arrive,
+		auto time_gen=tools::int_generator(3000, 8000);
+		float customer_arrival_time=(float)time_gen() / 1000.f;
+		log<<lm::debug<<"customer arrival time set at "<<customer_arrival_time<<std::endl;
+
+		//We also need to set the orders for this table...
+		//TODO: std::move this too?
+		app::order_generator ordgen;
+		auto orders=ordgen.generate(
+			stage.get_min_orders(),
+			stage.get_max_orders(),
+			stage.get_min_consumables(),
+			stage.get_min_consumables()
+		);
+
+		log<<lm::debug<<"will get "<<orders.size()<<" orders"<<std::endl;
+		std::stringstream ss;
+		for(const auto& o : orders) {
+
+			log<<lm::debug<<o<<std::endl;
+		}
+
+		_table.set_to_customer_arrival(customer_arrival_time, std::move(orders));
+		return;
+	}
+
+	//reset the timer...
+	_table.set_timer(stages[current_stage].get_customer_cooloff());
 }
 
 void game::tick_movement(
@@ -79,7 +181,7 @@ void game::tick_movement(
 	player_motion_phase(_delta);
 
 	//Can the player interact with anything?
-		evaluate_interactions();
+	evaluate_interactions();
 
 	if(game_input.interact) {
 
@@ -115,7 +217,6 @@ void game::tick_fill_tray(
 		return;
 	}
 
-
 	if(game_input.interact) {
 
 		if(player_tray.is_full()) {
@@ -127,12 +228,66 @@ void game::tick_fill_tray(
 	}
 }
 
+void game::tick_take_order(
+	float _delta
+) {
+
+	state_time_counter-=_delta;
+
+	//The state time counter must run out before we can go again.
+	if(game_input.interact && state_time_counter <= 0.f) {
+
+		//TODO: Should this be fixed???
+		current_table->set_to_wait_for_order(30.f);
+		current_mode=modes::movement;
+	}
+}
+
 void game::tick_serve(
 	float
 ) {
 	//TODO:
+/*
+Show tray, controls to add stuff, some other input to finish!
+*/
+
+	if(game_input.select_left) {
+
+		return;
+	}
+	
+	if(game_input.select_right) {
+
+		return;
+	}
+
+	if(game_input.select_down) {
+
+		return;
+	}
+	
+	if(game_input.select_up) {
+
+		return;
+	}
+
+	if(game_input.interact) {
+	
+		//TODO: compare products being served to order!
+		//TODO: if the order had at least 1 ok product...
+		current_table->set_to_consuming(30.f);
+
+		//TODO: else...
+		//current_table->set_to_ready_next_order_or_leave(30.f);
+		current_mode=modes::movement;
+
+		return;
+	}
 }
+
 void game::evaluate_interactions() {
+
+	current_table=nullptr;
 
 	const auto& player_box=player_instance.get_collision_box();
 	current_interaction_type=interaction_types::none;
@@ -161,7 +316,7 @@ void game::evaluate_interactions() {
 
 	if(!player_tray.has_trash()) {
 
-		for(const auto& table : tables) {
+		for(auto& table : tables) {
 
 			if(!table.can_be_interacted_with()) {
 
@@ -172,21 +327,24 @@ void game::evaluate_interactions() {
 	
 				if(table.is_demanding_attention() && player_tray.is_empty()) {
 
+					current_table=&table;
 					current_interaction_type=interaction_types::take_order;
 					return;
 				}
 
 				if(table.is_waiting_order() && !player_tray.is_empty()) {
 
+					current_table=&table;
 					current_interaction_type=interaction_types::serve_order;
 					return;
 				}
 
 				if(table.is_dirty() && player_tray.is_empty()) {
 
+					current_table=&table;
 					current_interaction_type=interaction_types::clean_table;
 					return;
-				}				
+				}
 			}
 		}
 	}
@@ -211,14 +369,18 @@ void game::process_interactions() {
 			player_tray.empty();
 			return;
 		break;
-		case game::interaction_types::take_order:
-
-			//TODO: 
-
+		case game::interaction_types::take_order: 
+			
+			current_table->pop_order();
+			current_mode=modes::take_order;
+			//TODO: Should be fixed const?
+			state_time_counter=0.5f;
+			return;
 		break;
 		case game::interaction_types::serve_order:
 
-			//TODO: 
+			current_mode=modes::serve;
+			return;
 		break;
 		case game::interaction_types::clean_table:
 
@@ -370,26 +532,33 @@ void game::collision_response(
 
 void game::advance_stage() {
 
+	//TODO:
 	++current_stage;
 }
 
 void game::reset() {
 
-	//TODO: should actually init...
-
 	current_stage=0;
 	current_game_seconds=0.f;
 	current_table=nullptr;
+
+	//reset tables...
+	auto table_time=stages[current_stage].get_customer_cooloff();
+	for(auto& table : tables) {
+
+		table.reset();
+		table.set_timer(table_time);
+	}
 	
 	//TODO: reset player
-	//TODO: reset tables
-	//TODO: reset player tray
-	//TODO: reset	app::bar_selector bar_selector_instance;
+	player_tray.reset();
+	bar_selector_instance.reset();
 	current_interaction_type=interaction_types::none;
 	
 }
 
 void game::game_over() {
 
+	//TODO: we need a game over proper
 	std::terminate();
 }

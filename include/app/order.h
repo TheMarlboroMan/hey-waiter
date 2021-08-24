@@ -3,6 +3,7 @@
 #include "consumable.h"
 
 #include <vector>
+#include <ostream>
 
 namespace app {
 
@@ -12,12 +13,11 @@ namespace app {
 
 class order {
 
-	static const std::size_t min_size{1};
-	static const std::size_t max_size{5};
+	public: 
 
 	std::vector<consumable>		products;
-
 };
+
 
 }
 

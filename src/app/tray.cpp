@@ -16,3 +16,9 @@ void tray::pop() {
 
 	contents.erase(contents.end()-1);
 }
+
+void tray::reset() {
+
+	contents.clear();
+	trash=false;
+}

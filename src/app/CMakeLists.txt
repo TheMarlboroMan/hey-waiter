@@ -3,7 +3,6 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/table.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/player.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/world.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/customer.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/consumable.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/order.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/game.cpp
@@ -15,6 +14,8 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/trash.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/tray.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/loop_stage.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/order_generator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/log.cpp
 	PARENT_SCOPE
 )
 

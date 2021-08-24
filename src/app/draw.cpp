@@ -53,20 +53,7 @@ void draw::do_draw(
 
 	for(const auto& table : _game.tables) {
 
-		auto table_color=ldv::rgba8(64, 64, 64, 255);
-
-		//TODO: 
-		//demanding table: blue,
-		//waiting table: yellow
-		//dirty table: red
-		//eating table: green
-
-		ldv::box_representation collision_box(
-			to_video(table.get_collision_box()),
-			table_color
-		);
-
-		collision_box.draw(_screen, _camera);
+		draw_table(_screen, _camera, table);
 	}
 
 	ldv::box_representation bar_box(
@@ -111,8 +98,56 @@ void draw::do_draw(
 
 			draw_serve(_screen, _game);
 		break;
+		case game::modes::take_order:
+
+			draw_take_order(_screen, _game);
+		break;
 	}
 }
+
+void draw::draw_table(
+	ldv::screen& _screen,
+	const ldv::camera& _camera,
+	const table& _table
+) {
+	
+	auto table_color=ldv::rgba8(64, 64, 64, 255);
+
+	if(_table.is_demanding_attention()) {
+		//demanding table: blue,
+		table_color=ldv::rgba8(0, 0, 192, 255);
+	}
+	else if(_table.is_waiting_order()) {
+		//waiting table: yellow
+		table_color=ldv::rgba8(192, 192, 0, 255);
+	}
+	else if(_table.is_dirty()) {
+		//dirty table: red
+		table_color=ldv::rgba8(192, 0, 0, 255);
+	}
+	else if(_table.is_consuming()) {
+		//eating table: green
+		table_color=ldv::rgba8(0, 192, 0, 255);
+	}
+	else if(_table.is_customer_arriving()) {
+
+		//a customer is coming: white
+		table_color=ldv::rgba8(255, 255, 255, 255);
+	}
+	else if(_table.is_customer_leaving()) {
+
+		//a customer is coming: black
+		table_color=ldv::rgba8(0, 0, 0, 255);
+	}
+
+	ldv::box_representation collision_box(
+		to_video(_table.get_collision_box()),
+		table_color
+	);
+
+	collision_box.draw(_screen, _camera);
+}
+
 
 void draw::draw_interactions(
 	ldv::screen& _screen,
@@ -192,17 +227,7 @@ void draw::draw_fill_tray(
 	ss<<_game.player_tray.size()<<" / 8"<<std::endl;
 	for(const auto& consumable : _game.player_tray.get()) {
 
-		switch(consumable.type) {
-
-			case consumable::types::water_bottle: ss<<"water, "; break;
-			case consumable::types::soda_bottle: ss<<"soda, "; break;
-			case consumable::types::beer_bottle: ss<<"beer, "; break;
-			case consumable::types::beer_jar: ss<<"beer jar, "; break;
-			case consumable::types::cocktail: ss<<"cocktail, "; break;
-			case consumable::types::pinneaple: ss<<"pineapple, "; break;
-			case consumable::types::melon: ss<<"melon, "; break;
-			case consumable::types::watermelon: ss<<"watermelon, "; break;
-		}
+		ss<<consumable_to_string(consumable)<<", ";
 	}
 
 	ldv::ttf_representation txt{
@@ -220,4 +245,47 @@ void draw::draw_serve(
 ) {
 
 	//TODO: draw tray and table and shit (up to pull order)
+}
+
+void draw::draw_take_order(
+	ldv::screen& _screen, 
+	const app::game& _game
+) {
+
+	const auto& order=_game.current_table->get_current_order();
+
+	std::stringstream ss;
+
+	ss<<"just get me ";
+	for(const auto& consumable : order.products) {
+
+		ss<<consumable_to_string(consumable)<<", ";
+	}
+
+	ldv::ttf_representation txt{
+		ttf_manager.get("main", 16),
+		ldv::rgba8(255, 255, 255, 255),
+		ss.str()
+	};
+
+	txt.draw(_screen);
+}
+
+std::string draw::consumable_to_string(
+	const app::consumable& _consumable
+) const {
+
+	switch(_consumable.type) {
+
+		case consumable::types::water_bottle: return "water";;
+		case consumable::types::soda_bottle: return "soda";;
+		case consumable::types::beer_bottle: return "beer";;
+		case consumable::types::beer_jar: return "beer jar";;
+		case consumable::types::cocktail: return "cocktail";;
+		case consumable::types::pinneaple: return "pineapple";
+		case consumable::types::melon: return "melon";
+		case consumable::types::watermelon: return "watermelon";
+	}
+
+	return "???";
 }

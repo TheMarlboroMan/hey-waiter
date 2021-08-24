@@ -218,6 +218,7 @@ void world_reader::read_as_table(
 		throw std::runtime_error("cannot read table without reading margin and size first");
 	}
 
+	int id=_tables.size()+1;
 	int x{0}, y{0};
 	char direction{0};
 
@@ -237,7 +238,7 @@ void world_reader::read_as_table(
 			throw std::runtime_error("bad table direction");
 	}
 
-	_tables.push_back({x, y, table_w, table_h, table_margin, customer_direction});
+	_tables.push_back({id, x, y, table_w, table_h, table_margin, customer_direction});
 }
 
 void world_reader::read_as_bar(

@@ -10,6 +10,7 @@
 #include "input.h"
 #include "loop_stage.h"
 
+#include <lm/logger.h>
 #include <vector>
 #include <optional>
 
@@ -21,7 +22,7 @@ class game {
 
 	public:
 
-					game();
+					game(lm::logger&);
 	void			init(const std::string&);
 	void			tick(float _delta);
 	void			set_input(app::input& _i) {game_input=std::move(_i);}
@@ -41,14 +42,18 @@ class game {
 
 	enum class modes {
 		movement,
+		take_order,
 		fill_tray,
 		serve
 	};
 
 	void			reset();
-	void			tick_movement(float _delta);
-	void			tick_fill_tray(float _delta);
-	void			tick_serve(float _delta);
+	void			tick_tables(float);
+	void			tick_movement(float);
+	void			tick_fill_tray(float);
+	void			tick_serve(float);
+	void			tick_take_order(float);
+	void			roll_table(app::table&);
 	void			player_get_input();
 	void			player_motion_phase(float);
 	std::optional<app::box>	collision_detection();
@@ -57,7 +62,9 @@ class game {
 	void			process_interactions();
 	void			advance_stage();
 	void			game_over();
-	
+
+	lm::logger&		log;
+
 	modes			current_mode{modes::movement};
 	app::world		world_instance;
 	app::player		player_instance;
@@ -72,7 +79,8 @@ class game {
 	app::table *	current_table{nullptr};
 	int				game_seconds{0};
 	std::size_t		current_stage{0};
-	float			current_game_seconds{0.f};
+	float			current_game_seconds{0.f},
+					state_time_counter{0.f}; //<! Counter for time-bound states.
 
 	friend class 	draw; //Yeah that's right!
 };
