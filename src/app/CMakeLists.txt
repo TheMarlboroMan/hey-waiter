@@ -17,6 +17,7 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/order_generator.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/log.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/serving.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/order_checker.cpp
 	PARENT_SCOPE
 )
 

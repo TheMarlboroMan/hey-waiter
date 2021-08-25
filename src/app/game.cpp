@@ -4,6 +4,7 @@
 #include <app/world_reader.h>
 #include <app/order_generator.h>
 #include <app/log.h>
+#include <app/order_checker.h>
 
 #include <tools/number_generator.h>
 #include <lm/sentry.h>
@@ -291,19 +292,36 @@ void game::tick_serve(
 			return;
 		}
 
-		log<<lm::debug<<*current_table<<" confirming serve"<<std::endl;
+		log<<lm::debug<<*current_table<<" confirming serve, a comparison will take place"<<std::endl;
 
-		//TODO: compare products being served to order!
+		order_checker checker;
+		auto check_result=checker.check(
+			table_serving.get(),
+			current_table->get_current_order().products
+		);
 
-		//TODO: score depends on: did perfect, else products it got - products missed - products failed.
+		log<<lm::debug<<"ok: "<<check_result.ok
+			<<", missing: "<<check_result.missing
+			<<", failed: "<<check_result.failed<<std::endl;
 
-		//TODO: if the order had at least 1 ok product...
-		log<<lm::debug<<*current_table<<" will start consuming"<<std::endl;
-		current_table->set_to_consuming(30.f);
+		//if the order had at least no good products...
+		if(!check_result.ok) {
 
-		//TODO: else...
-		//log<<lm::debug<<*current_table<<" wrong order, will skip or leave"<<std::endl;
-		//current_table->set_to_ready_next_order_or_leave(30.f);
+			log<<lm::debug<<*current_table<<" wrong order, will skip or leave"<<std::endl;
+			//TODO: fixed time?
+			//TODO: separate in two methods? ready or leave?
+			current_table->set_to_ready_next_order_or_leave(30.f);
+		}
+		else {
+
+			//TODO: score depends on: did perfect, else products it got - products missed - products failed.
+			log<<lm::debug<<*current_table<<" will start consuming"<<std::endl;
+			current_table->set_to_consuming(30.f);
+		}
+
+		//Whatever happens, reset stuff.
+		table_serving.reset();
+//		current_table->get_current_order().reset();
 
 		log<<lm::debug<<"returning to movement order"<<std::endl;
 		current_mode=modes::movement;

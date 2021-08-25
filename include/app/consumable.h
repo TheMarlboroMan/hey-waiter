@@ -19,6 +19,8 @@ class consumable {
 		watermelon
 	};
 
+	bool		operator==(const consumable& _c) const {return type==_c.type;}
+
 	types		type;
 };
 

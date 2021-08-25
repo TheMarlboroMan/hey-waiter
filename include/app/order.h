@@ -15,6 +15,7 @@ class order {
 
 	public: 
 
+	void						reset() {products.clear();}
 	std::vector<consumable>		products;
 };
 
