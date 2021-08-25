@@ -237,6 +237,8 @@ void game::tick_take_order(
 	//The state time counter must run out before we can go again.
 	if(game_input.interact && state_time_counter <= 0.f) {
 
+		log<<lm::debug<<*current_table<<" wait for the order to arrive"<<std::endl;
+
 		//TODO: Should this be fixed???
 		current_table->set_to_wait_for_order(30.f);
 		current_mode=modes::movement;
@@ -246,39 +248,64 @@ void game::tick_take_order(
 void game::tick_serve(
 	float
 ) {
-	//TODO:
-/*
-Show tray, controls to add stuff, some other input to finish!
-*/
-
+	//Change selection
 	if(game_input.select_left) {
 
+		player_tray.prev();
 		return;
 	}
 	
+	//Change selection
 	if(game_input.select_right) {
 
+		player_tray.next();
 		return;
 	}
 
-	if(game_input.select_down) {
+	//Retrieve all...
+	if(game_input.select_up) {
 
+		for(const auto& prod : table_serving.get()) {
+
+			player_tray.add(prod);
+		}
+
+		table_serving.reset();
 		return;
 	}
 	
-	if(game_input.select_up) {
+	//Serve current...
+	if(game_input.select_down) {
 
+		auto prod=player_tray.remove_current();
+		table_serving.add(prod);
 		return;
 	}
 
 	if(game_input.interact) {
 	
+		if(!table_serving.size()) {
+
+			log<<lm::debug<<*current_table<<" serving cancelled, returning to movement mode"<<std::endl;
+			current_mode=modes::movement;
+			return;
+		}
+
+		log<<lm::debug<<*current_table<<" confirming serve"<<std::endl;
+
 		//TODO: compare products being served to order!
+
+		//TODO: score depends on: did perfect, else products it got - products missed - products failed.
+
 		//TODO: if the order had at least 1 ok product...
+		log<<lm::debug<<*current_table<<" will start consuming"<<std::endl;
 		current_table->set_to_consuming(30.f);
 
 		//TODO: else...
+		//log<<lm::debug<<*current_table<<" wrong order, will skip or leave"<<std::endl;
 		//current_table->set_to_ready_next_order_or_leave(30.f);
+
+		log<<lm::debug<<"returning to movement order"<<std::endl;
 		current_mode=modes::movement;
 
 		return;
@@ -370,8 +397,10 @@ void game::process_interactions() {
 			return;
 		break;
 		case game::interaction_types::take_order: 
-			
+
+			log<<lm::debug<<"popping order of table "<<*current_table<<std::endl;
 			current_table->pop_order();
+			log<<lm::debug<<"will enter take order mode"<<std::endl;
 			current_mode=modes::take_order;
 			//TODO: Should be fixed const?
 			state_time_counter=0.5f;
@@ -379,7 +408,9 @@ void game::process_interactions() {
 		break;
 		case game::interaction_types::serve_order:
 
+			log<<lm::debug<<*current_table<<" will enter serve mode"<<std::endl;
 			current_mode=modes::serve;
+			table_serving.reset();
 			return;
 		break;
 		case game::interaction_types::clean_table:

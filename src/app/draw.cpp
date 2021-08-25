@@ -240,11 +240,38 @@ void draw::draw_fill_tray(
 }
 
 void draw::draw_serve(
-	ldv::screen&, 
-	const app::game&
+	ldv::screen& _screen,
+	const app::game& _game
 ) {
 
-	//TODO: draw tray and table and shit (up to pull order)
+	std::stringstream ss;
+	
+	std::size_t index=0;
+
+	ss<<"-- IN TRAY --"<<std::endl;
+	for(const auto& carried : _game.player_tray.get()) {
+	
+		if(index++==_game.player_tray.get_current_index()) {
+
+			ss<<">> ";
+		}
+
+		ss<<consumable_to_string(carried)<<std::endl;
+	}
+
+	ss<<std::endl<<"-- IN TABLE --"<<std::endl;
+	for(const auto& served : _game.table_serving.get()) {
+
+		ss<<consumable_to_string(served)<<std::endl;
+	}
+
+	ldv::ttf_representation txt{
+		ttf_manager.get("main", 16),
+		ldv::rgba8(255, 255, 255, 255),
+		ss.str()
+	};
+
+	txt.draw(_screen);
 }
 
 void draw::draw_take_order(

@@ -6,6 +6,7 @@
 #include "bar.h"
 #include "trash.h"
 #include "tray.h"
+#include "serving.h"
 #include "bar_selector.h"
 #include "input.h"
 #include "loop_stage.h"
@@ -73,6 +74,7 @@ class game {
 	std::vector<table>	tables;
 	std::vector<loop_stage>	stages;
 	app::tray		player_tray;
+	app::serving	table_serving;
 	app::input		game_input;
 	app::bar_selector bar_selector_instance;
 	interaction_types current_interaction_type{interaction_types::none};

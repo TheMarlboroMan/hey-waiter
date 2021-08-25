@@ -16,6 +16,7 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/loop_stage.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/order_generator.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/log.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/serving.cpp
 	PARENT_SCOPE
 )
 

@@ -3,6 +3,5 @@ A table-waiting game.
 
 # TODO:
 
-- draw serving mode
-- controls of serving mode
-- compare order to serving
+- compare order to serving, should be able to yield a score from it
+- score from trash removal too.
