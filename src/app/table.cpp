@@ -58,24 +58,19 @@ void table::set_to_customer_leaving(
 	float _timer
 ) {
 
+	//the reset will fuck this up.
+	auto copy_served=customer_served_orders;
+
 	reset();
 
-	dirty=customer_served_orders;
+	dirty=copy_served;
 	time_counter=_timer;
 	state=states::customer_leaving;
 }
 
-void table::set_to_ready_next_order_or_leave(
-	float _timer
-) {
+void table::serve() {
 
-	if(orders.size()) {
-
-		set_to_demand_attention(_timer);
-		return;
-	}
-
-	set_to_customer_leaving(_timer);
+	++customer_served_orders;
 }
 
 void table::set_to_wait_for_order(

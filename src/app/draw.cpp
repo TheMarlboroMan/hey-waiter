@@ -6,6 +6,7 @@
 
 
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <map>
 
@@ -103,6 +104,9 @@ void draw::do_draw(
 			draw_take_order(_screen, _game);
 		break;
 	}
+
+	draw_score(_screen, _game.player_score);
+	draw_timer(_screen, _game);
 }
 
 void draw::draw_table(
@@ -315,4 +319,56 @@ std::string draw::consumable_to_string(
 	}
 
 	return "???";
+}
+
+void draw::draw_score(
+	ldv::screen& _screen, 
+	const app::score& _score
+) {
+
+	std::stringstream ss;
+	ss<<std::setw(8)<<std::setfill('0')<<std::to_string(_score.get());
+
+	ldv::ttf_representation txt{
+		ttf_manager.get("main", 16),
+		ldv::rgba8(255, 255, 255, 255),
+		ss.str()
+	};
+
+	txt.align(
+		_screen.get_rect(), {
+			ldv::representation_alignment::h::inner_right,
+			ldv::representation_alignment::v::inner_top,
+			16, 16
+		}
+	);
+
+	txt.draw(_screen);
+}
+
+void draw::draw_timer(
+	ldv::screen& _screen, 
+	const app::game& _game
+) {
+
+	int timer=_game.game_seconds - std::floor(_game.current_game_seconds);
+	
+	std::stringstream ss;
+	ss<<std::setw(3)<<std::setfill('0')<<std::to_string(timer);
+
+	ldv::ttf_representation txt{
+		ttf_manager.get("main", 16),
+		ldv::rgba8(255, 255, 255, 255),
+		ss.str()
+	};
+
+	txt.align(
+		_screen.get_rect(), {
+			ldv::representation_alignment::h::inner_right,
+			ldv::representation_alignment::v::inner_top,
+			16, 40
+		}
+	);
+
+	txt.draw(_screen);
 }

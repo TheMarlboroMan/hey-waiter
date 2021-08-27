@@ -10,6 +10,7 @@
 #include "bar_selector.h"
 #include "input.h"
 #include "loop_stage.h"
+#include "score.h"
 
 #include <lm/logger.h>
 #include <vector>
@@ -63,6 +64,10 @@ class game {
 	void			process_interactions();
 	void			advance_stage();
 	void			game_over();
+	void			confirm_serve();
+	void			cancel_serve();
+	void			drop_trash();
+	void			table_done_with_order(app::table&);
 
 	lm::logger&		log;
 
@@ -77,11 +82,12 @@ class game {
 	app::serving	table_serving;
 	app::input		game_input;
 	app::bar_selector bar_selector_instance;
+	app::score		player_score;
 	interaction_types current_interaction_type{interaction_types::none};
 	app::table *	current_table{nullptr};
-	int				game_seconds{0};
-	std::size_t		current_stage{0};
-	float			current_game_seconds{0.f},
+	int				game_seconds{0}; //<!Max allowed time.
+	std::size_t		current_stage{0};	
+	float			current_game_seconds{0.f}, //<!Current time
 					state_time_counter{0.f}; //<! Counter for time-bound states.
 
 	friend class 	draw; //Yeah that's right!

@@ -33,6 +33,9 @@ void game::init(
 	stages.clear();
 
 	app::world_reader wr;
+
+	int score_consumable{0}, score_trash{0};
+
 	wr.read(
 		_path, 
 		world_instance, 
@@ -41,8 +44,14 @@ void game::init(
 		trash_instance, 
 		tables, 
 		stages,
-		game_seconds
+		game_seconds,
+		score_consumable,
+		score_trash
 	);
+
+	player_score.set_per_consumable(score_consumable);
+	player_score.set_per_trash(score_trash);
+
 
 	reset();
 }
@@ -96,6 +105,7 @@ void game::tick_tables(
 		//customer finally arrived at table.
 		if(table.is_customer_arrived()) {
 
+			log<<lm::debug<<table<<" will demand attention"<<std::endl;
 			//TODO: should this value be fixed???
 			table.set_to_demand_attention(30.f);
 			continue;
@@ -106,24 +116,41 @@ void game::tick_tables(
 
 			//if the customer had something, the table is left dirty
 			//TODO: fixed value??
+			log<<lm::debug<<table<<" got tired of waiting and will leave"<<std::endl;
 			table.set_to_customer_leaving(30.f);
 			continue;
 		}
 
 		if(table.is_done_with_order()) {
 
-			//either demand attention for the next order or leave when done.
-			//TODO: Fixed value??
-			table.set_to_ready_next_order_or_leave(30.f);
+			table_done_with_order(table);
 			continue;
 		}
 
 		if(table.has_customer_left()) {
 
+			log<<lm::debug<<table<<" is now free"<<std::endl;
 			table.set_free();
 			continue;
 		}
 	}
+}
+
+void game::table_done_with_order(
+	app::table& _table
+) {
+
+	if(!_table.has_orders_left()) {
+
+		log<<lm::debug<<_table<<" is done with order, will leave"<<std::endl;
+		//TODO: fixed???
+		_table.set_to_customer_leaving(4.f);
+		return;
+	}
+
+	log<<lm::debug<<_table<<" is done with order, demands next one"<<std::endl;
+	//TODO: fixed???
+	_table.set_to_demand_attention(30.f);
 }
 
 void game::roll_table(
@@ -285,49 +312,53 @@ void game::tick_serve(
 
 	if(game_input.interact) {
 	
-		if(!table_serving.size()) {
-
-			log<<lm::debug<<*current_table<<" serving cancelled, returning to movement mode"<<std::endl;
-			current_mode=modes::movement;
-			return;
-		}
-
-		log<<lm::debug<<*current_table<<" confirming serve, a comparison will take place"<<std::endl;
-
-		order_checker checker;
-		auto check_result=checker.check(
-			table_serving.get(),
-			current_table->get_current_order().products
-		);
-
-		log<<lm::debug<<"ok: "<<check_result.ok
-			<<", missing: "<<check_result.missing
-			<<", failed: "<<check_result.failed<<std::endl;
-
-		//if the order had at least no good products...
-		if(!check_result.ok) {
-
-			log<<lm::debug<<*current_table<<" wrong order, will skip or leave"<<std::endl;
-			//TODO: fixed time?
-			//TODO: separate in two methods? ready or leave?
-			current_table->set_to_ready_next_order_or_leave(30.f);
-		}
-		else {
-
-			//TODO: score depends on: did perfect, else products it got - products missed - products failed.
-			log<<lm::debug<<*current_table<<" will start consuming"<<std::endl;
-			current_table->set_to_consuming(30.f);
-		}
-
-		//Whatever happens, reset stuff.
-		table_serving.reset();
-//		current_table->get_current_order().reset();
-
-		log<<lm::debug<<"returning to movement order"<<std::endl;
-		current_mode=modes::movement;
-
+		!table_serving.size()
+			? cancel_serve()
+			: confirm_serve();
 		return;
 	}
+}
+
+void game::cancel_serve() {
+
+	log<<lm::debug<<*current_table<<" serving cancelled, returning to movement mode"<<std::endl;
+	current_mode=modes::movement;
+}
+
+void game::confirm_serve() {
+
+	log<<lm::debug<<*current_table<<" confirming serve, a comparison will take place"<<std::endl;
+
+	order_checker checker;
+	auto check_result=checker.check(
+		table_serving.get(),
+		current_table->get_current_order().products
+	);
+
+	log<<lm::debug<<"ok: "<<check_result.ok
+		<<", missing: "<<check_result.missing
+		<<", failed: "<<check_result.failed<<std::endl;
+
+	//if the order had at least no good products...
+	if(!check_result.ok) {
+
+		log<<lm::debug<<*current_table<<" wrong order, will skip or leave"<<std::endl;
+		table_done_with_order(*current_table);
+	}
+	else {
+
+		current_table->serve();
+		player_score.score_consumables(check_result.ok, check_result.missing, check_result.failed);
+		log<<lm::debug<<*current_table<<" will start consuming"<<std::endl;
+		current_table->set_to_consuming(30.f);
+	}
+
+	//Whatever happens, reset stuff.
+	table_serving.reset();
+//	current_table->get_current_order().reset();
+
+	log<<lm::debug<<"returning to movement order"<<std::endl;
+	current_mode=modes::movement;
 }
 
 void game::evaluate_interactions() {
@@ -434,14 +465,21 @@ void game::process_interactions() {
 		case game::interaction_types::clean_table:
 
 			player_tray.fill_with_trash();
+			current_table->clean();
 			return;
 		break;
 		case game::interaction_types::drop_trash:
 
-			player_tray.drop_trash();
+			drop_trash();
 			return;
 		break;
 	}
+}
+
+void game::drop_trash() {
+
+	player_tray.drop_trash();
+	player_score.score_trash();
 }
 
 std::optional<app::box> game::collision_detection() {
@@ -601,6 +639,7 @@ void game::reset() {
 	
 	//TODO: reset player
 	player_tray.reset();
+	player_score.reset();
 	bar_selector_instance.reset();
 	current_interaction_type=interaction_types::none;
 	

@@ -25,6 +25,8 @@ class draw {
 	void				draw_fill_tray(ldv::screen&, const app::game&);
 	void				draw_serve(ldv::screen&, const app::game&);
 	void				draw_take_order(ldv::screen&, const app::game&);
+	void				draw_score(ldv::screen&, const app::score&);
+	void				draw_timer(ldv::screen&, const app::game&);
 	ldv::rect			to_video(const box&) const;
 	std::string			consumable_to_string(const app::consumable&) const;
 

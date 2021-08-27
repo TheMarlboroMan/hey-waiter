@@ -26,16 +26,18 @@ class table {
 	bool						can_be_interacted_with() const {return state==states::demanding_attention || state==states::waiting_order || dirty;}
 	bool						is_timer_done() const {return time_counter <= 0.f;}
 	bool						has_customer_left() const {return state==states::customer_leaving && time_counter <= 0.f;}
+	bool						has_orders_left() const {return orders.size();}
 	const box&					get_collision_box() const {return collision_box;}
 	const box&					get_interaction_box() const {return interaction_box;}
 	void						tick(float _delta);
+	void						serve();
 	//TODO: Should this include time_counter value???
+	void						clean() {dirty=false;}
 	void						reset();
 	void						set_to_customer_arrival(float, std::vector<order>&&);
 	void						set_to_demand_attention(float);
 	void						set_to_wait_for_order(float);
 	void						set_to_customer_leaving(float);
-	void						set_to_ready_next_order_or_leave(float);
 	void						set_timer(float _val) {time_counter=_val;}
 	void						set_to_consuming(float _val);
 	void						set_free() {state=states::free;}

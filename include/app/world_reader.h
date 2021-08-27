@@ -24,6 +24,8 @@ class world_reader {
 		trash&, 
 		std::vector<table>&,
 		std::vector<loop_stage>&,
+		int&,
+		int&,
 		int&
 	);
 
@@ -39,6 +41,8 @@ class world_reader {
 	void			read_as_bar(std::stringstream&, bar&);
 	void			read_as_trash(std::stringstream&, trash&);
 	int				read_as_game_length(std::stringstream&);
+	int				read_as_score_consumable(std::stringstream&);
+	int				read_as_score_trash(std::stringstream&);
 	void			read_as_loop_stage(std::stringstream&, std::vector<loop_stage>&);
 
 	int 			table_margin{-1},

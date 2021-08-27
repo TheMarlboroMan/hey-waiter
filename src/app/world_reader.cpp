@@ -18,7 +18,9 @@ void world_reader::read(
 	app::trash& _trash,
 	std::vector<table>& _tables,
 	std::vector<loop_stage>& _stages,
-	int& _game_length
+	int& _game_length,
+	int& _score_consumable,
+	int& _score_trash
 ) {
 
 	std::ifstream infile(_path);
@@ -90,6 +92,14 @@ void world_reader::read(
 
 			_game_length=read_as_game_length(ss);
 		}
+		else if(word=="score_consumable") {
+
+			_score_consumable=read_as_score_consumable(ss);
+		}
+		else if(word=="score_trash") {
+
+			_score_trash=read_as_score_trash(ss);
+		}
 		else if(word=="loop") {
 
 			read_as_loop_stage(ss, _stages);
@@ -98,6 +108,21 @@ void world_reader::read(
 
 			throw std::runtime_error(std::string{"world_reader cannot interpret line '"}+line+"'");
 		}
+	}
+
+	if(!_game_length) {
+
+		throw std::runtime_error("no game length set!");
+	}
+
+	if(!_score_consumable) {
+
+		throw std::runtime_error("no score per consumable set!");
+	}
+
+	if(!_score_trash) {
+
+		throw std::runtime_error("no score per trash set!");
 	}
 
 	if(!_stages.size()) {
@@ -294,6 +319,48 @@ int world_reader::read_as_game_length(
 	}
 
 	return length;
+}
+
+int world_reader::read_as_score_consumable(
+	std::stringstream& _ss
+) {
+
+	int score{0};
+
+	_ss>>score;
+
+	if(_ss.fail()) {
+
+		throw std::runtime_error("failed to read score consumable");
+	}
+
+	if(score <= 0) {
+
+		throw std::runtime_error("score per consumable cannot be zero or negative");
+	}
+
+	return score;
+}
+
+int world_reader::read_as_score_trash(
+	std::stringstream& _ss
+) {
+
+	int score{0};
+
+	_ss>>score;
+
+	if(_ss.fail()) {
+
+		throw std::runtime_error("failed to read score trash");
+	}
+
+	if(score <= 0) {
+
+		throw std::runtime_error("score per trash cannot be zero or negative");
+	}
+
+	return score;
 }
 
 void world_reader::read_as_loop_stage(
