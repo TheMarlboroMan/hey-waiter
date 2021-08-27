@@ -18,7 +18,8 @@ state_driver::state_driver(
 	config(c), 
 	log(kernel.get_log()),
 	env{_env},
-	i8n{env.build_data_path("i8n"), "en", {"game.txt"}}
+	i8n{env.build_data_path("i8n"), "en", {"game.txt"}},
+	hi_scores{_env}
 {
 
 	lm::log(log, lm::lvl::info)<<"setting state check function..."<<std::endl;
@@ -112,7 +113,11 @@ void state_driver::register_controllers(dfw::kernel& /*kernel*/) {
 		register_controller(_i, *_ptr);
 	};
 
-	reg(c_game, controller::t_states::state_game, new controller::game(log, env, ttf_manager, i8n));
+	reg(
+		c_game, 
+		controller::t_states::state_game, 
+		new controller::game(log, env, ttf_manager, i8n, hi_scores)
+	);
 	//[new-controller-mark]
 }
 

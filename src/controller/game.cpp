@@ -12,10 +12,12 @@ game::game(
 	lm::logger& plog,
 	const app::env& _env,
 	const ldtools::ttf_manager& _ttf_manager,
-	const tools::i8n& _i8n
+	const tools::i8n& _i8n,
+	app::hi_score_manager& _hi_scores
 ):
 	log(plog),
 	env{_env},
+	hi_scores{_hi_scores},
 	camera{ {0,0,500,500},{0,0} },
 	game_instance{plog},
 	draw_instance{_ttf_manager, _i8n}

@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include <app/env.h>
+#include <app/hi_score.h>
 
 #include <dfw/state_driver_interface.h>
 #include <ldtools/ttf_manager.h>
@@ -52,6 +53,7 @@ class state_driver:
 	//properties...
 	ldtools::ttf_manager		ttf_manager;
 	tools::i8n					i8n;
+	app::hi_score_manager		hi_scores;
 
 	typedef std::unique_ptr<dfw::controller_interface>	ptr_controller;
 	ptr_controller					c_game;

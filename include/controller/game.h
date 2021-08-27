@@ -5,6 +5,7 @@
 #include <app/game.h>
 #include <app/env.h>
 #include <app/draw.h>
+#include <app/hi_score.h>
 
 #include <dfw/controller_interface.h>
 #include <lm/logger.h>
@@ -21,7 +22,7 @@ class game:
 
 	public:
 
-								game(lm::logger&, const app::env&, const ldtools::ttf_manager&, const tools::i8n&);
+								game(lm::logger&, const app::env&, const ldtools::ttf_manager&, const tools::i8n&, app::hi_score_manager&);
 	virtual void 				loop(dfw::input&, const dfw::loop_iteration_data&);
 	virtual void 				draw(ldv::screen&, int);
 	virtual void 				awake(dfw::input& /*input*/) {}
@@ -33,6 +34,7 @@ class game:
 	//references...
 	lm::logger&					log;
 	const app::env&				env;
+	app::hi_score_manager&		hi_scores;
 
 	//properties
 	ldv::camera					camera;

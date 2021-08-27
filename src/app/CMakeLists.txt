@@ -19,6 +19,7 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/serving.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/order_checker.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/score.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/hi_score.cpp
 	PARENT_SCOPE
 )
 
