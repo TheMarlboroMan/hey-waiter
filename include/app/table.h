@@ -14,6 +14,7 @@ class table {
 
 								table(int, int, int, int, int, int, directions);
 	bool						can_roll_for_customer() const {return state==states::free && time_counter <= 0.f;}
+	bool						is_free() const {return state==states::free;}
 	bool						is_demanding_attention() const {return state==states::demanding_attention;}
 	bool						is_customer_arriving() const {return state==states::customer_arriving;}
 	bool						is_customer_arrived() const {return state==states::customer_arriving && time_counter <= 0.f;}

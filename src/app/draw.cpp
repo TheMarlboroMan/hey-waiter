@@ -103,6 +103,10 @@ void draw::do_draw(
 
 			draw_take_order(_screen, _game);
 		break;
+		case game::modes::game_over:
+
+			//TODO: draw game over!
+		break;
 	}
 
 	draw_score(_screen, _game.player_score);
@@ -219,13 +223,15 @@ void draw::draw_fill_tray(
 
 		if(pair.first==_game.bar_selector_instance.get()) {
 
-			ss<<">>";
+			ss<<" [ "<<pair.second<<" ] ";
 		}
+		else {
 
-		ss<<pair.second<<std::endl;
+			ss<<pair.second<<" ";
+		}
 	}
-
-	ss<<std::endl<<"------------------"<<std::endl;
+	
+	ss<<"\n\n"<<"------------------"<<std::endl;
 
 	//draw current tray contents...
 	ss<<_game.player_tray.size()<<" / 8"<<std::endl;
@@ -252,22 +258,26 @@ void draw::draw_serve(
 	
 	std::size_t index=0;
 
-	ss<<"-- IN TRAY --"<<std::endl;
+	ss<<"-- IN TRAY --\n";
 	for(const auto& carried : _game.player_tray.get()) {
 	
 		if(index++==_game.player_tray.get_current_index()) {
 
-			ss<<">> ";
+			ss<<" [ "<<consumable_to_string(carried)<<" ] ";
 		}
+		else {
 
-		ss<<consumable_to_string(carried)<<std::endl;
+			ss<<consumable_to_string(carried)<<" ";
+		}
 	}
 
-	ss<<std::endl<<"-- IN TABLE --"<<std::endl;
+	ss<<"\n\n-- IN TABLE --"<<std::endl;
 	for(const auto& served : _game.table_serving.get()) {
 
-		ss<<consumable_to_string(served)<<std::endl;
+		ss<<consumable_to_string(served)<<" ";
 	}
+
+	ss<<"\n";
 
 	ldv::ttf_representation txt{
 		ttf_manager.get("main", 16),
@@ -354,7 +364,7 @@ void draw::draw_timer(
 	int timer=_game.game_seconds - std::floor(_game.current_game_seconds);
 	
 	std::stringstream ss;
-	ss<<std::setw(3)<<std::setfill('0')<<std::to_string(timer);
+	ss<<std::setw(3)<<std::setfill('0')<<std::to_string(timer)<<" level "<<(_game.current_stage+1);
 
 	ldv::ttf_representation txt{
 		ttf_manager.get("main", 16),

@@ -46,7 +46,8 @@ class game {
 		movement,
 		take_order,
 		fill_tray,
-		serve
+		serve,
+		game_over
 	};
 
 	void			reset();
@@ -55,6 +56,7 @@ class game {
 	void			tick_fill_tray(float);
 	void			tick_serve(float);
 	void			tick_take_order(float);
+	void			tick_game_over(float);
 	void			roll_table(app::table&);
 	void			player_get_input();
 	void			player_motion_phase(float);

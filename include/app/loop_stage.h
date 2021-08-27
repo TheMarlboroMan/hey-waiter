@@ -6,10 +6,10 @@ class loop_stage {
 
 	public:
 
-			loop_stage(int, int, int, int, int, int, int);
+			loop_stage(int, int, int, int, int, int, int, int, int);
 
 	int		get_until() const {return until;}
-	int		get_customer_chance() const {return customer_chance;}
+	int		calculate_chance(int, int) const;
 	int		get_customer_cooloff() const {return customer_cooloff;}
 	int		get_min_orders() const {return min_orders;}
 	int		get_max_orders() const {return max_orders;}
@@ -20,6 +20,8 @@ class loop_stage {
 
 	int		until{0},
 			customer_chance{0},
+			chance_occupied_table_modifier{0},
+			chance_dirty_table_modifier{0},
 			customer_cooloff{0},
 			min_orders{0},
 			max_orders{0},

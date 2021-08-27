@@ -75,3 +75,19 @@ void player::set_motion(
 ) {
 	motion={_x*speed, _y*speed};
 }
+
+void player::set_start_position(
+	int _x,
+	int _y
+) {
+
+	start_position.x=_x;
+	start_position.y=_y;
+}
+
+void player::reset() {
+
+	set_position(start_position.x, start_position.y);
+	previous_collision_box=collision_box;
+	motion={0.,0.};
+}

@@ -10,6 +10,5 @@ using point=ldt::point_2d<double>;
 using box=ldt::box< double, double>;
 using vector=ldt::vector_2d<double>;
 enum class axes{x, y};
-
 enum class directions{up, right, down, left};
 }

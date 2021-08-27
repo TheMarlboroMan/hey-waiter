@@ -3,6 +3,4 @@ A table-waiting game.
 
 # TODO:
 
-- scoring:
-	- failed to give a single good product?
-		- remove time?
+- Some bug shows up on serving.

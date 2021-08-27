@@ -60,24 +60,25 @@ void game::tick(
 	float _delta
 ) {
 
-	current_game_seconds+=_delta;
+	if(current_mode != modes::game_over) {
 
-//std::cout<<"["<<current_stage<<"] "<<current_game_seconds<<" /"<<game_seconds<<std::endl;
+		current_game_seconds+=_delta;
 
-	if(current_game_seconds > game_seconds) {
+		if(current_game_seconds > game_seconds) {
 
-		std::cout<<"game over"<<std::endl;
-		game_over();
-		return;
+			std::cout<<"game over"<<std::endl;
+			game_over();
+			return;
+		}
+
+		if(current_game_seconds > stages[current_stage].get_until() && current_stage != stages.size() -1) {
+
+			log<<lm::debug<<"advancing to next stage "<<std::endl;
+			advance_stage();
+		}
+
+		tick_tables(_delta);
 	}
-
-	if(current_game_seconds > stages[current_stage].get_until() && current_stage != stages.size() -1) {
-
-		log<<lm::debug<<"advancing to next stage "<<std::endl;
-		advance_stage();
-	}
-
-	tick_tables(_delta);
 
 	switch(current_mode) {
 
@@ -85,6 +86,7 @@ void game::tick(
 		case modes::fill_tray: tick_fill_tray(_delta); break;
 		case modes::serve: tick_serve(_delta); break;
 		case modes::take_order: tick_take_order(_delta); break;
+		case modes::game_over: tick_game_over(_delta); break;
 	}
 }
 
@@ -107,7 +109,7 @@ void game::tick_tables(
 
 			log<<lm::debug<<table<<" will demand attention"<<std::endl;
 			//TODO: should this value be fixed???
-			table.set_to_demand_attention(30.f);
+			table.set_to_demand_attention(20.f);
 			continue;
 		}
 
@@ -117,7 +119,7 @@ void game::tick_tables(
 			//if the customer had something, the table is left dirty
 			//TODO: fixed value??
 			log<<lm::debug<<table<<" got tired of waiting and will leave"<<std::endl;
-			table.set_to_customer_leaving(30.f);
+			table.set_to_customer_leaving(10.f);
 			continue;
 		}
 
@@ -159,11 +161,32 @@ void game::roll_table(
 
 	const auto& stage=stages[current_stage];
 
-	auto chance=stage.get_customer_chance();
+	//TODO: debug these!!!
+
+	int occupied_count=std::count_if(
+		std::begin(tables),
+		std::end(tables),
+		[](const table& _ctable) {
+
+			return _ctable.is_consuming()
+				|| _ctable.is_waiting_order()
+				|| _ctable.is_demanding_attention()
+				|| _ctable.is_customer_arriving();
+		}
+	);
+	int dirty_count=std::count_if(
+		std::begin(tables),
+		std::end(tables),
+		[](const table& _ctable) {
+			return _ctable.is_free() && _ctable.is_dirty();
+		}
+	);
+
+	auto chance=stage.calculate_chance(occupied_count, dirty_count);
 	auto gen=tools::int_generator(0, 100);
 	auto val=gen();
 
-	log<<lm::debug<<_table<<" rolled "<<val<<"/"<<chance<<std::endl;
+	log<<lm::debug<<_table<<" rolled "<<val<<"/"<<chance<<" (stage:"<<current_stage<<", dirty:"<<dirty_count<<", occupied:"<<occupied_count<<")"<<std::endl;
 
 	if(val < chance) {
 
@@ -217,6 +240,19 @@ void game::tick_movement(
 	}
 }
 
+void game::tick_game_over(
+	float _delta
+) {
+
+	state_time_counter-=_delta;
+
+	if(game_input.interact && state_time_counter <= 0.f) {
+
+		reset();
+		return;
+	}
+}
+
 void game::tick_fill_tray(
 	float /*_delta*/
 ) {
@@ -235,8 +271,12 @@ void game::tick_fill_tray(
 
 	if(game_input.select_down) {
 
-		current_mode=modes::movement;
-		return;
+		if(player_tray.is_full()) {
+
+			return;
+		}
+
+		player_tray.add({bar_selector_instance.get()});
 	}
 	
 	if(game_input.select_up) {
@@ -247,12 +287,8 @@ void game::tick_fill_tray(
 
 	if(game_input.interact) {
 
-		if(player_tray.is_full()) {
-
-			return;
-		}
-
-		player_tray.add({bar_selector_instance.get()});
+		current_mode=modes::movement;
+		return;
 	}
 }
 
@@ -303,7 +339,7 @@ void game::tick_serve(
 	}
 	
 	//Serve current...
-	if(game_input.select_down) {
+	if(game_input.select_down && player_tray.size()) {
 
 		auto prod=player_tray.remove_current();
 		table_serving.add(prod);
@@ -342,7 +378,9 @@ void game::confirm_serve() {
 	//if the order had at least no good products...
 	if(!check_result.ok) {
 
-		log<<lm::debug<<*current_table<<" wrong order, will skip or leave"<<std::endl;
+		log<<lm::debug<<*current_table<<" wrong order, will skip or leave, will lose time"<<std::endl;
+		//TODO: should be a fixed value????
+		current_game_seconds+=15.f;
 		table_done_with_order(*current_table);
 	}
 	else {
@@ -628,6 +666,7 @@ void game::reset() {
 	current_stage=0;
 	current_game_seconds=0.f;
 	current_table=nullptr;
+	current_mode=modes::movement;
 
 	//reset tables...
 	auto table_time=stages[current_stage].get_customer_cooloff();
@@ -637,16 +676,16 @@ void game::reset() {
 		table.set_timer(table_time);
 	}
 	
-	//TODO: reset player
+	table_serving.reset();
+	player_instance.reset();
 	player_tray.reset();
 	player_score.reset();
 	bar_selector_instance.reset();
 	current_interaction_type=interaction_types::none;
-	
 }
 
 void game::game_over() {
 
-	//TODO: we need a game over proper
-	std::terminate();
+	state_time_counter=5.f;
+	current_mode=modes::game_over;
 }

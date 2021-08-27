@@ -17,6 +17,8 @@ class player {
 	void			apply_motion(axes, float);
 	void			restore_previous_position();
 	void			set_speed(double _speed) {speed=_speed;}
+	void			reset();
+	void			set_start_position(int, int);
 	
 
 	const box&		get_collision_box() const {return collision_box;}
@@ -27,6 +29,7 @@ class player {
 
 	box				collision_box,
 					previous_collision_box;
+	point			start_position;
 	vector			motion;
 	double			speed{0.};
 };

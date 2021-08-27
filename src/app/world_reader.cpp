@@ -201,6 +201,7 @@ void world_reader::read_as_player(
 		throw std::runtime_error("failed to read world line");
 	}
 
+	_player.set_start_position(x,y);
 	_player.set_position(x, y);
 	_player.set_size(w, h);
 }
@@ -368,10 +369,12 @@ void world_reader::read_as_loop_stage(
 	std::vector<loop_stage>& _stages
 ) {
 
-	int until{0}, chance{0}, cooloff{0}, min_orders{0},
-		max_orders{0}, min_consumables{0}, max_consumables{0};
+	int until{0}, chance{0}, occupied_chance_mod{0}, dirty_chance_mod{0},
+		cooloff{0}, min_orders{0}, max_orders{0}, min_consumables{0}, 
+		max_consumables{0};
 
-	_ss>>until>>chance>>cooloff>>min_orders>>max_orders>>min_consumables>>max_consumables;
+	_ss>>until>>chance>>occupied_chance_mod>>dirty_chance_mod>>cooloff
+		>>min_orders>>max_orders>>min_consumables>>max_consumables;
 
 	if(_ss.fail()) {
 
@@ -426,6 +429,8 @@ void world_reader::read_as_loop_stage(
 	_stages.push_back({
 		until, 
 		chance, 
+		occupied_chance_mod,
+		dirty_chance_mod,
 		cooloff, 
 		min_orders,
 		max_orders, 
