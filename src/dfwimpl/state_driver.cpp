@@ -14,7 +14,7 @@ state_driver::state_driver(
 	dfwimpl::config& c,
 	const app::env& _env
 ):
-	state_driver_interface(controller::t_states::state_game),
+	state_driver_interface(controller::t_states::state_menu),
 	config(c), 
 	log(kernel.get_log()),
 	env{_env},
@@ -103,7 +103,64 @@ void state_driver::prepare_resources(dfw::kernel& /*kernel*/) {
 	r_loader.generate_music(tools::explode_lines_from_file(std::string("data/resources/music.txt")));
 */
 
-	ttf_manager.insert("main", 16, env.build_data_path("fonts/BebasNeue-Regular.ttf"));
+	std::ifstream resfile(env.build_data_path("resources.dat"));
+	if(!resfile.is_open()) {
+
+		throw std::runtime_error("could not open resources file");
+	}
+
+	std::string line, title;
+
+	while(true) {
+
+		std::getline(resfile, line);
+
+		if(resfile.eof()) {
+
+			break;
+		}
+
+		if(!line.size()) {
+		
+			continue;
+		}
+
+		std::stringstream ss{line};
+		ss>>title;
+
+		if(title=="game_hud_ttf") {
+
+			ss>>resources.main_menu_ttf;
+		}
+		else if(title=="game_hud_font_size") {
+
+			ss>>resources.main_menu_font_size;
+		}
+		else if(title=="main_menu_ttf") {
+			
+			ss>>resources.game_hud_ttf;
+		}
+		else if(title=="main_menu_font_size") {
+
+			ss>>resources.game_hud_font_size;
+		}
+		else {
+
+			throw std::runtime_error("straneous data in resources file");
+		}
+	}
+
+	ttf_manager.insert(
+		"menu", 
+		resources.main_menu_font_size, 
+		env.build_data_path(std::string{"fonts/"}+resources.main_menu_ttf)
+	);
+
+	ttf_manager.insert(
+		"hud", 
+		resources.game_hud_font_size, 
+		env.build_data_path(std::string{"fonts/"}+resources.game_hud_ttf)
+	);
 }
 
 void state_driver::register_controllers(dfw::kernel& /*kernel*/) {
@@ -116,7 +173,12 @@ void state_driver::register_controllers(dfw::kernel& /*kernel*/) {
 	reg(
 		c_game, 
 		controller::t_states::state_game, 
-		new controller::game(log, env, ttf_manager, i8n, hi_scores)
+		new controller::game(log, env, resources, ttf_manager, i8n, hi_scores)
+	);
+	reg(
+		c_menu, 
+		controller::t_states::state_menu, 
+		new controller::menu(log, env, resources, ttf_manager, i8n, hi_scores)
 	);
 	//[new-controller-mark]
 }

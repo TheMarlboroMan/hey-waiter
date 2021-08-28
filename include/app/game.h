@@ -29,6 +29,7 @@ class game {
 	void			tick(float _delta);
 	void			set_input(app::input& _i) {game_input=std::move(_i);}
 	const world&	get_world() const {return world_instance;}
+	void			reset();
 
 	private:
 
@@ -50,7 +51,6 @@ class game {
 		game_over
 	};
 
-	void			reset();
 	void			tick_tables(float);
 	void			tick_movement(float);
 	void			tick_fill_tray(float);

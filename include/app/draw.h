@@ -2,6 +2,7 @@
 
 #include <app/game.h>
 #include <app/definitions.h>
+#include <app/resources.h>
 
 #include <ldv/screen.h>
 #include <ldv/camera.h>
@@ -15,7 +16,7 @@ class draw {
 
 	public:
 
-						draw(const ldtools::ttf_manager&, const tools::i8n&);
+						draw(const app::resources&, const ldtools::ttf_manager&, const tools::i8n&);
 	void				do_draw(ldv::screen&, const ldv::camera&, const app::game&);
 
 	private:
@@ -30,6 +31,7 @@ class draw {
 	ldv::rect			to_video(const box&) const;
 	std::string			consumable_to_string(const app::consumable&) const;
 
+	const app::resources& 		resources;
 	const ldtools::ttf_manager&	ttf_manager;
 	const tools::i8n&			i8n;
 

@@ -13,9 +13,11 @@
 using namespace app;
 
 draw::draw(
+	const app::resources& _resources,
 	const ldtools::ttf_manager& _ttf_manager,
 	const tools::i8n& _i8n
 ):
+	resources{_resources},
 	ttf_manager{_ttf_manager},
 	i8n{_i8n}
 {
@@ -168,7 +170,7 @@ void draw::draw_interactions(
 	}
 
 	ldv::ttf_representation txt{
-		ttf_manager.get("main", 16),
+		ttf_manager.get("hud", resources.game_hud_font_size),
 		ldv::rgba8(255, 255, 255, 255),
 		"..."
 	};
@@ -241,7 +243,7 @@ void draw::draw_fill_tray(
 	}
 
 	ldv::ttf_representation txt{
-		ttf_manager.get("main", 16),
+		ttf_manager.get("hud", resources.game_hud_font_size),
 		ldv::rgba8(255, 255, 255, 255),
 		ss.str()
 	};
@@ -280,7 +282,7 @@ void draw::draw_serve(
 	ss<<"\n";
 
 	ldv::ttf_representation txt{
-		ttf_manager.get("main", 16),
+		ttf_manager.get("hud", resources.game_hud_font_size),
 		ldv::rgba8(255, 255, 255, 255),
 		ss.str()
 	};
@@ -304,7 +306,7 @@ void draw::draw_take_order(
 	}
 
 	ldv::ttf_representation txt{
-		ttf_manager.get("main", 16),
+		ttf_manager.get("hud", resources.game_hud_font_size),
 		ldv::rgba8(255, 255, 255, 255),
 		ss.str()
 	};
@@ -340,7 +342,7 @@ void draw::draw_score(
 	ss<<std::setw(8)<<std::setfill('0')<<std::to_string(_score.get());
 
 	ldv::ttf_representation txt{
-		ttf_manager.get("main", 16),
+		ttf_manager.get("hud", resources.game_hud_font_size),
 		ldv::rgba8(255, 255, 255, 255),
 		ss.str()
 	};
@@ -367,7 +369,7 @@ void draw::draw_timer(
 	ss<<std::setw(3)<<std::setfill('0')<<std::to_string(timer)<<" level "<<(_game.current_stage+1);
 
 	ldv::ttf_representation txt{
-		ttf_manager.get("main", 16),
+		ttf_manager.get("hud", resources.game_hud_font_size),
 		ldv::rgba8(255, 255, 255, 255),
 		ss.str()
 	};

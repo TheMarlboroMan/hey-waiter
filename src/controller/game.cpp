@@ -11,6 +11,7 @@ using namespace controller;
 game::game(
 	lm::logger& plog,
 	const app::env& _env,
+	const app::resources& _resources,
 	const ldtools::ttf_manager& _ttf_manager,
 	const tools::i8n& _i8n,
 	app::hi_score_manager& _hi_scores
@@ -20,7 +21,7 @@ game::game(
 	hi_scores{_hi_scores},
 	camera{ {0,0,500,500},{0,0} },
 	game_instance{plog},
-	draw_instance{_ttf_manager, _i8n}
+	draw_instance{_resources, _ttf_manager, _i8n}
 {
 
 	camera.set_coordinate_system(ldv::camera::tsystem::cartesian);
@@ -32,9 +33,15 @@ void game::loop(
 	const dfw::loop_iteration_data& _lid
 ) {
 
-	if(_input().is_exit_signal() || _input.is_input_down(input::escape)) {
+	if(_input().is_exit_signal()) {
 		set_leave(true);
 		return;
+	}
+
+	if( _input.is_input_down(input::escape)) {
+
+		game_instance.reset();
+		set_state(t_states::state_menu);
 	}
 
 	app::input i;

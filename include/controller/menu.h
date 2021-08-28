@@ -2,31 +2,36 @@
 
 //local
 #include "states.h"
-#include <app/game.h>
 #include <app/env.h>
 #include <app/resources.h>
-#include <app/draw.h>
 #include <app/hi_score.h>
+
 
 #include <dfw/controller_interface.h>
 #include <lm/logger.h>
-#include <ldv/camera.h>
 #include <ldtools/ttf_manager.h>
 #include <tools/i8n.h>
+#include <ldtools/view_composer.h>
 
 #include <cmath>
 
 namespace controller {
 
-class game:
+class menu:
 	public dfw::controller_interface {
 
 	public:
 
-								game(lm::logger&, const app::env&, const app::resources&, const ldtools::ttf_manager&, const tools::i8n&, app::hi_score_manager&);
+								menu(lm::logger&,
+									const app::env&,
+									const app::resources&,
+									const ldtools::ttf_manager&,
+									const tools::i8n&,
+									app::hi_score_manager&
+								);
 	virtual void 				loop(dfw::input&, const dfw::loop_iteration_data&);
 	virtual void 				draw(ldv::screen&, int);
-	virtual void 				awake(dfw::input& /*input*/) {}
+	virtual void 				awake(dfw::input& /*input*/);
 	virtual void 				slumber(dfw::input& /*input*/) {}
 	virtual bool				can_leave_state() const {return true;}
 
@@ -35,12 +40,12 @@ class game:
 	//references...
 	lm::logger&					log;
 	const app::env&				env;
+	const app::resources&		resources;
+	const tools::i8n&			i8n;
 	app::hi_score_manager&		hi_scores;
 
 	//properties
-	ldv::camera					camera;
-	app::game					game_instance;
-	app::draw					draw_instance;
+	ldtools::view_composer		layout;
 };
 
 }

@@ -1,0 +1,33 @@
+{
+	"main_menu": [
+		{
+			"type":"screen",
+			"rgba":[0, 0, 0, 255]
+		},
+		{
+			"id":"text_title",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"main_menu_font",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"hi_scores_title",
+			"type":"ttf",
+			"location":[100, 220],
+			"text":"...",
+			"font":"main_menu_font",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"hi_scores",
+			"type":"ttf",
+			"location":[120, 260],
+			"text":"...",
+			"font":"main_menu_font",
+			"rgba":[255, 255, 255, 160]
+		}
+	]
+}
+
