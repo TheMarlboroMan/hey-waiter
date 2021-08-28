@@ -34,7 +34,7 @@ menu::menu(
 		)
 	);
 
-	const std::string layout_path=_env.build_data_path("layout/main_menu.json");
+	const std::string layout_path=_env.build_data_path("layout/layouts.json");
 	auto document=tools::parse_json_string(
 		tools::dump_file(layout_path)
 	);

@@ -105,10 +105,6 @@ void draw::do_draw(
 
 			draw_take_order(_screen, _game);
 		break;
-		case game::modes::game_over:
-
-			//TODO: draw game over!
-		break;
 	}
 
 	draw_score(_screen, _game.player_score);

@@ -28,6 +28,13 @@
 			"font":"main_menu_font",
 			"rgba":[255, 255, 255, 160]
 		}
+	],
+	"game_over": [
+		{
+			"type":"box",
+			"location":[0, 0, 800, 600],
+			"rgba":[0,0,0,64]
+		}
 	]
 }
 

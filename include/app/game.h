@@ -24,12 +24,13 @@ class game {
 
 	public:
 
-					game(lm::logger&);
+					game(lm::logger&, app::score&);
 	void			init(const std::string&);
 	void			tick(float _delta);
 	void			set_input(app::input& _i) {game_input=std::move(_i);}
 	const world&	get_world() const {return world_instance;}
 	void			reset();
+	bool			is_game_over() const {return current_game_seconds > game_seconds;}
 
 	private:
 
@@ -47,8 +48,7 @@ class game {
 		movement,
 		take_order,
 		fill_tray,
-		serve,
-		game_over
+		serve
 	};
 
 	void			tick_tables(float);
@@ -72,6 +72,7 @@ class game {
 	void			table_done_with_order(app::table&);
 
 	lm::logger&		log;
+	app::score&		player_score;
 
 	modes			current_mode{modes::movement};
 	app::world		world_instance;
@@ -84,7 +85,7 @@ class game {
 	app::serving	table_serving;
 	app::input		game_input;
 	app::bar_selector bar_selector_instance;
-	app::score		player_score;
+
 	interaction_types current_interaction_type{interaction_types::none};
 	app::table *	current_table{nullptr};
 	int				game_seconds{0}; //<!Max allowed time.

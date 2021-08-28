@@ -4,6 +4,7 @@
 #include <app/env.h>
 #include <app/resources.h>
 #include <app/hi_score.h>
+#include <app/score.h>
 
 #include <dfw/state_driver_interface.h>
 #include <ldtools/ttf_manager.h>
@@ -14,6 +15,7 @@
 //Controllers.
 #include "../../include/controller/game.h"
 #include "../../include/controller/menu.h"
+#include "../../include/controller/game_over.h"
 //[new-controller-header-mark]
 
 //Specific app_config
@@ -56,11 +58,13 @@ class state_driver:
 	ldtools::ttf_manager		ttf_manager;
 	tools::i8n					i8n;
 	app::hi_score_manager		hi_scores;
+	app::score					player_score;
 	app::resources				resources;
 
 	typedef std::unique_ptr<dfw::controller_interface>	ptr_controller;
 	ptr_controller					c_game;
 	ptr_controller					c_menu;
+	ptr_controller					c_game_over;
 	//[new-controller-property-mark]
 };
 

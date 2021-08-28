@@ -1,4 +1,6 @@
 game_hud_ttf BebasNeue-Regular.ttf
 game_hud_font_size 16
+game_over_ttf BebasNeue-Regular.ttf
+game_over_font_size 16
 main_menu_ttf BebasNeue-Regular.ttf
 main_menu_font_size 16

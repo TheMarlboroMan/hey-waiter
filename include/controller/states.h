@@ -5,6 +5,7 @@ namespace controller {
 enum t_states {state_min=0,
 state_game,
 state_menu,
+state_game_over,
 //[new-controller-state-mark]
 state_max
 };

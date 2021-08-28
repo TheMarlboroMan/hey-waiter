@@ -144,6 +144,14 @@ void state_driver::prepare_resources(dfw::kernel& /*kernel*/) {
 
 			ss>>resources.game_hud_font_size;
 		}
+		else if(title=="game_over_ttf") {
+			
+			ss>>resources.game_over_ttf;
+		}
+		else if(title=="game_over_font_size") {
+
+			ss>>resources.game_over_font_size;
+		}
 		else {
 
 			throw std::runtime_error("straneous data in resources file");
@@ -161,6 +169,12 @@ void state_driver::prepare_resources(dfw::kernel& /*kernel*/) {
 		resources.game_hud_font_size, 
 		env.build_data_path(std::string{"fonts/"}+resources.game_hud_ttf)
 	);
+
+	ttf_manager.insert(
+		"game_over", 
+		resources.game_over_font_size, 
+		env.build_data_path(std::string{"fonts/"}+resources.game_over_ttf)
+	);
 }
 
 void state_driver::register_controllers(dfw::kernel& /*kernel*/) {
@@ -173,12 +187,17 @@ void state_driver::register_controllers(dfw::kernel& /*kernel*/) {
 	reg(
 		c_game, 
 		controller::t_states::state_game, 
-		new controller::game(log, env, resources, ttf_manager, i8n, hi_scores)
+		new controller::game(log, env, resources, ttf_manager, i8n, player_score)
 	);
 	reg(
 		c_menu, 
 		controller::t_states::state_menu, 
 		new controller::menu(log, env, resources, ttf_manager, i8n, hi_scores)
+	);
+	reg(
+		c_game_over, 
+		controller::t_states::state_game_over, 
+		new controller::game_over(log, env, resources, ttf_manager, i8n, hi_scores, player_score)
 	);
 	//[new-controller-mark]
 }

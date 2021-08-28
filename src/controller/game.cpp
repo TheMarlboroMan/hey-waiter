@@ -14,13 +14,12 @@ game::game(
 	const app::resources& _resources,
 	const ldtools::ttf_manager& _ttf_manager,
 	const tools::i8n& _i8n,
-	app::hi_score_manager& _hi_scores
+	app::score& _player_score
 ):
 	log(plog),
 	env{_env},
-	hi_scores{_hi_scores},
 	camera{ {0,0,500,500},{0,0} },
-	game_instance{plog},
+	game_instance{plog, _player_score},
 	draw_instance{_resources, _ttf_manager, _i8n}
 {
 
@@ -89,6 +88,13 @@ void game::loop(
 
 	game_instance.set_input(i);
 	game_instance.tick(_lid.delta);
+
+	if(game_instance.is_game_over()) {
+
+		game_instance.reset();
+		set_state(t_states::state_game_over);
+		return;
+	}
 }
 
 void game::draw(

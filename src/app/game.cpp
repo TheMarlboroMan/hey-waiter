@@ -14,9 +14,11 @@
 using namespace app;
 
 game::game(
-	lm::logger& _logger
+	lm::logger& _logger,
+	app::score& _player_score
 ):
 	log{_logger},
+	player_score{_player_score},
 	world_instance{0,0},
 	player_instance{0,0,0,0},
 	bar_instance{0,0,0,0,0},
@@ -60,25 +62,21 @@ void game::tick(
 	float _delta
 ) {
 
-	if(current_mode != modes::game_over) {
+	current_game_seconds+=_delta;
 
-		current_game_seconds+=_delta;
+	if(current_game_seconds > game_seconds) {
 
-		if(current_game_seconds > game_seconds) {
-
-			std::cout<<"game over"<<std::endl;
-			game_over();
-			return;
-		}
-
-		if(current_game_seconds > stages[current_stage].get_until() && current_stage != stages.size() -1) {
-
-			log<<lm::debug<<"advancing to next stage "<<std::endl;
-			advance_stage();
-		}
-
-		tick_tables(_delta);
+		std::cout<<"game over"<<std::endl;
+		return;
 	}
+
+	if(current_game_seconds > stages[current_stage].get_until() && current_stage != stages.size() -1) {
+
+		log<<lm::debug<<"advancing to next stage "<<std::endl;
+		advance_stage();
+	}
+
+	tick_tables(_delta);
 
 	switch(current_mode) {
 
@@ -86,7 +84,6 @@ void game::tick(
 		case modes::fill_tray: tick_fill_tray(_delta); break;
 		case modes::serve: tick_serve(_delta); break;
 		case modes::take_order: tick_take_order(_delta); break;
-		case modes::game_over: tick_game_over(_delta); break;
 	}
 }
 
@@ -237,19 +234,6 @@ void game::tick_movement(
 	if(game_input.interact) {
 
 		process_interactions();
-	}
-}
-
-void game::tick_game_over(
-	float _delta
-) {
-
-	state_time_counter-=_delta;
-
-	if(game_input.interact && state_time_counter <= 0.f) {
-
-		reset();
-		return;
 	}
 }
 
@@ -684,8 +668,3 @@ void game::reset() {
 	current_interaction_type=interaction_types::none;
 }
 
-void game::game_over() {
-
-	state_time_counter=5.f;
-	current_mode=modes::game_over;
-}
