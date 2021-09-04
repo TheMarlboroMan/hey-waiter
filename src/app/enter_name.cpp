@@ -5,7 +5,7 @@ using namespace app;
 enter_name::enter_name(
 
 )
-	:acceptable{" ABCDEFGHIJKLMNOPQRSTUVWXYZ-_!?"}, //I would love to include a space and symbols, but it is not monospaced
+	:acceptable{"_ABCDEFGHIJKLMNOPQRSTUVWXYZ-!?0123456789 "}, //I would love to include a space and symbols, but it is not monospaced
 	player_name("          ")
 {
 

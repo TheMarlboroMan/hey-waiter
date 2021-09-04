@@ -3,6 +3,7 @@
 
 [[game_over-title]] {{Game over!!}}
 [[game_over-hi_score]] {{You got a hi-score!!!}}
+[[game_over-bad_game]] {{You are really terrible at this!}}
 [[game_over-your_score]] {{Your score:}}
 
 [[game-pick_consumables]]{{Fill tray}}

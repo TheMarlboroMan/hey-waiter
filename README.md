@@ -3,11 +3,14 @@ A table-waiting game.
 
 # TODO:
 
-- Some bug shows up on serving.
-- Game over, use keys to enter your initials!!!!
-	- interact finishes the input.
+- Add sounds or music, beeps or whatever
+- Some bug shows up on serving and sigsevs
 - Redefine keys, always, always
 - Help controller explaining the sytems
+
+# BUGS:
+
+- Score is shown as zero after entering a high score.
 
 # Credits:
 

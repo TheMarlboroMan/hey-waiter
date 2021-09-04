@@ -14,7 +14,7 @@ state_driver::state_driver(
 	dfwimpl::config& c,
 	const app::env& _env
 ):
-	state_driver_interface(controller::t_states::state_game_over),
+	state_driver_interface(controller::t_states::state_menu),
 	config(c), 
 	log(kernel.get_log()),
 	env{_env},

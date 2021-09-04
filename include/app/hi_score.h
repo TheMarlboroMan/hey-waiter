@@ -31,6 +31,8 @@ class hi_score_manager {
 
 	private:
 
+	const std::size_t			max_size{10};
+
 	void						save();
 	void						load();
 	std::string					get_filename() const;

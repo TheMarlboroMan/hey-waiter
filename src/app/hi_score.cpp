@@ -28,9 +28,9 @@ void hi_score_manager::submit(const hi_score& _item) {
 	current_scores.push_back(_item);
 	std::sort(std::begin(current_scores), std::end(current_scores));
 
-	if(current_scores.size() > 10) {
+	if(current_scores.size() > max_size) {
 
-		current_scores.resize(10);
+		current_scores.resize(max_size);
 	}
 
 	save();
@@ -101,6 +101,16 @@ bool hi_score_manager::can_be_submitted(
 	int _score
 ) const {
 
+	if(_score==0) {
+
+		return false;
+	}
+
+	if(current_scores.size() < 10) {
+
+		return true;
+	}
+
 	for(const auto& score : current_scores) {
 
 		if(_score > score.score) {
@@ -110,5 +120,4 @@ bool hi_score_manager::can_be_submitted(
 	}
 
 	return false;
-
 }

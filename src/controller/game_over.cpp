@@ -49,17 +49,16 @@ game_over::game_over(
 	set_text("text_title", "game_over-title");
 	set_text("got_hi_score_title", "game_over-hi_score");
 	set_text("your_score_title", "game_over-your_score");
+	set_text("bad_game", "game_over-bad_game");
 
 	static_cast<ldv::ttf_representation*>(layout.get_by_id("enter_hi_score"))->set_text(enter_name.get_player_name());
-	static_cast<ldv::ttf_representation*>(layout.get_by_id("your_score_value"))->set_text(std::to_string(player_score.get()));
 }
 
 void game_over::awake(
 	dfw::input& /*input*/
 ) {
 
-	wait_timer=5.f;
-
+	static_cast<ldv::ttf_representation*>(layout.get_by_id("your_score_value"))->set_text(std::to_string(player_score.get()));
 	with_high_score=hi_scores.can_be_submitted(player_score.get());
 
 	current_mode=with_high_score
@@ -70,7 +69,12 @@ void game_over::awake(
 
 		enter_name.reset();
 	}
+	else {
 
+		wait_timer=5.f;
+	}
+
+	layout.get_by_id("bad_game")->set_visible(!player_score.get());
 	layout.get_by_id("got_hi_score_title")->set_visible(with_high_score);
 	layout.get_by_id("enter_hi_score")->set_visible(with_high_score);
 	layout.get_by_id("caret")->set_visible(with_high_score);
@@ -91,20 +95,18 @@ void game_over::loop(
 	switch(current_mode) {
 
 		case modes::hi_score_input:
-	
-			hi_score_input(_input, _lid);
 
+			hi_score_input(_input, _lid);
 		break;
 		case modes::game_over_wait:
 
 			wait_timer-=_lid.delta;
 
-			//TODO: actually, any input will do.
-			if(_input.is_input_down(input::interact) && wait_timer < 0.f) {
-
-//TODO: caret must not show.
+			if(_input().is_event_input() && wait_timer < 0.f) {
 
 				set_state(t_states::state_menu);
+
+				//TODO: hmmm... this must not be reset... right?
 				player_score.reset();
 				return;
 			}
@@ -172,8 +174,10 @@ void game_over::hi_score_input(
 	if(enter_name.is_finished()) {
 
 		//submit hi score...
+		wait_timer=5.f;
 		hi_scores.submit({player_score.get(), enter_name.get_player_name()});
 		current_mode=modes::game_over_wait;
+		layout.get_by_id("caret")->set_visible(false);
 	}
 }
 
