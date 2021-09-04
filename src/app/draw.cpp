@@ -221,11 +221,11 @@ void draw::draw_fill_tray(
 
 		if(pair.first==_game.bar_selector_instance.get()) {
 
-			ss<<" [ "<<pair.second<<" ] ";
+			ss<<" [ "<<pair.second<<" ]\n";
 		}
 		else {
 
-			ss<<pair.second<<" ";
+			ss<<pair.second<<"\n";
 		}
 	}
 	

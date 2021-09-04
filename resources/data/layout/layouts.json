@@ -34,6 +34,54 @@
 			"type":"box",
 			"location":[0, 0, 800, 600],
 			"rgba":[0,0,0,64]
+		},
+		{
+			"id":"text_title",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"game_over_font",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"your_score_title",
+			"type":"ttf",
+			"location":[60, 160],
+			"text":"...",
+			"font":"game_over_font",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"your_score_value",
+			"type":"ttf",
+			"location":[200, 160],
+			"text":"...",
+			"font":"game_over_font",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"got_hi_score_title",
+			"type":"ttf",
+			"location":[100, 220],
+			"text":"...",
+			"font":"game_over_font",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"enter_hi_score",
+			"type":"ttf",
+			"location":[100, 250],
+			"text":"...",
+			"font":"game_over_font",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"caret",
+			"type":"ttf",
+			"location":[100, 260],
+			"text":"          ",
+			"font":"game_over_font",
+			"rgba":[255, 255, 255, 160]
 		}
 	]
 }

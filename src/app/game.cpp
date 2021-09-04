@@ -663,8 +663,8 @@ void game::reset() {
 	table_serving.reset();
 	player_instance.reset();
 	player_tray.reset();
-	player_score.reset();
 	bar_selector_instance.reset();
 	current_interaction_type=interaction_types::none;
+	//the player score is reset in the game over controller!
 }
 

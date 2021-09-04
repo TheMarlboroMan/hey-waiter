@@ -21,6 +21,7 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/score.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/hi_score.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/resources.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/enter_name.cpp
 	PARENT_SCOPE
 )
 

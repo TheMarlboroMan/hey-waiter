@@ -1,6 +1,10 @@
 [[menu-title]] {{Hey waiter!!}}
 [[menu-hi_scores]] {{Hi-scores:}}
 
+[[game_over-title]] {{Game over!!}}
+[[game_over-hi_score]] {{You got a hi-score!!!}}
+[[game_over-your_score]] {{Your score:}}
+
 [[game-pick_consumables]]{{Fill tray}}
 [[game-empty_tray]]{{Empty tray}}
 [[game-take_order]]{{Take order}}

@@ -4,9 +4,12 @@ A table-waiting game.
 # TODO:
 
 - Some bug shows up on serving.
-- When game over, if the score can be submitted, do so.
-	- build the score object at the driver level, pass it on to controllers
-	- make it some other controller drawing on top of the regular one??
-	- make the game over controller be on top????
+- Game over, use keys to enter your initials!!!!
+	- interact finishes the input.
 - Redefine keys, always, always
 - Help controller explaining the sytems
+
+# Credits:
+
+Font Origami Mommy by Tepid Monkey Fonts (https://www.1001fonts.com/users/tepidmonkey/)
+The font was modified so all characters had the same width.
