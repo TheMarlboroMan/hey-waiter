@@ -11,11 +11,13 @@
 [[settings-input_up]]{{Up}}
 [[settings-input_down]]{{Down}}
 [[settings-input_interact]]{{Interact}}
-[[settings-learn]]{{Enter new input, escape to cancel}}
+[[settings-learn]]{{learning...}}
 [[settings-mouse_button]]{{Mouse }}
 [[settings-joystick]]{{Joystick }}
 [[settings-button]]{{button }}
 [[settings-back]]{{Back}}
+
+[[how_to_play-placeholder]]{{This is placeholder text}}
 
 [[game_over-title]] {{Game over!!}}
 [[game_over-hi_score]] {{You got a hi-score!!!}}

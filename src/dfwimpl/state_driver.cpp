@@ -107,7 +107,7 @@ void state_driver::prepare_resources(
 //	r_loader.generate_textures(tools::explode_lines_from_file(std::string("data/resources/textures.txt")));
 
 	r_loader.generate_sounds(tools::explode_lines_from_file(env.build_data_path("audio.txt")));
-//	r_loader.generate_music(tools::explode_lines_from_file(std::string("data/resources/music.txt")));
+	r_loader.generate_music(tools::explode_lines_from_file(env.build_data_path("music.txt")));
 
 	std::ifstream resfile(env.build_data_path("fonts.txt"));
 	if(!resfile.is_open()) {
@@ -150,6 +150,10 @@ void state_driver::prepare_resources(
 			
 			ss>>resources.settings_ttf;
 		}
+		else if(title=="how_to_play_ttf") {
+			
+			ss>>resources.how_to_play_ttf;
+		}
 		else if(title=="main_menu_font_size") {
 
 			ss>>resources.game_hud_font_size;
@@ -165,6 +169,10 @@ void state_driver::prepare_resources(
 		else if(title=="settings_font_size") {
 
 			ss>>resources.settings_font_size;
+		}
+		else if(title=="how_to_play_font_size") {
+
+			ss>>resources.how_to_play_font_size;
 		}
 		else {
 
@@ -196,6 +204,12 @@ void state_driver::prepare_resources(
 		"settings",
 		resources.settings_font_size,
 		env.build_data_path(std::string{"fonts/"}+resources.settings_ttf)
+	);
+
+	ttf_manager.insert(
+		"how_to_play",
+		resources.how_to_play_font_size,
+		env.build_data_path(std::string{"fonts/"}+resources.how_to_play_ttf)
 	);
 }
 
@@ -257,6 +271,18 @@ void state_driver::register_controllers(
 			_kernel.get_screen().get_rect()
 		)
 	);
+	reg(
+		c_how_to_play, 
+		controller::t_states::state_how_to_play, 
+		new controller::how_to_play(
+			log,
+			env,
+			_kernel.get_audio(), 
+			_kernel.get_audio_resource_manager(), 
+			resources, 
+			i8n, 
+			ttf_manager
+		));
 	//[new-controller-mark]
 }
 

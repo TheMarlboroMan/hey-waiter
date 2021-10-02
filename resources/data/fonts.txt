@@ -6,3 +6,5 @@ main_menu_ttf OrigamiMommy.ttf
 main_menu_font_size 16
 settings_ttf OrigamiMommy.ttf
 settings_font_size 16
+how_to_play_ttf OrigamiMommy.ttf
+how_to_play_font_size 16

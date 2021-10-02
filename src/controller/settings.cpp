@@ -102,7 +102,7 @@ settings::settings(
 	};
 
 	auto align_rect=_screen_rect;
-	align_rect.w/=3;
+	align_rect.w/=2;
 
 	auto left_side_align=ldv::representation_alignment{
 		ldv::representation_alignment::h::inner_right,

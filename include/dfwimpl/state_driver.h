@@ -17,6 +17,7 @@
 #include "../../include/controller/menu.h"
 #include "../../include/controller/game_over.h"
 #include "../../include/controller/settings.h"
+#include "../../include/controller/how_to_play.h"
 //[new-controller-header-mark]
 
 //Specific app_config
@@ -67,6 +68,7 @@ class state_driver:
 	ptr_controller					c_menu;
 	ptr_controller					c_game_over;
 	ptr_controller					c_settings;
+	ptr_controller					c_how_to_play;
 	//[new-controller-property-mark]
 };
 

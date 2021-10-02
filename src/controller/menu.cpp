@@ -54,6 +54,8 @@ menu::menu(
 	set_text("menu_start_game", "menu-start_game");
 	set_text("menu_how_to_play", "menu-how_to_play");
 	set_text("menu_options", "menu-options");
+
+	audio.play_music(audio_rm.get_music(app::resources::mus_default));
 }
 
 void menu::awake(
@@ -99,17 +101,17 @@ void menu::loop(
 
 		switch(current_selection) {
 
-				//TODO: with transition
+			//TODO: with transition
 			case 0:
 				set_state(t_states::state_game);
 				return;
 			case 1:
-				//TODO: how to play
+				set_state(t_states::state_how_to_play);
+				return;
 			case 2:
 				set_state(t_states::state_settings);
 				return;
 			break;
-
 		}
 	}
 }
