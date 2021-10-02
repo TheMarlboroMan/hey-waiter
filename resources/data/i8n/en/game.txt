@@ -10,7 +10,7 @@
 [[settings-input_right]]{{Right}}
 [[settings-input_up]]{{Up}}
 [[settings-input_down]]{{Down}}
-[[settings-input_action]]{{Interact}}
+[[settings-input_interact]]{{Interact}}
 [[settings-learn]]{{Enter new input, escape to cancel}}
 [[settings-mouse_button]]{{Mouse }}
 [[settings-joystick]]{{Joystick }}

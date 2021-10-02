@@ -19,7 +19,7 @@
 		{
 			"id":"20_music_volume",
 			"type":"ttf",
-			"location":[60, 60],
+			"location":[60, 80],
 			"text":"...",
 			"font":"settings",
 			"rgba":[255, 255, 255, 160]
@@ -27,7 +27,7 @@
 		{
 			"id":"20_music_volume_value",
 			"type":"ttf",
-			"location":[60, 60],
+			"location":[60, 80],
 			"text":"...",
 			"font":"settings",
 			"rgba":[255, 255, 255, 160]
@@ -35,7 +35,7 @@
 		{
 			"id":"30_left",
 			"type":"ttf",
-			"location":[60, 60],
+			"location":[60, 100],
 			"text":"...",
 			"font":"settings",
 			"rgba":[255, 255, 255, 160]
@@ -43,7 +43,7 @@
 		{
 			"id":"30_left_value",
 			"type":"ttf",
-			"location":[60, 60],
+			"location":[60, 100],
 			"text":"...",
 			"font":"settings",
 			"rgba":[255, 255, 255, 160]
@@ -51,7 +51,7 @@
 		{
 			"id":"40_right",
 			"type":"ttf",
-			"location":[60, 60],
+			"location":[60, 120],
 			"text":"...",
 			"font":"settings",
 			"rgba":[255, 255, 255, 160]
@@ -59,7 +59,7 @@
 		{
 			"id":"40_right_value",
 			"type":"ttf",
-			"location":[60, 60],
+			"location":[60, 120],
 			"text":"...",
 			"font":"settings",
 			"rgba":[255, 255, 255, 160]
@@ -67,7 +67,7 @@
 		{
 			"id":"50_up",
 			"type":"ttf",
-			"location":[60, 60],
+			"location":[60, 140],
 			"text":"...",
 			"font":"settings",
 			"rgba":[255, 255, 255, 160]
@@ -75,7 +75,7 @@
 		{
 			"id":"50_up_value",
 			"type":"ttf",
-			"location":[60, 60],
+			"location":[60, 140],
 			"text":"...",
 			"font":"settings",
 			"rgba":[255, 255, 255, 160]
@@ -83,7 +83,7 @@
 		{
 			"id":"60_down",
 			"type":"ttf",
-			"location":[60, 60],
+			"location":[60, 160],
 			"text":"...",
 			"font":"settings",
 			"rgba":[255, 255, 255, 160]
@@ -91,7 +91,7 @@
 		{
 			"id":"60_down_value",
 			"type":"ttf",
-			"location":[60, 60],
+			"location":[60, 160],
 			"text":"...",
 			"font":"settings",
 			"rgba":[255, 255, 255, 160]
@@ -99,7 +99,7 @@
 		{
 			"id":"70_interact",
 			"type":"ttf",
-			"location":[60, 60],
+			"location":[60, 180],
 			"text":"...",
 			"font":"settings",
 			"rgba":[255, 255, 255, 160]
@@ -107,7 +107,7 @@
 		{
 			"id":"70_interact_value",
 			"type":"ttf",
-			"location":[60, 60],
+			"location":[60, 180],
 			"text":"...",
 			"font":"settings",
 			"rgba":[255, 255, 255, 160]
@@ -115,15 +115,7 @@
 		{
 			"id":"80_back",
 			"type":"ttf",
-			"location":[60, 60],
-			"text":"...",
-			"font":"settings",
-			"rgba":[255, 255, 255, 160]
-		},
-		{
-			"id":"80_back_value",
-			"type":"ttf",
-			"location":[60, 60],
+			"location":[60, 200],
 			"text":"...",
 			"font":"settings",
 			"rgba":[255, 255, 255, 160]

@@ -104,8 +104,12 @@ void menu::loop(
 				set_state(t_states::state_game);
 				return;
 			case 1:
+				//TODO: how to play
 			case 2:
+				set_state(t_states::state_settings);
+				return;
 			break;
+
 		}
 	}
 }

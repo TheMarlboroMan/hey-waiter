@@ -86,7 +86,7 @@ settings::settings(
 		"40_right_value",
 		"50_up_value",
 		"60_down_value",
-		"70_interact"
+		"70_interact_value"
 	};
 
 	//Translate and align left side...
@@ -198,6 +198,7 @@ void settings::loop_navigate(
 
 		right(_input.is_input_down(input::right), _lid.delta);
 	}
+	//TODO: or SDL space xD!
 	else if(_input.is_input_down(input::interact)) {
 
 		select();
@@ -452,7 +453,7 @@ void settings::sync_view() {
 	set_value("40_right_value", translate_input(input::right, "40_right"));
 	set_value("50_up_value", translate_input(input::up, "50_up"));
 	set_value("60_down_value", translate_input(input::down, "60_down"));
-	set_value("70_interact", translate_input(input::interact, "70_interact"));
+	set_value("70_interact_value", translate_input(input::interact, "70_interact"));
 }
 
 void settings::sync_selection() {
