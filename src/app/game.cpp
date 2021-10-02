@@ -5,6 +5,7 @@
 #include <app/order_generator.h>
 #include <app/log.h>
 #include <app/order_checker.h>
+#include <app/resources.h>
 
 #include <tools/number_generator.h>
 #include <lm/sentry.h>
@@ -15,9 +16,13 @@ using namespace app;
 
 game::game(
 	lm::logger& _logger,
+	dfw::audio& _audio,
+	const lda::resource_manager& _audio_rm,
 	app::score& _player_score
 ):
 	log{_logger},
+	audio{_audio},
+	audio_rm{_audio_rm},
 	player_score{_player_score},
 	world_instance{0,0},
 	player_instance{0,0,0,0},
@@ -458,6 +463,7 @@ void game::process_interactions() {
 		break;
 		case game::interaction_types::pick_consumables:
 
+			audio.play_sound(audio_rm.get_sound(app::resources::snd_default));
 			current_mode=modes::fill_tray;
 			bar_selector_instance.reset();
 			return;

@@ -1,0 +1,51 @@
+{
+	"settings": {
+		"properties":{
+			"wrap": true
+		},
+		"entries":[
+			{
+				"type":"int",
+				"key":"10_sound_volume",
+				"properties": {
+					"wrap":false,
+					"min": 1,
+					"max": 100
+				}
+			},
+			{
+				"type":"int",
+				"key":"20_music_volume",
+				"properties": {
+					"wrap":false,
+					"min": 1,
+					"max": 100
+				}
+			},
+			{
+				"type":"string",
+				"key":"30_left"
+			},
+			{
+				"type":"string",
+				"key":"40_right"
+			},
+			{
+				"type":"string",
+				"key":"50_up"
+			},
+			{
+				"type":"string",
+				"key":"60_down"
+			},
+			{
+				"type":"string",
+				"key":"70_interact"
+			},
+			{
+				"type":"void",
+				"key":"80_back"
+			}
+		]
+	}
+}

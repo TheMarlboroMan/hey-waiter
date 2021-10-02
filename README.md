@@ -3,14 +3,22 @@ A table-waiting game.
 
 # TODO:
 
-- Add sounds or music, beeps or whatever
+- Add music
+- Add sounds
+- Graphics
 - Some bug shows up on serving and sigsevs
-- Redefine keys, always, always
+- Menu:
+	- start
+	- how to play
+	- options
+		- controls
+		- volume
+		- volume
 - Help controller explaining the sytems
+- Add software version to title.
 
 # BUGS:
 
-- Score is shown as zero after entering a high score.
 
 # Credits:
 

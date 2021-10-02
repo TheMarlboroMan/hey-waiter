@@ -1,5 +1,21 @@
 [[menu-title]] {{Hey waiter!!}}
 [[menu-hi_scores]] {{Hi-scores:}}
+[[menu-start_game]] {{Start game}}
+[[menu-how_to_play]] {{How to play}}
+[[menu-options]] {{Options}}
+
+[[settings-sound_volume]]{{Sound volume}}
+[[settings-music_volume]]{{Music volume}}
+[[settings-input_left]]{{Left}}
+[[settings-input_right]]{{Right}}
+[[settings-input_up]]{{Up}}
+[[settings-input_down]]{{Down}}
+[[settings-input_action]]{{Interact}}
+[[settings-learn]]{{Enter new input, escape to cancel}}
+[[settings-mouse_button]]{{Mouse }}
+[[settings-joystick]]{{Joystick }}
+[[settings-button]]{{button }}
+[[settings-back]]{{Back}}
 
 [[game_over-title]] {{Game over!!}}
 [[game_over-hi_score]] {{You got a hi-score!!!}}

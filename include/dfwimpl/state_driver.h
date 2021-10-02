@@ -16,6 +16,7 @@
 #include "../../include/controller/game.h"
 #include "../../include/controller/menu.h"
 #include "../../include/controller/game_over.h"
+#include "../../include/controller/settings.h"
 //[new-controller-header-mark]
 
 //Specific app_config
@@ -50,7 +51,7 @@ class state_driver:
 	void 						virtualize_input(dfw::input& input);
 
 	//references
-	dfwimpl::config&				config;
+	dfwimpl::config&			config;
 	lm::logger&					log;
 	const app::env&				env;
 	
@@ -65,6 +66,7 @@ class state_driver:
 	ptr_controller					c_game;
 	ptr_controller					c_menu;
 	ptr_controller					c_game_over;
+	ptr_controller					c_settings;
 	//[new-controller-property-mark]
 };
 

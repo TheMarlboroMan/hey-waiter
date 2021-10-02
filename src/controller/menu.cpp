@@ -14,6 +14,8 @@ using namespace controller;
 menu::menu(
 	lm::logger& _log,
 	const app::env& _env,
+	dfw::audio& _audio,
+	const lda::resource_manager& _audio_rm,
 	const app::resources& _resources,
 	const ldtools::ttf_manager& _ttf_manager,
 	const tools::i8n& _i8n,
@@ -21,6 +23,8 @@ menu::menu(
 )
 	:log(_log),
 	env{_env},
+	audio{_audio},
+	audio_rm{_audio_rm},
 	resources{_resources},
 	i8n{_i8n},
 	hi_scores{_hi_scores}
@@ -47,6 +51,9 @@ menu::menu(
 
 	set_text("text_title", "menu-title");
 	set_text("hi_scores_title", "menu-hi_scores");
+	set_text("menu_start_game", "menu-start_game");
+	set_text("menu_how_to_play", "menu-how_to_play");
+	set_text("menu_options", "menu-options");
 }
 
 void menu::awake(
@@ -60,7 +67,8 @@ void menu::awake(
 	}
 
 	static_cast<ldv::ttf_representation*>(layout.get_by_id("hi_scores"))->set_text(ss.str());
-
+	current_selection=0;
+	refresh();
 }
 
 void menu::loop(
@@ -73,13 +81,33 @@ void menu::loop(
 		return;
 	}
 
-	//TODO: perhaps this should be fixed values too, like space?
-	if(_input.is_input_down(input::interact)) {
+	//TODO: perhaps this should be fixed values too, like space and cursors???
 
-		set_state(t_states::state_game);
+	if(_input.is_input_down(input::up)) {
+
+		prev();
 		return;
 	}
 
+	if(_input.is_input_down(input::down)) {
+
+		next();
+		return;
+	}
+
+	if(_input.is_input_down(input::interact)) {
+
+		switch(current_selection) {
+
+				//TODO: with transition
+			case 0:
+				set_state(t_states::state_game);
+				return;
+			case 1:
+			case 2:
+			break;
+		}
+	}
 }
 
 void menu::draw(
@@ -88,4 +116,42 @@ void menu::draw(
 ) {
 
 	layout.draw(_screen);
+}
+
+void menu::next() {
+
+	if(current_selection < 2) {
+
+		++current_selection;
+		refresh();
+		audio.play_sound(audio_rm.get_sound(app::resources::snd_default));
+	}
+}
+
+void menu::prev() {
+
+	if(0==current_selection) {
+
+		return;
+	}
+
+	--current_selection;
+	refresh();
+	audio.play_sound(audio_rm.get_sound(app::resources::snd_default));
+}
+
+void menu::refresh() {
+
+	std::vector<std::string> ids{
+		"menu_start_game",
+		"menu_how_to_play",
+		"menu_options"
+	};
+
+	for(const auto& id : ids) {
+		static_cast<ldv::ttf_representation*>(layout.get_by_id(id))->set_color(ldv::rgba8(255, 255, 255, 160));
+	}
+
+	static_cast<ldv::ttf_representation*>(layout.get_by_id(ids[current_selection]))->set_color(ldv::rgba8(255, 255, 255, 255));
+
 }

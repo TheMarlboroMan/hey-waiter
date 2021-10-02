@@ -7,6 +7,8 @@
 #include <app/hi_score.h>
 
 
+#include <lda/resource_manager.h>
+#include <dfw/audio.h>
 #include <dfw/controller_interface.h>
 #include <lm/logger.h>
 #include <ldtools/ttf_manager.h>
@@ -24,6 +26,8 @@ class menu:
 
 								menu(lm::logger&,
 									const app::env&,
+									dfw::audio&,
+									const lda::resource_manager&,
 									const app::resources&,
 									const ldtools::ttf_manager&,
 									const tools::i8n&,
@@ -37,12 +41,19 @@ class menu:
 
 	private:
 
+	void						refresh();
+	void						next();
+	void						prev();
+
 	//references...
 	lm::logger&					log;
 	const app::env&				env;
+	dfw::audio&					audio;
+	const lda::resource_manager& audio_rm;
 	const app::resources&		resources;
 	const tools::i8n&			i8n;
 	app::hi_score_manager&		hi_scores;
+	std::size_t					current_selection{0};
 
 	//properties
 	ldtools::view_composer		layout;

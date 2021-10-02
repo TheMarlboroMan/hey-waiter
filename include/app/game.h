@@ -13,6 +13,8 @@
 #include "score.h"
 
 #include <lm/logger.h>
+#include <dfw/audio.h>
+#include <lda/resource_manager.h>
 #include <vector>
 #include <optional>
 
@@ -24,7 +26,7 @@ class game {
 
 	public:
 
-					game(lm::logger&, app::score&);
+					game(lm::logger&, dfw::audio&, const lda::resource_manager&, app::score&);
 	void			init(const std::string&);
 	void			tick(float _delta);
 	void			set_input(app::input& _i) {game_input=std::move(_i);}
@@ -72,6 +74,8 @@ class game {
 	void			table_done_with_order(app::table&);
 
 	lm::logger&		log;
+	dfw::audio&		audio;
+	const lda::resource_manager& audio_rm;
 	app::score&		player_score;
 
 	modes			current_mode{modes::movement};

@@ -1,4 +1,134 @@
 {
+	"settings": [
+		{
+			"id":"10_sound_volume",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"10_sound_volume_value",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"20_music_volume",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"20_music_volume_value",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"30_left",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"30_left_value",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"40_right",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"40_right_value",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"50_up",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"50_up_value",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"60_down",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"60_down_value",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"70_interact",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"70_interact_value",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"80_back",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"80_back_value",
+			"type":"ttf",
+			"location":[60, 60],
+			"text":"...",
+			"font":"settings",
+			"rgba":[255, 255, 255, 160]
+		}
+	],
 	"main_menu": [
 		{
 			"type":"screen",
@@ -15,7 +145,7 @@
 		{
 			"id":"hi_scores_title",
 			"type":"ttf",
-			"location":[100, 220],
+			"location":[100, 120],
 			"text":"...",
 			"font":"main_menu_font",
 			"rgba":[255, 255, 255, 160]
@@ -23,7 +153,31 @@
 		{
 			"id":"hi_scores",
 			"type":"ttf",
-			"location":[120, 260],
+			"location":[120, 160],
+			"text":"...",
+			"font":"main_menu_font",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"menu_start_game",
+			"type":"ttf",
+			"location":[120, 360],
+			"text":"...",
+			"font":"main_menu_font",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"menu_how_to_play",
+			"type":"ttf",
+			"location":[120, 380],
+			"text":"...",
+			"font":"main_menu_font",
+			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"menu_options",
+			"type":"ttf",
+			"location":[120, 400],
 			"text":"...",
 			"font":"main_menu_font",
 			"rgba":[255, 255, 255, 160]

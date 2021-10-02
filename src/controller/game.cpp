@@ -1,16 +1,15 @@
 #include "../../include/controller/game.h"
+#include "../../include/input/input.h"
 #include <app/env.h>
 #include <app/input.h>
-
-//local
-#include "../../include/input/input.h"
-
 
 using namespace controller;
 
 game::game(
 	lm::logger& plog,
 	const app::env& _env,
+	dfw::audio& _audio,
+	const lda::resource_manager& _audio_rm,
 	const app::resources& _resources,
 	const ldtools::ttf_manager& _ttf_manager,
 	const tools::i8n& _i8n,
@@ -19,7 +18,7 @@ game::game(
 	log(plog),
 	env{_env},
 	camera{ {0,0,500,500},{0,0} },
-	game_instance{plog, _player_score},
+	game_instance{plog, _audio, _audio_rm, _player_score},
 	draw_instance{_resources, _ttf_manager, _i8n}
 {
 

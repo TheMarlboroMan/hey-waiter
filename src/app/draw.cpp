@@ -87,6 +87,13 @@ void draw::do_draw(
 	);
 	player_box.draw(_screen, _camera);
 
+
+	//If the game is over, we just want the world drawn.
+	if(_game.is_game_over()) {
+
+		return;
+	}
+
 	switch(_game.current_mode) {
 
 		case game::modes::movement:

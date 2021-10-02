@@ -9,6 +9,8 @@
 #include <app/score.h>
 
 #include <dfw/controller_interface.h>
+#include <lda/resource_manager.h>
+#include <dfw/audio.h>
 #include <lm/logger.h>
 #include <ldv/camera.h>
 #include <ldtools/ttf_manager.h>
@@ -26,6 +28,8 @@ class game:
 								game(
 									lm::logger&, 
 									const app::env&, 
+									dfw::audio&,
+									const lda::resource_manager&,
 									const app::resources&, 
 									const ldtools::ttf_manager&, 
 									const tools::i8n&, 

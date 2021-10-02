@@ -6,14 +6,14 @@ enter_name::enter_name(
 
 )
 	:acceptable{"_ABCDEFGHIJKLMNOPQRSTUVWXYZ-!?0123456789 "}, //I would love to include a space and symbols, but it is not monospaced
-	player_name("          ")
+	player_name("__________")
 {
 
 }
 
 void enter_name::reset() {
 
-	player_name="          ";
+	player_name="__________";
 	current_position=0;
 	current_index=0;
 	finished=false;

@@ -93,20 +93,26 @@ void state_driver::prepare_input(dfw::kernel& kernel) {
 	kernel.init_input_system(pairs);
 }
 
-void state_driver::prepare_resources(dfw::kernel& /*kernel*/) {
+void state_driver::prepare_resources(
+	dfw::kernel& _kernel
+) {
 
-/*
-	dfw::resource_loader r_loader(kernel.get_video_resource_manager(), kernel.get_audio_resource_manager());
 
-	r_loader.generate_textures(tools::explode_lines_from_file(std::string("data/resources/textures.txt")));
-	r_loader.generate_sounds(tools::explode_lines_from_file(std::string("data/resources/audio.txt")));
-	r_loader.generate_music(tools::explode_lines_from_file(std::string("data/resources/music.txt")));
-*/
+	dfw::resource_loader r_loader(
+		_kernel.get_video_resource_manager(), 
+		_kernel.get_audio_resource_manager(),
+		env.build_data_path("")
+	);
 
-	std::ifstream resfile(env.build_data_path("resources.dat"));
+//	r_loader.generate_textures(tools::explode_lines_from_file(std::string("data/resources/textures.txt")));
+
+	r_loader.generate_sounds(tools::explode_lines_from_file(env.build_data_path("audio.txt")));
+//	r_loader.generate_music(tools::explode_lines_from_file(std::string("data/resources/music.txt")));
+
+	std::ifstream resfile(env.build_data_path("fonts.txt"));
 	if(!resfile.is_open()) {
 
-		throw std::runtime_error("could not open resources file");
+		throw std::runtime_error("could not open font files");
 	}
 
 	std::string line, title;
@@ -140,6 +146,10 @@ void state_driver::prepare_resources(dfw::kernel& /*kernel*/) {
 			
 			ss>>resources.game_hud_ttf;
 		}
+		else if(title=="settings_ttf") {
+			
+			ss>>resources.settings_ttf;
+		}
 		else if(title=="main_menu_font_size") {
 
 			ss>>resources.game_hud_font_size;
@@ -152,32 +162,46 @@ void state_driver::prepare_resources(dfw::kernel& /*kernel*/) {
 
 			ss>>resources.game_over_font_size;
 		}
+		else if(title=="settings_font_size") {
+
+			ss>>resources.settings_font_size;
+		}
 		else {
 
-			throw std::runtime_error("straneous data in resources file");
+			std::string error{"straneous data in resources file '"};
+			error+=title+"'";
+			throw std::runtime_error(error);
 		}
 	}
 
 	ttf_manager.insert(
-		"menu", 
-		resources.main_menu_font_size, 
+		"menu",
+		resources.main_menu_font_size,
 		env.build_data_path(std::string{"fonts/"}+resources.main_menu_ttf)
 	);
 
 	ttf_manager.insert(
-		"hud", 
-		resources.game_hud_font_size, 
+		"hud",
+		resources.game_hud_font_size,
 		env.build_data_path(std::string{"fonts/"}+resources.game_hud_ttf)
 	);
 
 	ttf_manager.insert(
-		"game_over", 
-		resources.game_over_font_size, 
+		"game_over",
+		resources.game_over_font_size,
 		env.build_data_path(std::string{"fonts/"}+resources.game_over_ttf)
+	);
+
+	ttf_manager.insert(
+		"settings",
+		resources.settings_font_size,
+		env.build_data_path(std::string{"fonts/"}+resources.settings_ttf)
 	);
 }
 
-void state_driver::register_controllers(dfw::kernel& /*kernel*/) {
+void state_driver::register_controllers(
+	dfw::kernel& _kernel
+) {
 
 	auto reg=[this](ptr_controller& _ptr, int _i, dfw::controller_interface * _ci) {
 		_ptr.reset(_ci);
@@ -187,17 +211,51 @@ void state_driver::register_controllers(dfw::kernel& /*kernel*/) {
 	reg(
 		c_game, 
 		controller::t_states::state_game, 
-		new controller::game(log, env, resources, ttf_manager, i8n, player_score)
+		new controller::game(
+			log, 
+			env, 
+			_kernel.get_audio(), 
+			_kernel.get_audio_resource_manager(), 
+			resources, 
+			ttf_manager, 
+			i8n, 
+			player_score
+		)
 	);
 	reg(
 		c_menu, 
 		controller::t_states::state_menu, 
-		new controller::menu(log, env, resources, ttf_manager, i8n, hi_scores)
+		new controller::menu(
+			log, 
+			env, 
+			_kernel.get_audio(), 
+			_kernel.get_audio_resource_manager(), 
+			resources, 
+			ttf_manager, 
+			i8n, 
+			hi_scores
+		)
 	);
 	reg(
 		c_game_over, 
 		controller::t_states::state_game_over, 
 		new controller::game_over(log, env, resources, ttf_manager, i8n, hi_scores, player_score)
+	);
+	reg(
+		c_settings, 
+		controller::t_states::state_settings, 
+		new controller::settings(
+			log, 
+			env, 
+			_kernel.get_audio(), 
+			_kernel.get_audio_resource_manager(), 
+			resources, 
+			i8n, 
+			_kernel.get_input(),
+			config,
+			ttf_manager,
+			_kernel.get_screen().get_rect()
+		)
 	);
 	//[new-controller-mark]
 }
