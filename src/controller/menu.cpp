@@ -12,41 +12,34 @@
 using namespace controller;
 
 menu::menu(
-	lm::logger& _log,
-	const app::env& _env,
-	dfw::audio& _audio,
-	const lda::resource_manager& _audio_rm,
-	const app::resources& _resources,
-	const ldtools::ttf_manager& _ttf_manager,
-	const tools::i8n& _i8n,
-	app::hi_score_manager& _hi_scores
+	app::dependency_container& _dependency_container
 )
-	:log(_log),
-	env{_env},
-	audio{_audio},
-	audio_rm{_audio_rm},
-	resources{_resources},
-	i8n{_i8n},
-	hi_scores{_hi_scores}
+	:log(_dependency_container.get_log()),
+	env{_dependency_container.get_env()},
+	audio{_dependency_container.get_audio()},
+	audio_rm{_dependency_container.get_audio_resource_manager()},
+	resources{_dependency_container.get_resources()},
+	i8n{_dependency_container.get_i8n()},
+	hi_scores{_dependency_container.get_hi_score_manager()}
 {
 
 	layout.map_font(
 		"main_menu_font", 
-		_ttf_manager.get(
+		_dependency_container.get_ttf_manager().get(
 			"menu", 
 			resources.main_menu_font_size
 		)
 	);
 
-	const std::string layout_path=_env.build_data_path("layout/layouts.json");
+	const std::string layout_path=env.build_data_path("layout/layouts.json");
 	auto document=tools::parse_json_string(
 		tools::dump_file(layout_path)
 	);
 	layout.parse(document["main_menu"]);
 
-	auto set_text=[this, &_i8n](const std::string& _id, const std::string& _key) {
+	auto set_text=[this](const std::string& _id, const std::string& _key) {
 
-		static_cast<ldv::ttf_representation*>(layout.get_by_id(_id))->set_text(_i8n.get(_key));
+		static_cast<ldv::ttf_representation*>(layout.get_by_id(_id))->set_text(i8n.get(_key));
 	};
 
 	set_text("text_title", "menu-title");

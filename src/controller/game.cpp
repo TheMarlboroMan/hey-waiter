@@ -6,20 +6,13 @@
 using namespace controller;
 
 game::game(
-	lm::logger& plog,
-	const app::env& _env,
-	dfw::audio& _audio,
-	const lda::resource_manager& _audio_rm,
-	const app::resources& _resources,
-	const ldtools::ttf_manager& _ttf_manager,
-	const tools::i8n& _i8n,
-	app::score& _player_score
+	app::dependency_container& _dc
 ):
-	log(plog),
-	env{_env},
+	log{_dc.get_log()},
+	env{_dc.get_env()},
 	camera{ {0,0,500,500},{0,0} },
-	game_instance{plog, _audio, _audio_rm, _player_score},
-	draw_instance{_resources, _ttf_manager, _i8n}
+	game_instance{_dc.get_log(), _dc.get_audio(), _dc.get_audio_resource_manager(), _dc.get_score()},
+	draw_instance{_dc.get_resources(), _dc.get_ttf_manager(), _dc.get_i8n()}
 {
 
 	camera.set_coordinate_system(ldv::camera::tsystem::cartesian);

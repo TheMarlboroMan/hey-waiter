@@ -7,32 +7,23 @@
 
 using namespace controller;
 
-how_to_play::how_to_play(
-	lm::logger& _logger,
-	const app::env& _env,
-	dfw::audio& _audio,
-	const lda::resource_manager& _arm,
-	const app::resources& _resources,
-	const tools::i8n& _i8n,
-	const ldtools::ttf_manager& _ttf_manager
-)
-	:log{_logger},
-	env{_env},
-	audio{_audio},
-	audio_rm{_arm},
-	resources{_resources},
-	i8n{_i8n} {
+how_to_play::how_to_play(app::dependency_container& _dc) 
+	:log{_dc.get_log()},
+	env{_dc.get_env()},
+	audio{_dc.get_audio()},
+	audio_rm{_dc.get_audio_resource_manager()},
+	i8n{_dc.get_i8n()} {
 
 	layout.map_font(
 		"how_to_play", 
-		_ttf_manager.get(
+		_dc.get_ttf_manager().get(
 			"how_to_play", 
-			resources.settings_font_size
+			_dc.get_resources().settings_font_size
 		)
 	);
 
 	//TODO: This json file is being parsed everywhere!!! Just parse it once!!!
-	const std::string layout_path=_env.build_data_path("layout/layouts.json");
+	const std::string layout_path=env.build_data_path("layout/layouts.json");
 	auto document=tools::parse_json_string(
 		tools::dump_file(layout_path)
 	);

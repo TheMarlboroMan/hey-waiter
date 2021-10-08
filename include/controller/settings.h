@@ -1,6 +1,7 @@
 #pragma once
 
 #include "states.h"
+#include "app/dependency_container.h"
 #include "app/env.h"
 #include <app/resources.h>
 #include "dfwimpl/config.h"
@@ -24,18 +25,7 @@ class settings:
 
 	public:
 
-	                            settings(
-									lm::logger&,
-									const app::env&,
-									dfw::audio&,
-									const lda::resource_manager&,
-									const app::resources&,
-									const tools::i8n&,
-									dfw::input&,
-									dfwimpl::config&,
-									const ldtools::ttf_manager& _ttf_manager,
-									const ldv::rect&
-	                            );
+	                            settings(app::dependency_container&);
 
 	virtual void                loop(dfw::input&, const dfw::loop_iteration_data&);
 	virtual void                draw(ldv::screen&, int);
@@ -66,7 +56,6 @@ class settings:
 	const app::env&				env;
 	dfw::audio&					audio;
 	const lda::resource_manager& audio_rm;
-	const app::resources&		resources;
 	const tools::i8n&			i8n;
 	dfw::input&					input;
 	dfwimpl::config&			config;

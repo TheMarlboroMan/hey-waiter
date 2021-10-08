@@ -3,6 +3,8 @@
 //local
 #include "states.h"
 #include <app/game.h>
+
+#include <app/dependency_container.h>
 #include <app/env.h>
 #include <app/resources.h>
 #include <app/draw.h>
@@ -25,16 +27,7 @@ class game:
 
 	public:
 
-								game(
-									lm::logger&, 
-									const app::env&, 
-									dfw::audio&,
-									const lda::resource_manager&,
-									const app::resources&, 
-									const ldtools::ttf_manager&, 
-									const tools::i8n&, 
-									app::score&
-								);
+								game(app::dependency_container&);
 	virtual void 				loop(dfw::input&, const dfw::loop_iteration_data&);
 	virtual void 				draw(ldv::screen&, int);
 	virtual void 				awake(dfw::input& /*input*/) {}

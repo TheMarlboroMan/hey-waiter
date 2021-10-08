@@ -15,26 +15,15 @@
 
 using namespace controller;
 
-settings::settings(
-	lm::logger& _log,
-	const app::env& _env,
-	dfw::audio& _audio, 
-	const lda::resource_manager& _audio_rm,
-	const app::resources& _resources,
-	const tools::i8n& _i8n,
-	dfw::input& _input,
-	dfwimpl::config& _config,
-	const ldtools::ttf_manager& _ttf_manager,
-	const ldv::rect& _screen_rect
-):
-	log(_log),
-	env(_env),
-	audio{_audio},
-	audio_rm{_audio_rm},
-	resources{_resources},
-	i8n{_i8n},
-	input{_input},
-	config{_config}
+settings::settings(app::dependency_container& _dc) 
+:
+	log(_dc.get_log()),
+	env(_dc.get_env()),
+	audio{_dc.get_audio()},
+	audio_rm{_dc.get_audio_resource_manager()},
+	i8n{_dc.get_i8n()},
+	input{_dc.get_input()},
+	config{_dc.get_config()}
 {
 
 	auto json_document=tools::parse_json_string(
@@ -49,14 +38,14 @@ settings::settings(
 
 	layout.map_font(
 		"settings", 
-		_ttf_manager.get(
+		_dc.get_ttf_manager().get(
 			"settings", 
-			resources.settings_font_size
+			_dc.get_resources().settings_font_size
 		)
 	);
 
 	//TODO: This json file is being parsed everywhere!!! Just parse it once!!!
-	const std::string layout_path=_env.build_data_path("layout/layouts.json");
+	const std::string layout_path=env.build_data_path("layout/layouts.json");
 	auto document=tools::parse_json_string(
 		tools::dump_file(layout_path)
 	);
@@ -101,7 +90,7 @@ settings::settings(
 		{"80_back", "settings-back"}
 	};
 
-	auto align_rect=_screen_rect;
+	auto align_rect=_dc.get_screen().get_rect();
 	align_rect.w/=2;
 
 	auto left_side_align=ldv::representation_alignment{

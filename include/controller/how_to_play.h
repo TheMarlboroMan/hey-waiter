@@ -2,10 +2,10 @@
 
 //local
 #include "states.h"
+#include "app/dependency_container.h"
 #include "app/env.h"
 #include <app/resources.h>
 
-#include <dfw/controller_interface.h>
 #include <dfw/controller_interface.h>
 #include <dfw/audio.h>
 #include <lda/resource_manager.h>
@@ -24,15 +24,7 @@ class how_to_play:
 
 	public:
 
-								how_to_play(
-									lm::logger&,
-									const app::env&,
-									dfw::audio&,
-									const lda::resource_manager&,
-									const app::resources&,
-									const tools::i8n&,
-									const ldtools::ttf_manager&
-								);
+								how_to_play(app::dependency_container&);
 	virtual void 				loop(dfw::input&, const dfw::loop_iteration_data&);
 	virtual void 				draw(ldv::screen&, int);
 	virtual void 				awake(dfw::input& /*input*/) {}
@@ -46,7 +38,6 @@ class how_to_play:
 	const app::env&				env;
 	dfw::audio&					audio;
 	const lda::resource_manager& audio_rm;
-	const app::resources&		resources;
 	const tools::i8n&			i8n;
 
 	//properties

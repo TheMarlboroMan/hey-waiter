@@ -1,11 +1,8 @@
 #pragma once
 
 #include "config.h"
-#include <app/env.h>
-#include <app/resources.h>
-#include <app/hi_score.h>
-#include <app/score.h>
 
+#include <app/dependency_container.h>
 #include <dfw/state_driver_interface.h>
 #include <ldtools/ttf_manager.h>
 #include <tools/i8n.h>
@@ -54,14 +51,9 @@ class state_driver:
 	//references
 	dfwimpl::config&			config;
 	lm::logger&					log;
-	const app::env&				env;
+	app::dependency_container	dependency_container;
 	
 	//properties...
-	ldtools::ttf_manager		ttf_manager;
-	tools::i8n					i8n;
-	app::hi_score_manager		hi_scores;
-	app::score					player_score;
-	app::resources				resources;
 
 	typedef std::unique_ptr<dfw::controller_interface>	ptr_controller;
 	ptr_controller					c_game;

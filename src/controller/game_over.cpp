@@ -10,40 +10,31 @@
 
 using namespace controller;
 
-game_over::game_over(
-	lm::logger& _log,
-	const app::env& _env,
-	const app::resources& _resources,
-	const ldtools::ttf_manager& _ttf_manager,
-	const tools::i8n& _i8n,
-	app::hi_score_manager& _hi_scores,
-	app::score& _player_score
-)
-	:log(_log),
-	env{_env},
-	resources{_resources},
-	i8n{_i8n},
-	hi_scores{_hi_scores},
-	player_score{_player_score}
+game_over::game_over(app::dependency_container& _dc)
+	:log(_dc.get_log()),
+	env{_dc.get_env()},
+	i8n{_dc.get_i8n()},
+	hi_scores{_dc.get_hi_score_manager()},
+	player_score{_dc.get_score()}
 {
 
 	layout.map_font(
 		"game_over_font", 
-		_ttf_manager.get(
+		_dc.get_ttf_manager().get(
 			"game_over", 
-			resources.game_over_font_size
+			_dc.get_resources().game_over_font_size
 		)
 	);
 
-	const std::string layout_path=_env.build_data_path("layout/layouts.json");
+	const std::string layout_path=env.build_data_path("layout/layouts.json");
 	auto document=tools::parse_json_string(
 		tools::dump_file(layout_path)
 	);
 	layout.parse(document["game_over"]);
 
-	auto set_text=[this, &_i8n](const std::string& _id, const std::string& _key) {
+	auto set_text=[this](const std::string& _id, const std::string& _key) {
 
-		static_cast<ldv::ttf_representation*>(layout.get_by_id(_id))->set_text(_i8n.get(_key));
+		static_cast<ldv::ttf_representation*>(layout.get_by_id(_id))->set_text(i8n.get(_key));
 	};
 
 	set_text("text_title", "game_over-title");

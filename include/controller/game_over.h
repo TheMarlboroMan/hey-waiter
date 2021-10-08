@@ -2,6 +2,7 @@
 
 //local
 #include "states.h"
+#include <app/dependency_container.h>
 #include <app/env.h>
 #include <app/resources.h>
 #include <app/hi_score.h>
@@ -23,15 +24,7 @@ class game_over:
 
 	public:
 
-								game_over(
-									lm::logger&,
-									const app::env&,
-									const app::resources&,
-									const ldtools::ttf_manager&,
-									const tools::i8n&,
-									app::hi_score_manager&,
-									app::score&
-								);
+								game_over(app::dependency_container&);
 	virtual void 				loop(dfw::input&, const dfw::loop_iteration_data&);
 	virtual void 				draw(ldv::screen&, int);
 	virtual void 				awake(dfw::input& /*input*/);
@@ -49,7 +42,6 @@ class game_over:
 	//references...
 	lm::logger&					log;
 	const app::env&				env;
-	const app::resources&		resources;
 	const tools::i8n&			i8n;
 	app::hi_score_manager&		hi_scores;
 	app::score&					player_score; //not const, resets before exiting.

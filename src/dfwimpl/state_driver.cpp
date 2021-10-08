@@ -16,11 +16,10 @@ state_driver::state_driver(
 ):
 	state_driver_interface(controller::t_states::state_menu),
 	config(c), 
-	log(kernel.get_log()),
-	env{_env},
-	i8n{env.build_data_path("i8n"), "en", {"game.txt"}},
-	hi_scores{_env}
+	log(kernel.get_log())
 {
+
+	dependency_container.set_env(_env);
 
 	lm::log(log, lm::lvl::info)<<"setting state check function..."<<std::endl;
 
@@ -97,124 +96,31 @@ void state_driver::prepare_resources(
 	dfw::kernel& _kernel
 ) {
 
+	dependency_container.set_input(_kernel.get_input());
+	dependency_container.set_config(config);
+	dependency_container.set_audio(_kernel.get_audio());
+	dependency_container.set_audio_resource_manager(_kernel.get_audio_resource_manager());
+	dependency_container.set_logger(log);
+	dependency_container.set_screen(_kernel.get_screen());
 
 	dfw::resource_loader r_loader(
 		_kernel.get_video_resource_manager(), 
 		_kernel.get_audio_resource_manager(),
-		env.build_data_path("")
+		dependency_container.get_env().build_data_path("")
 	);
 
 //	r_loader.generate_textures(tools::explode_lines_from_file(std::string("data/resources/textures.txt")));
 
-	r_loader.generate_sounds(tools::explode_lines_from_file(env.build_data_path("audio.txt")));
-	r_loader.generate_music(tools::explode_lines_from_file(env.build_data_path("music.txt")));
+	r_loader.generate_sounds(tools::explode_lines_from_file(dependency_container.get_env().build_data_path("audio.txt")));
+	r_loader.generate_music(tools::explode_lines_from_file(dependency_container.get_env().build_data_path("music.txt")));
 
-	std::ifstream resfile(env.build_data_path("fonts.txt"));
-	if(!resfile.is_open()) {
-
-		throw std::runtime_error("could not open font files");
-	}
-
-	std::string line, title;
-
-	while(true) {
-
-		std::getline(resfile, line);
-
-		if(resfile.eof()) {
-
-			break;
-		}
-
-		if(!line.size()) {
-		
-			continue;
-		}
-
-		std::stringstream ss{line};
-		ss>>title;
-
-		if(title=="game_hud_ttf") {
-
-			ss>>resources.main_menu_ttf;
-		}
-		else if(title=="game_hud_font_size") {
-
-			ss>>resources.main_menu_font_size;
-		}
-		else if(title=="main_menu_ttf") {
-			
-			ss>>resources.game_hud_ttf;
-		}
-		else if(title=="settings_ttf") {
-			
-			ss>>resources.settings_ttf;
-		}
-		else if(title=="how_to_play_ttf") {
-			
-			ss>>resources.how_to_play_ttf;
-		}
-		else if(title=="main_menu_font_size") {
-
-			ss>>resources.game_hud_font_size;
-		}
-		else if(title=="game_over_ttf") {
-			
-			ss>>resources.game_over_ttf;
-		}
-		else if(title=="game_over_font_size") {
-
-			ss>>resources.game_over_font_size;
-		}
-		else if(title=="settings_font_size") {
-
-			ss>>resources.settings_font_size;
-		}
-		else if(title=="how_to_play_font_size") {
-
-			ss>>resources.how_to_play_font_size;
-		}
-		else {
-
-			std::string error{"straneous data in resources file '"};
-			error+=title+"'";
-			throw std::runtime_error(error);
-		}
-	}
-
-	ttf_manager.insert(
-		"menu",
-		resources.main_menu_font_size,
-		env.build_data_path(std::string{"fonts/"}+resources.main_menu_ttf)
-	);
-
-	ttf_manager.insert(
-		"hud",
-		resources.game_hud_font_size,
-		env.build_data_path(std::string{"fonts/"}+resources.game_hud_ttf)
-	);
-
-	ttf_manager.insert(
-		"game_over",
-		resources.game_over_font_size,
-		env.build_data_path(std::string{"fonts/"}+resources.game_over_ttf)
-	);
-
-	ttf_manager.insert(
-		"settings",
-		resources.settings_font_size,
-		env.build_data_path(std::string{"fonts/"}+resources.settings_ttf)
-	);
-
-	ttf_manager.insert(
-		"how_to_play",
-		resources.how_to_play_font_size,
-		env.build_data_path(std::string{"fonts/"}+resources.how_to_play_ttf)
-	);
+	//force loading of stuff now!
+	dependency_container.get_i8n();
+	dependency_container.get_ttf_manager();
 }
 
 void state_driver::register_controllers(
-	dfw::kernel& _kernel
+	dfw::kernel& /*_kernel*/
 ) {
 
 	auto reg=[this](ptr_controller& _ptr, int _i, dfw::controller_interface * _ci) {
@@ -224,65 +130,33 @@ void state_driver::register_controllers(
 
 	reg(
 		c_game, 
-		controller::t_states::state_game, 
-		new controller::game(
-			log, 
-			env, 
-			_kernel.get_audio(), 
-			_kernel.get_audio_resource_manager(), 
-			resources, 
-			ttf_manager, 
-			i8n, 
-			player_score
-		)
+		controller::t_states::state_game,
+		new controller::game(dependency_container)
 	);
+
 	reg(
 		c_menu, 
 		controller::t_states::state_menu, 
-		new controller::menu(
-			log, 
-			env, 
-			_kernel.get_audio(), 
-			_kernel.get_audio_resource_manager(), 
-			resources, 
-			ttf_manager, 
-			i8n, 
-			hi_scores
-		)
+		new controller::menu(dependency_container)
 	);
+
 	reg(
 		c_game_over, 
 		controller::t_states::state_game_over, 
-		new controller::game_over(log, env, resources, ttf_manager, i8n, hi_scores, player_score)
+		new controller::game_over(dependency_container)
 	);
+
 	reg(
 		c_settings, 
 		controller::t_states::state_settings, 
-		new controller::settings(
-			log, 
-			env, 
-			_kernel.get_audio(), 
-			_kernel.get_audio_resource_manager(), 
-			resources, 
-			i8n, 
-			_kernel.get_input(),
-			config,
-			ttf_manager,
-			_kernel.get_screen().get_rect()
-		)
+		new controller::settings(dependency_container)
 	);
+
 	reg(
 		c_how_to_play, 
 		controller::t_states::state_how_to_play, 
-		new controller::how_to_play(
-			log,
-			env,
-			_kernel.get_audio(), 
-			_kernel.get_audio_resource_manager(), 
-			resources, 
-			i8n, 
-			ttf_manager
-		));
+		new controller::how_to_play(dependency_container)
+	);
 	//[new-controller-mark]
 }
 
