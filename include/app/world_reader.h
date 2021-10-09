@@ -6,6 +6,7 @@
 #include <app/bar.h>
 #include <app/trash.h>
 #include <app/loop_stage.h>
+#include <app/obstacle.h>
 
 #include <sstream>
 #include <string>
@@ -23,6 +24,7 @@ class world_reader {
 		bar&, 
 		trash&, 
 		std::vector<table>&,
+		std::vector<obstacle>&,
 		std::vector<loop_stage>&,
 		int&,
 		int&,
@@ -40,6 +42,7 @@ class world_reader {
 	void			read_as_table(std::stringstream&);
 	void			read_as_bar(std::stringstream&, bar&);
 	void			read_as_trash(std::stringstream&, trash&);
+	void			read_as_obstacle(std::stringstream&, std::vector<obstacle>&);
 	int				read_as_game_length(std::stringstream&);
 	int				read_as_score_consumable(std::stringstream&);
 	int				read_as_score_trash(std::stringstream&);

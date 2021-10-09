@@ -17,6 +17,7 @@ void world_reader::read(
 	app::bar& _bar,
 	app::trash& _trash,
 	std::vector<table>& _tables,
+	std::vector<obstacle>& _obstacles,
 	std::vector<loop_stage>& _stages,
 	int& _game_length,
 	int& _score_consumable,
@@ -87,6 +88,10 @@ void world_reader::read(
 		else if(word=="trash") {
 
 			read_as_trash(ss, _trash);
+		}
+		else if(word=="obstacle") {
+
+			read_as_obstacle(ss, _obstacles);
 		}
 		else if(word=="game_length") {
 
@@ -299,6 +304,23 @@ void world_reader::read_as_trash(
 	}
 
 	_trash=app::trash(x, y, w, h, margin);
+}
+
+void world_reader::read_as_obstacle(
+	std::stringstream& _ss,
+	std::vector<obstacle>& _obstacles
+) {
+
+	int x{0}, y{0}, w{0}, h{0};
+
+	_ss>>x>>y>>w>>h;
+
+	if(_ss.fail()) {
+
+		throw std::runtime_error("failed to read obstacle position");
+	}
+
+	_obstacles.push_back({x, y, w, h});
 }
 
 int world_reader::read_as_game_length(

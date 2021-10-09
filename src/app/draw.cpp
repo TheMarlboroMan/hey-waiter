@@ -4,7 +4,6 @@
 #include <ldv/ttf_representation.h>
 #include <ldv/color.h>
 
-
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -57,6 +56,11 @@ void draw::do_draw(
 	for(const auto& table : _game.tables) {
 
 		draw_table(_screen, _camera, table);
+	}
+
+	for(const auto& obstacle : _game.obstacles) {
+
+		draw_obstacle(_screen, _camera, obstacle);
 	}
 
 	ldv::box_representation bar_box(
@@ -116,6 +120,22 @@ void draw::do_draw(
 
 	draw_score(_screen, _game.player_score);
 	draw_timer(_screen, _game);
+}
+
+void draw::draw_obstacle(
+	ldv::screen& _screen, 
+	const ldv::camera& _camera, 
+	const obstacle& _obstacle
+) {
+
+	auto color=ldv::rgba8(64, 128, 192, 255);
+
+	ldv::box_representation collision_box(
+		to_video(_obstacle.get_collision_box()),
+		color
+	);
+
+	collision_box.draw(_screen, _camera);
 }
 
 void draw::draw_table(

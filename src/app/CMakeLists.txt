@@ -23,6 +23,7 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/resources.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/enter_name.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/dependency_container.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/obstacle.cpp
 	PARENT_SCOPE
 )
 

@@ -5,6 +5,7 @@
 #include "table.h"
 #include "bar.h"
 #include "trash.h"
+#include "obstacle.h"
 #include "tray.h"
 #include "serving.h"
 #include "bar_selector.h"
@@ -84,6 +85,7 @@ class game {
 	app::bar		bar_instance;
 	app::trash		trash_instance;
 	std::vector<table>	tables;
+	std::vector<obstacle>	obstacles;
 	std::vector<loop_stage>	stages;
 	app::tray		player_tray;
 	app::serving	table_serving;

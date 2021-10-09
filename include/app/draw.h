@@ -22,6 +22,7 @@ class draw {
 	private:
 
 	void				draw_table(ldv::screen&, const ldv::camera&, const table&);
+	void				draw_obstacle(ldv::screen&, const ldv::camera&, const obstacle&);
 	void				draw_interactions(ldv::screen&, const app::game&);
 	void				draw_fill_tray(ldv::screen&, const app::game&);
 	void				draw_serve(ldv::screen&, const app::game&);

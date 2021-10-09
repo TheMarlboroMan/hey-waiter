@@ -49,7 +49,8 @@ void game::init(
 		player_instance, 
 		bar_instance, 
 		trash_instance, 
-		tables, 
+		tables,
+		obstacles, 
 		stages,
 		game_seconds,
 		score_consumable,
@@ -526,6 +527,15 @@ std::optional<app::box> game::collision_detection() {
 		if(table.get_collision_box().collides_with(player_box)) {
 
 			return {table.get_collision_box()};
+		}
+	}
+
+	//Same, but with obstacles...
+	for(const auto& obstacle : obstacles) {
+
+		if(obstacle.get_collision_box().collides_with(player_box)) {
+
+			return {obstacle.get_collision_box()};
 		}
 	}
 

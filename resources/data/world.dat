@@ -3,16 +3,15 @@ table_margin 10
 table_size 40 40
 player 0 0 30 30
 player_speed 200
-table 0 100 L
-table 0 200 L
-table 0 300 L
-table 0 400 L
-table 360 100 R
-table 360 200 R
-table 360 300 R
-table 360 400 R
+table 0 50 L
+table 0 150 L
+table 0 250 L
+table 360 50 R
+table 360 150 R
+table 360 250 R
 bar 150 470 100 30 10
 trash 190 0 20 20 10
+obstacle 60 60 100 100
 game_length 180
 score_consumable 300
 score_trash 100
