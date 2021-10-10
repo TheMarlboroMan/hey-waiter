@@ -9,9 +9,17 @@ table 0 250 L
 table 360 50 R
 table 360 150 R
 table 360 250 R
-bar 150 470 100 30 10
+bar 140 410 120 30 10
 trash 190 0 20 20 10
-obstacle 60 60 100 100
+
+obstacle 0 440 400 40
+obstacle 150 430 100 30
+obstacle 0 370 50 20
+obstacle 100 370 200 20
+obstacle 350 370 50 20
+
+
+
 game_length 180
 score_consumable 300
 score_trash 100

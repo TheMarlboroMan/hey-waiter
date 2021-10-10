@@ -29,6 +29,7 @@ class draw {
 
 	void				draw_background(ldv::screen&, const ldv::camera&, const app::game&);
 	void				draw_table(ldv::screen&, const ldv::camera&, const table&);
+	void				draw_bar(ldv::screen&, const ldv::camera&, const app::bar&);
 	void				draw_obstacle(ldv::screen&, const ldv::camera&, const obstacle&);
 	void				draw_interactions(ldv::screen&, const app::game&);
 	void				draw_fill_tray(ldv::screen&, const app::game&);
@@ -36,6 +37,7 @@ class draw {
 	void				draw_take_order(ldv::screen&, const app::game&);
 	void				draw_score(ldv::screen&, const app::score&);
 	void				draw_timer(ldv::screen&, const app::game&);
+	void				draw_level_number(ldv::screen&, const app::game&);
 	ldv::rect			to_video(const box&) const;
 	std::string			consumable_to_string(const app::consumable&) const;
 

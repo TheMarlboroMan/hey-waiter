@@ -3,11 +3,17 @@ A table-waiting game.
 
 # TODO:
 
-- Take screencap of game layout, draw the beach thing. Add obstacles to simulate
-	walking boards into bar, leave space at the top!!!
+- Bar / Table / Trash bitmap lights up to indicate interaction!!!
+	- lights up
+	- or a border appears
+- Graphics
+	- Bar
+	- Table
+	- Trash
+	- Player
+- Draw world with depth, some stuff first.
 - Add music
 - Add sounds
-- Graphics
 - Help controller explaining the sytems
 
 # BUGS:

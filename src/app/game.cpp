@@ -540,10 +540,12 @@ std::optional<app::box> game::collision_detection() {
 	}
 
 	//Check the player does not collide with the bar or trash
+/*
 	if(bar_instance.get_collision_box().collides_with(player_box)) {
 
 			return {bar_instance.get_collision_box()};
 	}
+*/
 
 	if(trash_instance.get_collision_box().collides_with(player_box)) {
 

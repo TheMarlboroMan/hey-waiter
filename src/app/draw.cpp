@@ -60,16 +60,13 @@ void draw::do_draw(
 		draw_obstacle(_screen, _camera, obstacle);
 	}
 
-	ldv::box_representation bar_box(
-		to_video(_game.bar_instance.get_collision_box()),
-		ldv::rgba8(0, 255, 255, 255)
-	);
-	bar_box.draw(_screen, _camera);
+	draw_bar(_screen, _camera, _game.bar_instance);
 
 	ldv::box_representation trash_box(
 		to_video(_game.trash_instance.get_collision_box()),
-		ldv::rgba8(128, 128, 128, 255)
+		ldv::rgba8(128, 128, 128, 128)
 	);
+	trash_box.set_blend(ldv::representation::blends::alpha);
 	trash_box.draw(_screen, _camera);
 
 	auto player_color=ldv::rgba8(255, 255, 255, 255);
@@ -117,6 +114,7 @@ void draw::do_draw(
 
 	draw_score(_screen, _game.player_score);
 	draw_timer(_screen, _game);
+	draw_level_number(_screen, _game);
 }
 
 void draw::draw_obstacle(
@@ -125,13 +123,16 @@ void draw::draw_obstacle(
 	const obstacle& _obstacle
 ) {
 
-	auto color=ldv::rgba8(64, 128, 192, 255);
+	//TODO: only in debug mode!!
+
+	auto color=ldv::rgba8(128, 128, 128, 32);
 
 	ldv::box_representation collision_box(
 		to_video(_obstacle.get_collision_box()),
 		color
 	);
 
+	collision_box.set_blend(ldv::representation::blends::alpha);
 	collision_box.draw(_screen, _camera);
 }
 
@@ -175,6 +176,7 @@ void draw::draw_table(
 		table_color
 	);
 
+	collision_box.set_blend(ldv::representation::blends::alpha);
 	collision_box.draw(_screen, _camera);
 }
 
@@ -367,14 +369,9 @@ void draw::draw_score(
 		ss.str()
 	};
 
-	txt.align(
-		_screen.get_rect(), {
-			ldv::representation_alignment::h::inner_right,
-			ldv::representation_alignment::v::inner_top,
-			16, 16
-		}
-	);
-
+	//TODO: it would be great if there was a layout for this and others,
+	//so we can do this shit better.
+	txt.go_to({278, 17});
 	txt.draw(_screen);
 }
 
@@ -386,7 +383,7 @@ void draw::draw_timer(
 	int timer=_game.game_seconds - std::floor(_game.current_game_seconds);
 	
 	std::stringstream ss;
-	ss<<std::setw(3)<<std::setfill('0')<<std::to_string(timer)<<" level "<<(_game.current_stage+1);
+	ss<<std::setw(3)<<std::setfill('0')<<std::to_string(timer);
 
 	ldv::ttf_representation txt{
 		ttf_manager.get("hud", resources.game_hud_font_size),
@@ -394,14 +391,27 @@ void draw::draw_timer(
 		ss.str()
 	};
 
-	txt.align(
-		_screen.get_rect(), {
-			ldv::representation_alignment::h::inner_right,
-			ldv::representation_alignment::v::inner_top,
-			16, 40
-		}
-	);
+	txt.go_to({160, 52});
+	txt.draw(_screen);
+}
 
+void draw::draw_level_number(
+	ldv::screen& _screen, 
+	const app::game& _game
+) {
+
+	//TODO: only in debug mode!
+
+	std::stringstream ss;
+	ss<<"lvl "<<(_game.current_stage+1);
+
+	ldv::ttf_representation txt{
+		ttf_manager.get("hud", resources.game_hud_font_size),
+		ldv::rgba8(255, 255, 255, 255),
+		ss.str()
+	};
+
+	txt.go_to({30, 14});
 	txt.draw(_screen);
 }
 
@@ -415,9 +425,24 @@ void draw::draw_background(
 	ldv::bitmap_representation bg(
 		video_resource_manager.get_texture(app::resources::tex_background),
 		to_video(wbox),
-		{0,0,wbox.w, wbox.h}
+		{0,0, (unsigned)wbox.w, (unsigned)wbox.h}
 	);
 
 	bg.set_blend(ldv::representation::blends::alpha);
 	bg.draw(_screen, _camera);
+}
+
+void draw::draw_bar(
+	ldv::screen& /*_screen*/,
+	const ldv::camera& /*_camera*/,
+	const app::bar& /*_bar*/
+) {
+/*
+	ldv::box_representation bar_box(
+		to_video(_bar.get_collision_box()),
+		ldv::rgba8(0, 255, 255, 128)
+	);
+	bar_box.set_blend(ldv::representation::blends::alpha);
+	bar_box.draw(_screen, _camera);
+*/
 }
