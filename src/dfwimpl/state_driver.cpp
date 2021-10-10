@@ -100,6 +100,7 @@ void state_driver::prepare_resources(
 	dependency_container.set_config(config);
 	dependency_container.set_audio(_kernel.get_audio());
 	dependency_container.set_audio_resource_manager(_kernel.get_audio_resource_manager());
+	dependency_container.set_video_resource_manager(_kernel.get_video_resource_manager());
 	dependency_container.set_logger(log);
 	dependency_container.set_screen(_kernel.get_screen());
 
@@ -109,8 +110,7 @@ void state_driver::prepare_resources(
 		dependency_container.get_env().build_data_path("")
 	);
 
-//	r_loader.generate_textures(tools::explode_lines_from_file(std::string("data/resources/textures.txt")));
-
+	r_loader.generate_textures(tools::explode_lines_from_file(dependency_container.get_env().build_data_path("textures.txt")));
 	r_loader.generate_sounds(tools::explode_lines_from_file(dependency_container.get_env().build_data_path("audio.txt")));
 	r_loader.generate_music(tools::explode_lines_from_file(dependency_container.get_env().build_data_path("music.txt")));
 

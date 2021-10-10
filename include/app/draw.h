@@ -6,6 +6,7 @@
 
 #include <ldv/screen.h>
 #include <ldv/camera.h>
+#include <ldv/resource_manager.h>
 #include <ldtools/ttf_manager.h>
 #include <tools/i8n.h>
 #include <string>
@@ -16,11 +17,17 @@ class draw {
 
 	public:
 
-						draw(const app::resources&, const ldtools::ttf_manager&, const tools::i8n&);
+						draw(
+							const app::resources&, 
+							const ldv::resource_manager&,
+							const ldtools::ttf_manager&, 
+							const tools::i8n&
+						);
 	void				do_draw(ldv::screen&, const ldv::camera&, const app::game&);
 
 	private:
 
+	void				draw_background(ldv::screen&, const ldv::camera&, const app::game&);
 	void				draw_table(ldv::screen&, const ldv::camera&, const table&);
 	void				draw_obstacle(ldv::screen&, const ldv::camera&, const obstacle&);
 	void				draw_interactions(ldv::screen&, const app::game&);
@@ -33,6 +40,7 @@ class draw {
 	std::string			consumable_to_string(const app::consumable&) const;
 
 	const app::resources& 		resources;
+	const ldv::resource_manager& video_resource_manager;
 	const ldtools::ttf_manager&	ttf_manager;
 	const tools::i8n&			i8n;
 

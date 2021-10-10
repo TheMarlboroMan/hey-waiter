@@ -8,7 +8,7 @@ namespace dfwimpl {class config;}
 namespace ldtools {class ttf_manager;}
 namespace lda {class resource_manager;}
 namespace tools {class i8n;}
-namespace ldv {class screen;}
+namespace ldv {class screen; class resource_manager;}
 namespace app {
 
 class env; 
@@ -38,6 +38,7 @@ class dependency_container {
 	dfwimpl::config&						get_config() {return *config;}
 	dfw::audio&								get_audio() {return *audio;}
 	lda::resource_manager&					get_audio_resource_manager() {return *audio_resource_manager;}
+	ldv::resource_manager&					get_video_resource_manager() {return *video_resource_manager;}
 	lm::logger&								get_log() {return *logger;}
 
 	void									set_env(const app::env& _val) {env=&_val;}
@@ -45,6 +46,7 @@ class dependency_container {
 	void 									set_config(dfwimpl::config& _val) {config=&_val;}
 	void 									set_audio(dfw::audio& _val) {audio=&_val;}
 	void 									set_audio_resource_manager(lda::resource_manager& _val) {audio_resource_manager=&_val;}
+	void 									set_video_resource_manager(ldv::resource_manager& _val) {video_resource_manager=&_val;}
 	void 									set_logger(lm::logger& _val) {logger=&_val;}
 	void 									set_screen(ldv::screen& _val) {screen=&_val;}
 
@@ -65,6 +67,7 @@ class dependency_container {
 	dfwimpl::config*						config{nullptr};
 	dfw::audio*								audio{nullptr};
 	lda::resource_manager*					audio_resource_manager{nullptr};
+	ldv::resource_manager*					video_resource_manager{nullptr};
 	lm::logger*								logger{nullptr};
 	ldv::screen const *						screen{nullptr};
 };

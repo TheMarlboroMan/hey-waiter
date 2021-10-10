@@ -12,7 +12,7 @@ game::game(
 	env{_dc.get_env()},
 	camera{ {0,0,400,500},{0,0} },
 	game_instance{_dc.get_log(), _dc.get_audio(), _dc.get_audio_resource_manager(), _dc.get_score()},
-	draw_instance{_dc.get_resources(), _dc.get_ttf_manager(), _dc.get_i8n()}
+	draw_instance{_dc.get_resources(), _dc.get_video_resource_manager(), _dc.get_ttf_manager(), _dc.get_i8n()}
 {
 
 	camera.set_coordinate_system(ldv::camera::tsystem::cartesian);

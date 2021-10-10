@@ -45,7 +45,17 @@ menu::menu(
 
 	std::stringstream ss;
 	ss<<"v"<<app::version::major<<"."<<app::version::minor<<"."<<app::version::patch;
-	static_cast<ldv::ttf_representation*>(layout.get_by_id("software_version"))->set_text(ss.get());
+	static_cast<ldv::ttf_representation*>(layout.get_by_id("software_version"))->set_text(ss.str());
+
+	layout.get_by_id("software_version")->align(
+		_dependency_container.get_screen().get_rect(),
+		{
+			ldv::representation_alignment::h::inner_right,
+			ldv::representation_alignment::v::none,
+			10,
+			0
+		}
+	);
 
 	audio.play_music(audio_rm.get_music(app::resources::mus_default));
 }

@@ -24,6 +24,10 @@ struct resources {
 	enum music {
 		mus_default=1
 	};
+
+	enum textures {
+		tex_background=1
+	};
 };
 
 }

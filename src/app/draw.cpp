@@ -2,6 +2,7 @@
 
 #include <ldv/box_representation.h>
 #include <ldv/ttf_representation.h>
+#include <ldv/bitmap_representation.h>
 #include <ldv/color.h>
 
 #include <iostream>
@@ -13,10 +14,12 @@ using namespace app;
 
 draw::draw(
 	const app::resources& _resources,
+	const ldv::resource_manager& _vrm,
 	const ldtools::ttf_manager& _ttf_manager,
 	const tools::i8n& _i8n
 ):
 	resources{_resources},
+	video_resource_manager{_vrm},
 	ttf_manager{_ttf_manager},
 	i8n{_i8n}
 {
@@ -44,14 +47,8 @@ void draw::do_draw(
 
 	_screen.clear(ldv::rgba8(0,0,0,255));
 
-	const auto wbox=_game.world_instance.get_collision_box();
-	
-	ldv::box_representation bg_box(
-		to_video(wbox),
-		ldv::rgba8(192, 192, 192, 255)
-	);
-
-	bg_box.draw(_screen, _camera);
+	//TODO: come on, just pass the rect.
+	draw_background(_screen, _camera, _game);
 
 	for(const auto& table : _game.tables) {
 
@@ -406,4 +403,21 @@ void draw::draw_timer(
 	);
 
 	txt.draw(_screen);
+}
+
+void draw::draw_background(
+	ldv::screen& _screen,
+	const ldv::camera& _camera,
+	const app::game& _game
+) {
+
+	const auto wbox=_game.world_instance.get_collision_box();
+	ldv::bitmap_representation bg(
+		video_resource_manager.get_texture(app::resources::tex_background),
+		to_video(wbox),
+		{0,0,wbox.w, wbox.h}
+	);
+
+	bg.set_blend(ldv::representation::blends::alpha);
+	bg.draw(_screen, _camera);
 }
