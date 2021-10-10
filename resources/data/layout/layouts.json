@@ -183,6 +183,14 @@
 			"text":"...",
 			"font":"main_menu_font",
 			"rgba":[255, 255, 255, 160]
+		},
+		{
+			"id":"software_version",
+			"type":"ttf",
+			"location":[300, 480],
+			"text":"...",
+			"font":"main_menu_font",
+			"rgba":[255, 255, 255, 255]
 		}
 	],
 	"game_over": [

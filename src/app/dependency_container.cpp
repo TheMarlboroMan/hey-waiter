@@ -4,6 +4,7 @@
 #include <app/resources.h>
 #include <app/hi_score.h>
 #include <app/score.h>
+#include <app/layout.h>
 
 #include <lda/resource_manager.h>
 #include <ldv/screen.h>
@@ -151,6 +152,16 @@ ldtools::ttf_manager& dependency_container::get_ttf_manager() {
 	}
 
 	return *ttf_manager;
+}
+
+app::layout& dependency_container::get_layout() {
+
+	if(nullptr==layout.get()) {
+
+		layout.reset(new app::layout{get_env()});
+	}
+
+	return *layout;
 }
 
 app::hi_score_manager& dependency_container::get_hi_score_manager() {

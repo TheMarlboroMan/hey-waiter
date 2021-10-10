@@ -9,8 +9,13 @@ namespace ldtools {class ttf_manager;}
 namespace lda {class resource_manager;}
 namespace tools {class i8n;}
 namespace ldv {class screen;}
-namespace app {class env; class resources; class hi_score_manager; class score;}
 namespace app {
+
+class env; 
+class resources; 
+class hi_score_manager;
+class score; 
+class layout;
 
 /**
 *exactly what it sounds like. An easy way to grab dependencies.
@@ -25,6 +30,7 @@ class dependency_container {
 	ldtools::ttf_manager&					get_ttf_manager();
 	app::hi_score_manager&					get_hi_score_manager();
 	app::score&								get_score();
+	app::layout&							get_layout();
 
 	const app::env&							get_env() const {return *env;}
 	const ldv::screen&						get_screen() const {return *screen;}
@@ -51,6 +57,7 @@ class dependency_container {
 	std::unique_ptr<ldtools::ttf_manager>	ttf_manager;
 	std::unique_ptr<app::hi_score_manager>	hi_score_manager;
 	std::unique_ptr<app::score>				score;
+	std::unique_ptr<app::layout>			layout;
 
 	//injected deps.
 	app::env const *						env{nullptr};

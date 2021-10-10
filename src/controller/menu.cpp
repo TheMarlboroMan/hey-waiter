@@ -1,10 +1,9 @@
 #include "../../include/controller/menu.h"
 #include <app/resources.h>
-
-//local
+#include <app/version.h>
+#include <app/layout.h>
 #include "../../include/input/input.h"
-#include <tools/json.h>
-#include <tools/file_utils.h>
+
 #include <ldv/ttf_representation.h>
 #include <sstream>
 #include <iomanip>
@@ -31,11 +30,7 @@ menu::menu(
 		)
 	);
 
-	const std::string layout_path=env.build_data_path("layout/layouts.json");
-	auto document=tools::parse_json_string(
-		tools::dump_file(layout_path)
-	);
-	layout.parse(document["main_menu"]);
+	layout.parse(_dependency_container.get_layout().get("main_menu"));
 
 	auto set_text=[this](const std::string& _id, const std::string& _key) {
 
@@ -47,6 +42,10 @@ menu::menu(
 	set_text("menu_start_game", "menu-start_game");
 	set_text("menu_how_to_play", "menu-how_to_play");
 	set_text("menu_options", "menu-options");
+
+	std::stringstream ss;
+	ss<<"v"<<app::version::major<<"."<<app::version::minor<<"."<<app::version::patch;
+	static_cast<ldv::ttf_representation*>(layout.get_by_id("software_version"))->set_text(ss.get());
 
 	audio.play_music(audio_rm.get_music(app::resources::mus_default));
 }

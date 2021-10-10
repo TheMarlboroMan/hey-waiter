@@ -10,7 +10,7 @@ game::game(
 ):
 	log{_dc.get_log()},
 	env{_dc.get_env()},
-	camera{ {0,0,500,500},{0,0} },
+	camera{ {0,0,400,500},{0,0} },
 	game_instance{_dc.get_log(), _dc.get_audio(), _dc.get_audio_resource_manager(), _dc.get_score()},
 	draw_instance{_dc.get_resources(), _dc.get_ttf_manager(), _dc.get_i8n()}
 {

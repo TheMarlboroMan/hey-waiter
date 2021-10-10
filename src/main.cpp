@@ -45,7 +45,6 @@ int main(int argc, char ** argv)
 
 		dfwimpl::config config(env);
 
-
 		lm::log(log_app, lm::lvl::info)<<"create state driver..."<<std::endl;
 		dfwimpl::state_driver sd(kernel, config, env);
 

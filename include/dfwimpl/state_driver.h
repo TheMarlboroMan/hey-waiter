@@ -9,6 +9,9 @@
 
 #include <memory>
 
+//pimpl, incomplete types and unique_ptr...
+#include <app/layout.h>
+
 //Controllers.
 #include "../../include/controller/game.h"
 #include "../../include/controller/menu.h"

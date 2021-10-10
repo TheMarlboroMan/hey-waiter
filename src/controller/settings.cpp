@@ -2,10 +2,9 @@
 //changes. Long live rock and roll.
 
 #include "controller/settings.h"
-
+#include <app/layout.h>
 #include "input/input.h"
 
-#include <tools/json.h>
 #include <tools/file_utils.h>
 #include <ldv/representation.h>
 #include <ldv/ttf_representation.h>
@@ -44,12 +43,7 @@ settings::settings(app::dependency_container& _dc)
 		)
 	);
 
-	//TODO: This json file is being parsed everywhere!!! Just parse it once!!!
-	const std::string layout_path=env.build_data_path("layout/layouts.json");
-	auto document=tools::parse_json_string(
-		tools::dump_file(layout_path)
-	);
-	layout.parse(document["settings"]);
+	layout.parse(_dc.get_layout().get("settings"));
 
 
 	auto set_text=[this](const std::string& _id, const std::string& _key) {

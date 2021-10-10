@@ -1,9 +1,8 @@
 #include "../../include/controller/game_over.h"
 #include "../../include/input/input.h"
 #include <app/input.h>
+#include <app/layout.h>
 
-#include <tools/file_utils.h>
-#include <tools/json.h>
 #include <ldv/ttf_representation.h>
 
 #include <iostream>
@@ -26,11 +25,7 @@ game_over::game_over(app::dependency_container& _dc)
 		)
 	);
 
-	const std::string layout_path=env.build_data_path("layout/layouts.json");
-	auto document=tools::parse_json_string(
-		tools::dump_file(layout_path)
-	);
-	layout.parse(document["game_over"]);
+	layout.parse(_dc.get_layout().get("game_over"));
 
 	auto set_text=[this](const std::string& _id, const std::string& _key) {
 

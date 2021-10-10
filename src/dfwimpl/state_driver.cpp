@@ -53,7 +53,7 @@ void state_driver::prepare_video(dfw::kernel& kernel) {
 	kernel.init_video_system({
 		config.int_from_path("video:window_w_px"),
 		config.int_from_path("video:window_h_px"),
-		500,
+		400,
 		500,
 		config.string_from_path("video:window_title"),
 		config.bool_from_path("video:window_show_cursor"),
@@ -117,6 +117,7 @@ void state_driver::prepare_resources(
 	//force loading of stuff now!
 	dependency_container.get_i8n();
 	dependency_container.get_ttf_manager();
+	dependency_container.get_layout();
 }
 
 void state_driver::register_controllers(

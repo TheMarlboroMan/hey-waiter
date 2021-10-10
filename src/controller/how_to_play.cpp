@@ -1,8 +1,7 @@
 #include <controller/how_to_play.h>
 #include <input/input.h>
+#include <app/layout.h>
 
-#include <tools/json.h>
-#include <tools/file_utils.h>
 #include <ldv/ttf_representation.h>
 
 using namespace controller;
@@ -22,12 +21,7 @@ how_to_play::how_to_play(app::dependency_container& _dc)
 		)
 	);
 
-	//TODO: This json file is being parsed everywhere!!! Just parse it once!!!
-	const std::string layout_path=env.build_data_path("layout/layouts.json");
-	auto document=tools::parse_json_string(
-		tools::dump_file(layout_path)
-	);
-	layout.parse(document["how_to_play"]);
+	layout.parse(_dc.get_layout().get("how_to_play"));
 
 
 	auto set_text=[this](const std::string& _id, const std::string& _key) {
