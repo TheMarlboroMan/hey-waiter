@@ -16,11 +16,13 @@ draw::draw(
 	const app::resources& _resources,
 	const ldv::resource_manager& _vrm,
 	const ldtools::ttf_manager& _ttf_manager,
+	const ldtools::sprite_table& _sprite_table,
 	const tools::i8n& _i8n
 ):
 	resources{_resources},
 	video_resource_manager{_vrm},
 	ttf_manager{_ttf_manager},
+	sprite_table{_sprite_table},
 	i8n{_i8n}
 {
 
@@ -49,6 +51,9 @@ void draw::do_draw(
 
 	//TODO: come on, just pass the rect.
 	draw_background(_screen, _camera, _game);
+
+	draw_score(_screen, _game.player_score);
+	draw_timer(_screen, _game);
 
 	for(const auto& table : _game.tables) {
 
@@ -92,9 +97,6 @@ void draw::do_draw(
 			draw_take_order(_screen, _game);
 		break;
 	}
-
-	draw_score(_screen, _game.player_score);
-	draw_timer(_screen, _game);
 
 	if(debug) {
 
@@ -147,8 +149,6 @@ void draw::draw_obstacle(
 	const ldv::camera& _camera, 
 	const obstacle& _obstacle
 ) {
-
-	//TODO: only in debug mode!!
 
 	auto color=ldv::rgba8(128, 128, 128, 32);
 
@@ -458,16 +458,31 @@ void draw::draw_background(
 }
 
 void draw::draw_bar(
-	ldv::screen& /*_screen*/,
-	const ldv::camera& /*_camera*/,
-	const app::bar& /*_bar*/
+	ldv::screen& _screen,
+	const ldv::camera& _camera,
+	const app::bar& _bar
 ) {
-/*
-	ldv::box_representation bar_box(
-		to_video(_bar.get_collision_box()),
-		ldv::rgba8(0, 255, 255, 128)
+
+	//TODO: something that gives out a point
+	auto box=to_video(_bar.get_collision_box());
+	const auto sprite_box=sprite_table.get(app::resources::spr_bar).box;
+
+	ldv::bitmap_representation bmp(
+		video_resource_manager.get_texture(app::resources::tex_sprites),
+		{box.origin, sprite_box.w, sprite_box.h},
+		sprite_box
 	);
-	bar_box.set_blend(ldv::representation::blends::alpha);
-	bar_box.draw(_screen, _camera);
-*/
+
+	bmp.set_blend(ldv::representation::blends::alpha);
+	bmp.draw(_screen, _camera);
+
+	if(debug) {
+
+		ldv::box_representation bar_box(
+			to_video(_bar.get_collision_box()),
+			ldv::rgba8(0, 255, 255, 128)
+		);
+		bar_box.set_blend(ldv::representation::blends::alpha);
+		bar_box.draw(_screen, _camera);
+	}
 }

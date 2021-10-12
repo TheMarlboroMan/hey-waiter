@@ -1,1 +1,2 @@
 1	textures/background.png
+2	textures/sprites.png

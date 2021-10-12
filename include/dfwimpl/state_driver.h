@@ -11,6 +11,7 @@
 
 //pimpl, incomplete types and unique_ptr...
 #include <app/layout.h>
+#include <ldtools/sprite_table.h>
 
 //Controllers.
 #include "../../include/controller/game.h"

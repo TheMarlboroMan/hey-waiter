@@ -26,7 +26,17 @@ struct resources {
 	};
 
 	enum textures {
-		tex_background=1
+		tex_background=1,
+		tex_sprites=2
+	};
+
+	enum sprites {
+		spr_bar=1,
+		spr_table=2,
+		spr_trash=3,
+		spr_bar_outline=4,
+		spr_table_outline=5,
+		spr_trash_outline=6
 	};
 };
 

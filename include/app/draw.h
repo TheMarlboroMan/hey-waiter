@@ -8,6 +8,7 @@
 #include <ldv/camera.h>
 #include <ldv/resource_manager.h>
 #include <ldtools/ttf_manager.h>
+#include <ldtools/sprite_table.h>
 #include <tools/i8n.h>
 #include <string>
 
@@ -21,6 +22,7 @@ class draw {
 							const app::resources&, 
 							const ldv::resource_manager&,
 							const ldtools::ttf_manager&, 
+							const ldtools::sprite_table&,
 							const tools::i8n&
 						);
 	void				do_draw(ldv::screen&, const ldv::camera&, const app::game&);
@@ -47,6 +49,7 @@ class draw {
 	const app::resources& 		resources;
 	const ldv::resource_manager& video_resource_manager;
 	const ldtools::ttf_manager&	ttf_manager;
+	const ldtools::sprite_table& sprite_table;
 	const tools::i8n&			i8n;
 	bool						debug{false};
 

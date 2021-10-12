@@ -13,6 +13,7 @@
 #include <dfwimpl/config.h>
 #include <lm/logger.h>
 #include <ldtools/ttf_manager.h>
+#include <ldtools/sprite_table.h>
 #include <tools/i8n.h>
 
 #include <fstream>
@@ -112,6 +113,16 @@ tools::i8n& dependency_container::get_i8n() {
 	}
 
 	return *i8n;
+}
+
+ldtools::sprite_table& dependency_container::get_sprite_table() {
+
+	if(nullptr==sprite_table.get()) {
+
+		sprite_table.reset(new ldtools::sprite_table{get_env().build_data_path("sprites.txt")});
+	}
+
+	return *sprite_table;
 }
 
 ldtools::ttf_manager& dependency_container::get_ttf_manager() {

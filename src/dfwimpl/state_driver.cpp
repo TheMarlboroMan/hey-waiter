@@ -5,6 +5,7 @@
 #include <lm/sentry.h>
 #include <tools/string_utils.h>
 
+
 #include <algorithm>
 
 using namespace dfwimpl;
@@ -118,6 +119,7 @@ void state_driver::prepare_resources(
 	dependency_container.get_i8n();
 	dependency_container.get_ttf_manager();
 	dependency_container.get_layout();
+	dependency_container.get_sprite_table();
 }
 
 void state_driver::register_controllers(
