@@ -24,6 +24,7 @@ class draw {
 							const tools::i8n&
 						);
 	void				do_draw(ldv::screen&, const ldv::camera&, const app::game&);
+	void				set_debug(bool _val) {debug=_val;}
 
 	private:
 
@@ -31,6 +32,8 @@ class draw {
 	void				draw_table(ldv::screen&, const ldv::camera&, const table&);
 	void				draw_bar(ldv::screen&, const ldv::camera&, const app::bar&);
 	void				draw_obstacle(ldv::screen&, const ldv::camera&, const obstacle&);
+	void				draw_player(ldv::screen&, const ldv::camera&, const player&, const tray&);
+	void				draw_trash(ldv::screen&, const ldv::camera&, const trash&);
 	void				draw_interactions(ldv::screen&, const app::game&);
 	void				draw_fill_tray(ldv::screen&, const app::game&);
 	void				draw_serve(ldv::screen&, const app::game&);
@@ -45,7 +48,7 @@ class draw {
 	const ldv::resource_manager& video_resource_manager;
 	const ldtools::ttf_manager&	ttf_manager;
 	const tools::i8n&			i8n;
-
+	bool						debug{false};
 
 };
 

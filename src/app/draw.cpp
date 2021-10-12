@@ -55,36 +55,17 @@ void draw::do_draw(
 		draw_table(_screen, _camera, table);
 	}
 
-	for(const auto& obstacle : _game.obstacles) {
+	if(debug) {
 
-		draw_obstacle(_screen, _camera, obstacle);
+		for(const auto& obstacle : _game.obstacles) {
+
+			draw_obstacle(_screen, _camera, obstacle);
+		}
 	}
 
 	draw_bar(_screen, _camera, _game.bar_instance);
-
-	ldv::box_representation trash_box(
-		to_video(_game.trash_instance.get_collision_box()),
-		ldv::rgba8(128, 128, 128, 128)
-	);
-	trash_box.set_blend(ldv::representation::blends::alpha);
-	trash_box.draw(_screen, _camera);
-
-	auto player_color=ldv::rgba8(255, 255, 255, 255);
-	if(_game.player_tray.has_trash()) {
-
-		player_color=ldv::rgba8(255, 0, 0, 255);
-	}
-	else if(!_game.player_tray.is_empty()) {
-
-		player_color=ldv::rgba8(0, 255, 0, 255);
-	}
-
-	ldv::box_representation player_box(
-		to_video(_game.player_instance.get_collision_box()),
-		player_color
-	);
-	player_box.draw(_screen, _camera);
-
+	draw_trash(_screen, _camera, _game.trash_instance);
+	draw_player(_screen, _camera, _game.player_instance, _game.player_tray);
 
 	//If the game is over, we just want the world drawn.
 	if(_game.is_game_over()) {
@@ -114,7 +95,51 @@ void draw::do_draw(
 
 	draw_score(_screen, _game.player_score);
 	draw_timer(_screen, _game);
-	draw_level_number(_screen, _game);
+
+	if(debug) {
+
+		draw_level_number(_screen, _game);
+	}
+}
+
+void draw::draw_trash(
+	ldv::screen& _screen, 
+	const ldv::camera& _camera, 
+	const trash& _trash
+) {
+
+	ldv::box_representation trash_box(
+		to_video(_trash.get_collision_box()),
+		ldv::rgba8(128, 128, 128, 128)
+	);
+	trash_box.set_blend(ldv::representation::blends::alpha);
+	trash_box.draw(_screen, _camera);
+}
+
+void draw::draw_player(
+	ldv::screen& _screen, 
+	const ldv::camera& _camera, 
+	const player& _player,
+	const tray& _tray
+) {
+
+	auto player_color=ldv::rgba8(255, 255, 255, 255);
+	if(_tray.has_trash()) {
+
+		player_color=ldv::rgba8(255, 0, 0, 255);
+	}
+	else if(!_tray.is_empty()) {
+
+		player_color=ldv::rgba8(0, 255, 0, 255);
+	}
+
+	ldv::box_representation player_box(
+		to_video(_player.get_collision_box()),
+		player_color
+	);
+	player_box.draw(_screen, _camera);
+
+
 }
 
 void draw::draw_obstacle(
