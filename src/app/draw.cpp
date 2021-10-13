@@ -104,20 +104,6 @@ void draw::do_draw(
 	}
 }
 
-void draw::draw_trash(
-	ldv::screen& _screen, 
-	const ldv::camera& _camera, 
-	const trash& _trash
-) {
-
-	ldv::box_representation trash_box(
-		to_video(_trash.get_collision_box()),
-		ldv::rgba8(128, 128, 128, 128)
-	);
-	trash_box.set_blend(ldv::representation::blends::alpha);
-	trash_box.draw(_screen, _camera);
-}
-
 void draw::draw_player(
 	ldv::screen& _screen, 
 	const ldv::camera& _camera, 
@@ -150,7 +136,7 @@ void draw::draw_obstacle(
 	const obstacle& _obstacle
 ) {
 
-	auto color=ldv::rgba8(128, 128, 128, 32);
+	auto color=ldv::rgba8(0, 0, 0, 32);
 
 	ldv::box_representation collision_box(
 		to_video(_obstacle.get_collision_box()),
@@ -167,42 +153,58 @@ void draw::draw_table(
 	const table& _table
 ) {
 	
-	auto table_color=ldv::rgba8(64, 64, 64, 255);
+	//TODO: lots of repetition...
+	const auto sprite_box=sprite_table.get(app::resources::spr_table).box;
+	auto origin=to_sprite_point(_table.get_collision_box(), sprite_box);
 
-	if(_table.is_demanding_attention()) {
-		//demanding table: blue,
-		table_color=ldv::rgba8(0, 0, 192, 255);
-	}
-	else if(_table.is_waiting_order()) {
-		//waiting table: yellow
-		table_color=ldv::rgba8(192, 192, 0, 255);
-	}
-	else if(_table.is_dirty()) {
-		//dirty table: red
-		table_color=ldv::rgba8(192, 0, 0, 255);
-	}
-	else if(_table.is_consuming()) {
-		//eating table: green
-		table_color=ldv::rgba8(0, 192, 0, 255);
-	}
-	else if(_table.is_customer_arriving()) {
-
-		//a customer is coming: white
-		table_color=ldv::rgba8(255, 255, 255, 255);
-	}
-	else if(_table.is_customer_leaving()) {
-
-		//a customer is coming: black
-		table_color=ldv::rgba8(0, 0, 0, 255);
-	}
-
-	ldv::box_representation collision_box(
-		to_video(_table.get_collision_box()),
-		table_color
+	ldv::bitmap_representation bmp(
+		video_resource_manager.get_texture(app::resources::tex_sprites),
+		{origin, sprite_box.w, sprite_box.h},
+		sprite_box
 	);
 
-	collision_box.set_blend(ldv::representation::blends::alpha);
-	collision_box.draw(_screen, _camera);
+	bmp.set_blend(ldv::representation::blends::alpha);
+	bmp.draw(_screen, _camera);
+
+	if(debug) {
+
+		auto table_color=ldv::rgba8(64, 64, 64, 128);
+
+		if(_table.is_demanding_attention()) {
+			//demanding table: blue,
+			table_color=ldv::rgba8(0, 0, 192, 128);
+		}
+		else if(_table.is_waiting_order()) {
+			//waiting table: yellow
+			table_color=ldv::rgba8(192, 192, 0, 128);
+		}
+		else if(_table.is_dirty()) {
+			//dirty table: red
+			table_color=ldv::rgba8(192, 0, 0, 128);
+		}
+		else if(_table.is_consuming()) {
+			//eating table: green
+			table_color=ldv::rgba8(0, 192, 0, 128);
+		}
+		else if(_table.is_customer_arriving()) {
+
+			//a customer is coming: white
+			table_color=ldv::rgba8(255, 255, 255, 128);
+		}
+		else if(_table.is_customer_leaving()) {
+
+			//a customer is coming: black
+			table_color=ldv::rgba8(0, 0, 0, 128);
+		}
+
+		ldv::box_representation collision_box(
+			to_video(_table.get_collision_box()),
+			table_color
+		);
+
+		collision_box.set_blend(ldv::representation::blends::alpha);
+		collision_box.draw(_screen, _camera);
+	}
 }
 
 
@@ -463,13 +465,13 @@ void draw::draw_bar(
 	const app::bar& _bar
 ) {
 
-	//TODO: something that gives out a point
-	auto box=to_video(_bar.get_collision_box());
+	//TODO: A shitload of repetition...
 	const auto sprite_box=sprite_table.get(app::resources::spr_bar).box;
+	auto origin=to_sprite_point(_bar.get_collision_box(), sprite_box);
 
 	ldv::bitmap_representation bmp(
 		video_resource_manager.get_texture(app::resources::tex_sprites),
-		{box.origin, sprite_box.w, sprite_box.h},
+		{origin, sprite_box.w, sprite_box.h},
 		sprite_box
 	);
 
@@ -479,10 +481,66 @@ void draw::draw_bar(
 	if(debug) {
 
 		ldv::box_representation bar_box(
-			to_video(_bar.get_collision_box()),
-			ldv::rgba8(0, 255, 255, 128)
+			to_video(_bar.get_interaction_box()),
+			ldv::rgba8(255, 0, 0, 128)
 		);
 		bar_box.set_blend(ldv::representation::blends::alpha);
 		bar_box.draw(_screen, _camera);
+
+		ldv::box_representation collision_box(
+			to_video(_bar.get_collision_box()),
+			ldv::rgba8(0, 0, 0, 128)
+		);
+		collision_box.set_blend(ldv::representation::blends::alpha);
+		collision_box.draw(_screen, _camera);
 	}
+}
+
+void draw::draw_trash(
+	ldv::screen& _screen, 
+	const ldv::camera& _camera, 
+	const trash& _trash
+) {
+
+	//TODO: lots of repetition...
+	const auto sprite_box=sprite_table.get(app::resources::spr_trash).box;
+	auto origin=to_sprite_point(_trash.get_collision_box(), sprite_box);
+
+	ldv::bitmap_representation bmp(
+		video_resource_manager.get_texture(app::resources::tex_sprites),
+		{origin, sprite_box.w, sprite_box.h},
+		sprite_box
+	);
+
+	bmp.set_blend(ldv::representation::blends::alpha);
+	bmp.draw(_screen, _camera);
+
+	if(debug) {
+
+		ldv::box_representation trash_box(
+			to_video(_trash.get_collision_box()),
+			ldv::rgba8(128, 0, 0, 128)
+		);
+		trash_box.set_blend(ldv::representation::blends::alpha);
+		trash_box.draw(_screen, _camera);
+
+		ldv::box_representation collision_box(
+			to_video(_trash.get_collision_box()),
+			ldv::rgba8(0, 0, 0, 128)
+		);
+		collision_box.set_blend(ldv::representation::blends::alpha);
+		collision_box.draw(_screen, _camera);
+
+	}
+}
+
+ldv::point draw::to_sprite_point(
+	const box& _position_box,
+	const ldv::rect& _sprite_box
+) const {
+
+	int x=_position_box.origin.x,
+		y=-(_position_box.origin.y+_sprite_box.h);
+
+	return {x, y};
 }

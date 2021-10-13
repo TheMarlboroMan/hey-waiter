@@ -3,7 +3,8 @@
 A table-waiting game.
 
 # TODO:
-
+- The bar graphic and the bar interaction box should be different, so 
+	add a bar_margin
 - Bar / Table / Trash bitmap lights up to indicate interaction!!!
 	- Choose:
 		- it lights up

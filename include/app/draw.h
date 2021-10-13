@@ -44,6 +44,7 @@ class draw {
 	void				draw_timer(ldv::screen&, const app::game&);
 	void				draw_level_number(ldv::screen&, const app::game&);
 	ldv::rect			to_video(const box&) const;
+	ldv::point			to_sprite_point(const box&, const ldv::rect&) const;
 	std::string			consumable_to_string(const app::consumable&) const;
 
 	const app::resources& 		resources;

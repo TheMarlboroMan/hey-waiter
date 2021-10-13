@@ -3,17 +3,17 @@ table_margin 10
 table_size 40 40
 player 0 0 30 30
 player_speed 200
-table 0 50 L
-table 0 150 L
-table 0 250 L
-table 360 50 R
-table 360 150 R
-table 360 250 R
-bar 140 410 120 30 10
-trash 190 0 20 20 10
+table 20 50 L
+table 20 150 L
+table 20 250 L
+table 340 50 R
+table 340 150 R
+table 340 250 R
+bar 140 425 100 30 10
+trash 190 15 20 20 10
 
 obstacle 0 440 400 40
-obstacle 150 430 100 30
+#obstacle 150 430 110 30
 obstacle 0 370 50 20
 obstacle 100 370 200 20
 obstacle 350 370 50 20

@@ -26,6 +26,7 @@ game::game(
 	}
 {
 
+	draw_instance.set_debug(true);
 	camera.set_coordinate_system(ldv::camera::tsystem::cartesian);
 	game_instance.init(env.build_data_path("world.dat"));
 }
