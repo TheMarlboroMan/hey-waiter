@@ -544,3 +544,31 @@ ldv::point draw::to_sprite_point(
 
 	return {x, y};
 }
+
+void draw::populate(
+	const app::game& _game
+) {
+
+	sortable_components.clear();
+
+	auto bar=new app::draw_bar{_game.bar_instance};
+
+	sortable_components.push_back(
+		std::shared_ptr<draw_component>(bar)
+	);
+
+	auto trash=new app::draw_trash{_game.trash_instance};
+	sortable_components.push_back(
+		std::shared_ptr<draw_component>(trash)
+	);
+
+	for(const auto& table_instance : _game.tables) {
+
+		auto table=new app::draw_table{table_instance};
+
+		sortable_components.push_back(
+			std::shared_ptr<draw_component>(table)
+		);
+	}
+}
+

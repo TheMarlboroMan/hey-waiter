@@ -3,6 +3,7 @@
 #include <app/game.h>
 #include <app/definitions.h>
 #include <app/resources.h>
+#include <app/draw_component.h>
 
 #include <ldv/screen.h>
 #include <ldv/camera.h>
@@ -11,6 +12,8 @@
 #include <ldtools/sprite_table.h>
 #include <tools/i8n.h>
 #include <string>
+#include <vector>
+#include <memory>
 
 namespace app {
 
@@ -27,6 +30,7 @@ class draw {
 						);
 	void				do_draw(ldv::screen&, const ldv::camera&, const app::game&);
 	void				set_debug(bool _val) {debug=_val;}
+	void				populate(const app::game&);
 
 	private:
 
@@ -52,7 +56,10 @@ class draw {
 	const ldtools::ttf_manager&	ttf_manager;
 	const ldtools::sprite_table& sprite_table;
 	const tools::i8n&			i8n;
+	std::vector<std::shared_ptr<draw_component>>	sortable_components;
 	bool						debug{false};
+
+
 
 };
 

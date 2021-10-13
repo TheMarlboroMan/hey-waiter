@@ -25,6 +25,7 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/dependency_container.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/obstacle.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/layout.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/draw_component.cpp
 	PARENT_SCOPE
 )
 
