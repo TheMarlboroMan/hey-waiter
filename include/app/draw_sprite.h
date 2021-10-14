@@ -22,7 +22,7 @@ class draw_sprite {
 	/**
 	*draws sprite index at box position, with texture.
 	*/
-	void								draw(int, const box&, int, ldv::screen&, const ldv::camera&);
+	void								draw(int, const box&, int, ldv::screen&, const ldv::camera&) const;
 
 	private:
 
@@ -31,7 +31,8 @@ class draw_sprite {
 	const ldtools::sprite_table&		sprite_table;
 	const ldv::resource_manager&		vrm;
 
-	ldv::bitmap_representation			bmp;
+	//TODO: instance a new bmp to get rid of the mutable thing, if need be.
+	mutable ldv::bitmap_representation	bmp;
 
 };
 

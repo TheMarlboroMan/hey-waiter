@@ -9,7 +9,6 @@
 #include <ldv/camera.h>
 #include <ldv/resource_manager.h>
 #include <ldtools/ttf_manager.h>
-#include <ldtools/sprite_table.h>
 #include <tools/i8n.h>
 #include <string>
 #include <vector>
@@ -25,8 +24,8 @@ class draw {
 							const app::resources&, 
 							const ldv::resource_manager&,
 							const ldtools::ttf_manager&, 
-							const ldtools::sprite_table&,
-							const tools::i8n&
+							const tools::i8n&,
+							const app::draw_sprite&
 						);
 	void				do_draw(ldv::screen&, const ldv::camera&, const app::game&);
 	void				set_debug(bool _val) {debug=_val;}
@@ -47,15 +46,13 @@ class draw {
 	void				draw_timer(ldv::screen&, const app::game&);
 	void				draw_level_number(ldv::screen&, const app::game&);
 	ldv::rect			to_video(const box&) const;
-	//TODO: likely erase...
-	ldv::point			to_sprite_point(const box&, const ldv::rect&) const;
 	std::string			consumable_to_string(const app::consumable&) const;
 
 	const app::resources& 		resources;
 	const ldv::resource_manager& video_resource_manager;
 	const ldtools::ttf_manager&	ttf_manager;
-	const ldtools::sprite_table& sprite_table;
 	const tools::i8n&			i8n;
+	const app::draw_sprite&		draw_sprite;
 	std::vector<std::shared_ptr<draw_component>>	sortable_components;
 	bool						debug{false};
 

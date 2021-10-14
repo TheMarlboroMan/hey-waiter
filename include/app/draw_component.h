@@ -5,6 +5,7 @@
 #include <app/trash.h>
 #include <app/player.h>
 #include <app/tray.h>
+#include <app/draw_sprite.h>
 
 #include <ldv/screen.h>
 #include <ldv/camera.h>
@@ -42,14 +43,15 @@ class draw_bar
 
 	public:
 
-								draw_bar(const bar&);
+								draw_bar(const draw_sprite&, const bar&);
 	virtual point				origin() const {return bar_ptr->get_collision_box().origin;}
 	virtual void				draw(ldv::screen&, const ldv::camera&) const;
 	virtual void				tick(double) {}
 
 	private:
 
-	bar const *			bar_ptr;
+	const app::draw_sprite		sprite_draw;
+	bar const *					bar_ptr;
 
 };
 
@@ -58,14 +60,15 @@ class draw_trash
 
 	public:
 
-								draw_trash(const trash&);
+								draw_trash(const draw_sprite&, const trash&);
 	virtual point				origin() const {return trash_ptr->get_collision_box().origin;}
 	virtual void				draw(ldv::screen&, const ldv::camera&) const;
 	virtual void				tick(double) {}
 
 	private:
 
-	trash const *		trash_ptr;
+	const app::draw_sprite&		sprite_draw;
+	trash const *				trash_ptr;
 
 };
 
@@ -74,14 +77,15 @@ class draw_table
 
 	public:
 
-								draw_table(const table&);
+								draw_table(const draw_sprite&, const table&);
 	virtual point				origin() const {return table_ptr->get_collision_box().origin;}
 	virtual void				draw(ldv::screen&, const ldv::camera&) const;
 	virtual void				tick(double) {}
 
 	private:
 
-	table const *		table_ptr;
+	const app::draw_sprite&		sprite_draw;
+	table const *				table_ptr;
 
 };
 
@@ -90,13 +94,14 @@ class draw_player
 
 	public:
 
-								draw_player(const player&, const tray&);
+								draw_player(const draw_sprite&, const player&, const tray&);
 	virtual point				origin() const {return player_ptr->get_collision_box().origin;}
 	virtual void				draw(ldv::screen&, const ldv::camera&) const;
 	virtual void				tick(double) {}
 
 	private:
 
+	const app::draw_sprite&		sprite_draw; 
 	player const *				player_ptr;
 	tray const *				tray_ptr;
 

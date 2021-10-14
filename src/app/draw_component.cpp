@@ -1,4 +1,6 @@
 #include <app/draw_component.h>
+#include <app/resources.h>
+
 
 #include <ldv/box_representation.h>
 
@@ -8,8 +10,10 @@ using namespace app;
 //draw bar
 
 draw_bar::draw_bar(
+	const draw_sprite& _draw_sprite,
 	const bar& _bar
 ):
+	sprite_draw{_draw_sprite},
 	bar_ptr{&_bar}
 {
 
@@ -20,35 +24,23 @@ void draw_bar::draw(
 	const ldv::camera& _camera
 ) const {
 
-/*
-	//TODO: needs sprite table
-	//TODO: needs to sprite point
-	//TODO: Needs to_video...
-	//TODO: needs VRM
-	//TODO: make a service: sprite_draw, which contains such shit.
-
-	const auto sprite_box=sprite_table.get(app::resources::spr_bar).box;
-	auto origin=to_sprite_point(_bar.get_collision_box(), sprite_box);
-
-	ldv::bitmap_representation bmp(
-		video_resource_manager.get_texture(app::resources::tex_sprites),
-		{origin, sprite_box.w, sprite_box.h},
-		sprite_box
+	sprite_draw.draw(
+		app::resources::spr_bar, 
+		bar_ptr->get_collision_box(),
+		app::resources::tex_sprites,
+		_screen,
+		_camera
 	);
-
-	bmp.set_blend(ldv::representation::blends::alpha);
-	bmp.draw(_screen, _camera);
-*/
-
-
 }
 
 /////
 //draw trash
 
 draw_trash::draw_trash(
+	const draw_sprite& _draw_sprite,
 	const trash& _trash
 ):
+	sprite_draw{_draw_sprite},
 	trash_ptr{&_trash}
 {
 }
@@ -59,30 +51,23 @@ void draw_trash::draw(
 	const ldv::camera& _camera
 ) const {
 
-/*
-
-	//TODO: lots of repetition...
-	const auto sprite_box=sprite_table.get(app::resources::spr_trash).box;
-	auto origin=to_sprite_point(_trash.get_collision_box(), sprite_box);
-
-	ldv::bitmap_representation bmp(
-		video_resource_manager.get_texture(app::resources::tex_sprites),
-		{origin, sprite_box.w, sprite_box.h},
-		sprite_box
+	sprite_draw.draw(
+		app::resources::spr_trash, 
+		trash_ptr->get_collision_box(),
+		app::resources::tex_sprites,
+		_screen,
+		_camera
 	);
-
-	bmp.set_blend(ldv::representation::blends::alpha);
-	bmp.draw(_screen, _camera);
-*/
-
 }
 
 /////
 //draw table
 
 draw_table::draw_table(
+	const draw_sprite& _draw_sprite,
 	const table& _table
 ):
+	sprite_draw{_draw_sprite},
 	table_ptr{&_table}
 {
 
@@ -93,27 +78,25 @@ void draw_table::draw(
 	const ldv::camera& _camera
 ) const {
 
-/*
-	//TODO: lots of repetition...
-	const auto sprite_box=sprite_table.get(app::resources::spr_table).box;
-	auto origin=to_sprite_point(_table.get_collision_box(), sprite_box);
-
-	ldv::bitmap_representation bmp(
-		video_resource_manager.get_texture(app::resources::tex_sprites),
-		{origin, sprite_box.w, sprite_box.h},
-		sprite_box
+	sprite_draw.draw(
+		app::resources::spr_table, 
+		table_ptr->get_collision_box(), 
+		app::resources::tex_sprites, 
+		_screen,
+		_camera
 	);
-
-	bmp.set_blend(ldv::representation::blends::alpha);
-	bmp.draw(_screen, _camera);
-*/
-
 }
 
+//////////////
+// draw_player
+///
+
 draw_player::draw_player(
+	const draw_sprite& _draw_sprite,
 	const player& _player,
 	const tray& _tray
 ):
+	sprite_draw{_draw_sprite},
 	player_ptr{&_player},
 	tray_ptr{&_tray}
 {
@@ -124,6 +107,14 @@ void draw_player::draw(
 	ldv::screen& _screen, 
 	const ldv::camera& _camera
 ) const {
+
+	sprite_draw.draw(
+		app::resources::spr_table, 
+		player_ptr->get_collision_box(), 
+		app::resources::tex_sprites, 
+		_screen,
+		_camera
+	);
 
 /*
 	auto player_color=ldv::rgba8(255, 255, 255, 255);

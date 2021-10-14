@@ -17,14 +17,14 @@ draw::draw(
 	const app::resources& _resources,
 	const ldv::resource_manager& _vrm,
 	const ldtools::ttf_manager& _ttf_manager,
-	const ldtools::sprite_table& _sprite_table,
-	const tools::i8n& _i8n
+	const tools::i8n& _i8n,
+	const app::draw_sprite& _draw_sprite
 ):
 	resources{_resources},
 	video_resource_manager{_vrm},
 	ttf_manager{_ttf_manager},
-	sprite_table{_sprite_table},
-	i8n{_i8n}
+	i8n{_i8n},
+	draw_sprite{_draw_sprite}
 {
 
 }
@@ -56,7 +56,7 @@ void draw::do_draw(
 			const std::shared_ptr<draw_component> _b
 		) {
 
-			return _a->origin().y <= _b->origin().y;
+			return _a->origin().y > _b->origin().y;
 		}
 	);
 
@@ -143,19 +143,6 @@ void draw::draw_table(
 	const table& _table
 ) {
 	
-	//TODO: lots of repetition...
-	const auto sprite_box=sprite_table.get(app::resources::spr_table).box;
-	auto origin=to_sprite_point(_table.get_collision_box(), sprite_box);
-
-	ldv::bitmap_representation bmp(
-		video_resource_manager.get_texture(app::resources::tex_sprites),
-		{origin, sprite_box.w, sprite_box.h},
-		sprite_box
-	);
-
-	bmp.set_blend(ldv::representation::blends::alpha);
-	bmp.draw(_screen, _camera);
-
 	if(debug) {
 
 		auto table_color=ldv::rgba8(64, 64, 64, 128);
@@ -456,19 +443,6 @@ void draw::draw_bar(
 	const app::bar& _bar
 ) {
 
-	//TODO: A shitload of repetition...
-	const auto sprite_box=sprite_table.get(app::resources::spr_bar).box;
-	auto origin=to_sprite_point(_bar.get_collision_box(), sprite_box);
-
-	ldv::bitmap_representation bmp(
-		video_resource_manager.get_texture(app::resources::tex_sprites),
-		{origin, sprite_box.w, sprite_box.h},
-		sprite_box
-	);
-
-	bmp.set_blend(ldv::representation::blends::alpha);
-	bmp.draw(_screen, _camera);
-
 	if(debug) {
 
 		ldv::box_representation bar_box(
@@ -493,19 +467,6 @@ void draw::draw_trash(
 	const trash& _trash
 ) {
 
-	//TODO: lots of repetition...
-	const auto sprite_box=sprite_table.get(app::resources::spr_trash).box;
-	auto origin=to_sprite_point(_trash.get_collision_box(), sprite_box);
-
-	ldv::bitmap_representation bmp(
-		video_resource_manager.get_texture(app::resources::tex_sprites),
-		{origin, sprite_box.w, sprite_box.h},
-		sprite_box
-	);
-
-	bmp.set_blend(ldv::representation::blends::alpha);
-	bmp.draw(_screen, _camera);
-
 	if(debug) {
 
 		ldv::box_representation trash_box(
@@ -525,41 +486,30 @@ void draw::draw_trash(
 	}
 }
 
-ldv::point draw::to_sprite_point(
-	const box& _position_box,
-	const ldv::rect& _sprite_box
-) const {
-
-	int x=_position_box.origin.x,
-		y=-(_position_box.origin.y+_sprite_box.h);
-
-	return {x, y};
-}
-
 void draw::populate(
 	const app::game& _game
 ) {
 
 	sortable_components.clear();
 
-	auto player=new app::draw_player(_game.player_instance, _game.player_tray);
+	auto player=new app::draw_player(draw_sprite, _game.player_instance, _game.player_tray);
 	sortable_components.push_back(
 		std::shared_ptr<draw_component>(player)
 	);
 
-	auto bar=new app::draw_bar{_game.bar_instance};
+	auto bar=new app::draw_bar{draw_sprite, _game.bar_instance};
 	sortable_components.push_back(
 		std::shared_ptr<draw_component>(bar)
 	);
 
-	auto trash=new app::draw_trash{_game.trash_instance};
+	auto trash=new app::draw_trash{draw_sprite, _game.trash_instance};
 	sortable_components.push_back(
 		std::shared_ptr<draw_component>(trash)
 	);
 
 	for(const auto& table_instance : _game.tables) {
 
-		auto table=new app::draw_table{table_instance};
+		auto table=new app::draw_table{draw_sprite, table_instance};
 		sortable_components.push_back(
 			std::shared_ptr<draw_component>(table)
 		);

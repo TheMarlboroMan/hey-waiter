@@ -21,14 +21,15 @@ game::game(
 		_dc.get_resources(), 
 		_dc.get_video_resource_manager(), 
 		_dc.get_ttf_manager(), 
-		_dc.get_sprite_table(),
-		_dc.get_i8n()
+		_dc.get_i8n(),
+		_dc.get_draw_sprite()
 	}
 {
 
 	draw_instance.set_debug(true);
 	camera.set_coordinate_system(ldv::camera::tsystem::cartesian);
 	game_instance.init(env.build_data_path("world.dat"));
+	draw_instance.populate(game_instance);
 }
 
 void game::loop(
