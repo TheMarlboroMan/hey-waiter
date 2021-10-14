@@ -16,6 +16,7 @@ class resources;
 class hi_score_manager;
 class score; 
 class layout;
+class draw_sprite;
 
 /**
 *exactly what it sounds like. An easy way to grab dependencies.
@@ -31,6 +32,7 @@ class dependency_container {
 	app::hi_score_manager&					get_hi_score_manager();
 	app::score&								get_score();
 	app::layout&							get_layout();
+	app::draw_sprite&						get_draw_sprite();
 	ldtools::sprite_table&					get_sprite_table();
 
 	const app::env&							get_env() const {return *env;}
@@ -61,6 +63,7 @@ class dependency_container {
 	std::unique_ptr<app::hi_score_manager>	hi_score_manager;
 	std::unique_ptr<app::score>				score;
 	std::unique_ptr<app::layout>			layout;
+	std::unique_ptr<app::draw_sprite>		draw_sprite;
 	std::unique_ptr<ldtools::sprite_table>	sprite_table;
 
 	//injected deps.

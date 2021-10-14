@@ -38,7 +38,6 @@ class draw {
 	void				draw_table(ldv::screen&, const ldv::camera&, const table&);
 	void				draw_bar(ldv::screen&, const ldv::camera&, const app::bar&);
 	void				draw_obstacle(ldv::screen&, const ldv::camera&, const obstacle&);
-	void				draw_player(ldv::screen&, const ldv::camera&, const player&, const tray&);
 	void				draw_trash(ldv::screen&, const ldv::camera&, const trash&);
 	void				draw_interactions(ldv::screen&, const app::game&);
 	void				draw_fill_tray(ldv::screen&, const app::game&);
@@ -48,6 +47,7 @@ class draw {
 	void				draw_timer(ldv::screen&, const app::game&);
 	void				draw_level_number(ldv::screen&, const app::game&);
 	ldv::rect			to_video(const box&) const;
+	//TODO: likely erase...
 	ldv::point			to_sprite_point(const box&, const ldv::rect&) const;
 	std::string			consumable_to_string(const app::consumable&) const;
 

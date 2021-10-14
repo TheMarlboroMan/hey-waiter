@@ -12,8 +12,7 @@ A table-waiting game.
 	- Customers
 - Draw world with depth:
 	- inject the lit up status
-	- inject a sprite drawer
-	- sort the shit each draw
+	- inject a sprite drawer	[HERE WE ARE NOW!!!]
 - Add music
 - Add sounds
 - Help controller explaining the sytems

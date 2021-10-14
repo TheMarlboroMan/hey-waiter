@@ -1,5 +1,7 @@
 #include <app/draw_component.h>
 
+#include <ldv/box_representation.h>
+
 using namespace app;
 
 /////
@@ -21,6 +23,7 @@ void draw_bar::draw(
 /*
 	//TODO: needs sprite table
 	//TODO: needs to sprite point
+	//TODO: Needs to_video...
 	//TODO: needs VRM
 	//TODO: make a service: sprite_draw, which contains such shit.
 
@@ -105,5 +108,40 @@ void draw_table::draw(
 	bmp.draw(_screen, _camera);
 */
 
+}
+
+draw_player::draw_player(
+	const player& _player,
+	const tray& _tray
+):
+	player_ptr{&_player},
+	tray_ptr{&_tray}
+{
+
+}
+
+void draw_player::draw(
+	ldv::screen& _screen, 
+	const ldv::camera& _camera
+) const {
+
+/*
+	auto player_color=ldv::rgba8(255, 255, 255, 255);
+	if(tray_ptr->has_trash()) {
+
+		player_color=ldv::rgba8(255, 0, 0, 255);
+	}
+	else if(!tray_ptr->is_empty()) {
+
+		player_color=ldv::rgba8(0, 255, 0, 255);
+	}
+
+TODO: There's no "to video".
+	ldv::box_representation player_box(
+		to_video(player_ptr->get_collision_box()),
+		player_color
+	);
+	player_box.draw(_screen, _camera);
+*/
 }
 

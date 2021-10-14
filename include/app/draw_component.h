@@ -3,6 +3,8 @@
 #include <app/table.h>
 #include <app/bar.h>
 #include <app/trash.h>
+#include <app/player.h>
+#include <app/tray.h>
 
 #include <ldv/screen.h>
 #include <ldv/camera.h>
@@ -80,6 +82,23 @@ class draw_table
 	private:
 
 	table const *		table_ptr;
+
+};
+
+class draw_player
+	: public draw_component {
+
+	public:
+
+								draw_player(const player&, const tray&);
+	virtual point				origin() const {return player_ptr->get_collision_box().origin;}
+	virtual void				draw(ldv::screen&, const ldv::camera&) const;
+	virtual void				tick(double) {}
+
+	private:
+
+	player const *				player_ptr;
+	tray const *				tray_ptr;
 
 };
 

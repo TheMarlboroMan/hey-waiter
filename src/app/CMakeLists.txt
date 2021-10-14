@@ -26,6 +26,7 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/obstacle.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/layout.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/draw_component.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/draw_sprite.cpp
 	PARENT_SCOPE
 )
 

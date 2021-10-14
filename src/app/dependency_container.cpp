@@ -5,6 +5,7 @@
 #include <app/hi_score.h>
 #include <app/score.h>
 #include <app/layout.h>
+#include <app/draw_sprite.h>
 
 #include <lda/resource_manager.h>
 #include <ldv/screen.h>
@@ -193,5 +194,18 @@ app::score& dependency_container::get_score() {
 	}
 
 	return *score;
+}
+
+app::draw_sprite& dependency_container::get_draw_sprite() {
+
+	if(nullptr==draw_sprite.get()) {
+
+		draw_sprite.reset(new app::draw_sprite{
+			get_sprite_table(),
+			get_video_resource_manager()
+		});
+	}
+
+	return *draw_sprite;
 }
 

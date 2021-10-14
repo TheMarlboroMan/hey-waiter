@@ -6,6 +6,7 @@
 #include <ldv/color.h>
 
 #include <iostream>
+#include <algorithm>
 #include <iomanip>
 #include <sstream>
 #include <map>
@@ -47,13 +48,29 @@ void draw::do_draw(
 	const app::game& _game
 ) {
 
-	_screen.clear(ldv::rgba8(0,0,0,255));
+	std::sort(
+		std::begin(sortable_components),
+		std::end(sortable_components),
+		[](
+			const std::shared_ptr<draw_component> _a, 
+			const std::shared_ptr<draw_component> _b
+		) {
 
+			return _a->origin().y <= _b->origin().y;
+		}
+	);
+
+	_screen.clear(ldv::rgba8(0,0,0,255));
 	//TODO: come on, just pass the rect.
 	draw_background(_screen, _camera, _game);
-
 	draw_score(_screen, _game.player_score);
 	draw_timer(_screen, _game);
+
+	for(const auto& dr : sortable_components) {
+
+		dr->draw(_screen, _camera);
+	}
+
 
 	for(const auto& table : _game.tables) {
 
@@ -70,7 +87,6 @@ void draw::do_draw(
 
 	draw_bar(_screen, _camera, _game.bar_instance);
 	draw_trash(_screen, _camera, _game.trash_instance);
-	draw_player(_screen, _camera, _game.player_instance, _game.player_tray);
 
 	//If the game is over, we just want the world drawn.
 	if(_game.is_game_over()) {
@@ -102,32 +118,6 @@ void draw::do_draw(
 
 		draw_level_number(_screen, _game);
 	}
-}
-
-void draw::draw_player(
-	ldv::screen& _screen, 
-	const ldv::camera& _camera, 
-	const player& _player,
-	const tray& _tray
-) {
-
-	auto player_color=ldv::rgba8(255, 255, 255, 255);
-	if(_tray.has_trash()) {
-
-		player_color=ldv::rgba8(255, 0, 0, 255);
-	}
-	else if(!_tray.is_empty()) {
-
-		player_color=ldv::rgba8(0, 255, 0, 255);
-	}
-
-	ldv::box_representation player_box(
-		to_video(_player.get_collision_box()),
-		player_color
-	);
-	player_box.draw(_screen, _camera);
-
-
 }
 
 void draw::draw_obstacle(
@@ -428,6 +418,7 @@ void draw::draw_level_number(
 ) {
 
 	//TODO: only in debug mode!
+	
 
 	std::stringstream ss;
 	ss<<"lvl "<<(_game.current_stage+1);
@@ -551,8 +542,12 @@ void draw::populate(
 
 	sortable_components.clear();
 
-	auto bar=new app::draw_bar{_game.bar_instance};
+	auto player=new app::draw_player(_game.player_instance, _game.player_tray);
+	sortable_components.push_back(
+		std::shared_ptr<draw_component>(player)
+	);
 
+	auto bar=new app::draw_bar{_game.bar_instance};
 	sortable_components.push_back(
 		std::shared_ptr<draw_component>(bar)
 	);
@@ -565,7 +560,6 @@ void draw::populate(
 	for(const auto& table_instance : _game.tables) {
 
 		auto table=new app::draw_table{table_instance};
-
 		sortable_components.push_back(
 			std::shared_ptr<draw_component>(table)
 		);
