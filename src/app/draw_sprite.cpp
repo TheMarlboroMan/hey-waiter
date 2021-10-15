@@ -27,13 +27,10 @@ void draw_sprite::draw(
 	const auto sprite_box=sprite_table.get(_sprite).box;
 	auto origin=to_sprite_point(_position, sprite_box);
 
-std::cout<<_sprite<<" -> "<<_tex<<" "<<origin.x<<","<<origin.y<<" "<<sprite_box.w<<"x"<<sprite_box.h<<std::endl;
-
 	bmp.set_texture(vrm.get_texture(_tex));
 	bmp.set_location({origin, sprite_box.w, sprite_box.h});
 	bmp.set_clip(sprite_box);
 	bmp.draw(_screen, _camera);
-
 }
 
 ldv::point draw_sprite::to_sprite_point(

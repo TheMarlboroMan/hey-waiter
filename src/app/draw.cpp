@@ -48,6 +48,31 @@ void draw::do_draw(
 	const app::game& _game
 ) {
 
+	//update draw_info...
+	draw_info.reset();
+
+	switch(_game.current_interaction_type) {
+		case app::game::interaction_types::none: 
+		break;
+
+		case app::game::interaction_types::pick_consumables:
+		case app::game::interaction_types::empty_tray:
+
+			draw_info.interact_bar=true;
+		break;
+		case app::game::interaction_types::take_order:
+		case app::game::interaction_types::serve_order:
+		case app::game::interaction_types::clean_table:
+
+			draw_info.interact_table=true;
+			draw_info.current_table=_game.current_table;
+		break;
+		case app::game::interaction_types::drop_trash:
+
+			draw_info.interact_trash=true;
+		break;
+	}
+
 	std::sort(
 		std::begin(sortable_components),
 		std::end(sortable_components),
@@ -66,27 +91,32 @@ void draw::do_draw(
 	draw_score(_screen, _game.player_score);
 	draw_timer(_screen, _game);
 
+	if(debug) {
+
+		draw_level_number(_screen, _game);
+	}
+
 	for(const auto& dr : sortable_components) {
 
 		dr->draw(_screen, _camera);
 	}
 
 
-	for(const auto& table : _game.tables) {
-
-		draw_table(_screen, _camera, table);
-	}
-
 	if(debug) {
+
+		for(const auto& table : _game.tables) {
+
+			draw_table(_screen, _camera, table);
+		}
 
 		for(const auto& obstacle : _game.obstacles) {
 
 			draw_obstacle(_screen, _camera, obstacle);
 		}
-	}
 
-	draw_bar(_screen, _camera, _game.bar_instance);
-	draw_trash(_screen, _camera, _game.trash_instance);
+		draw_bar(_screen, _camera, _game.bar_instance);
+		draw_trash(_screen, _camera, _game.trash_instance);
+	}
 
 	//If the game is over, we just want the world drawn.
 	if(_game.is_game_over()) {
@@ -116,7 +146,7 @@ void draw::do_draw(
 
 	if(debug) {
 
-		draw_level_number(_screen, _game);
+
 	}
 }
 
@@ -404,9 +434,6 @@ void draw::draw_level_number(
 	const app::game& _game
 ) {
 
-	//TODO: only in debug mode!
-	
-
 	std::stringstream ss;
 	ss<<"lvl "<<(_game.current_stage+1);
 
@@ -492,24 +519,24 @@ void draw::populate(
 
 	sortable_components.clear();
 
-	auto player=new app::draw_player(draw_sprite, _game.player_instance, _game.player_tray);
+	auto player=new app::draw_player(draw_sprite, draw_info, _game.player_instance, _game.player_tray);
 	sortable_components.push_back(
 		std::shared_ptr<draw_component>(player)
 	);
 
-	auto bar=new app::draw_bar{draw_sprite, _game.bar_instance};
+	auto bar=new app::draw_bar{draw_sprite, draw_info, _game.bar_instance};
 	sortable_components.push_back(
 		std::shared_ptr<draw_component>(bar)
 	);
 
-	auto trash=new app::draw_trash{draw_sprite, _game.trash_instance};
+	auto trash=new app::draw_trash{draw_sprite, draw_info, _game.trash_instance};
 	sortable_components.push_back(
 		std::shared_ptr<draw_component>(trash)
 	);
 
 	for(const auto& table_instance : _game.tables) {
 
-		auto table=new app::draw_table{draw_sprite, table_instance};
+		auto table=new app::draw_table{draw_sprite, draw_info, table_instance};
 		sortable_components.push_back(
 			std::shared_ptr<draw_component>(table)
 		);

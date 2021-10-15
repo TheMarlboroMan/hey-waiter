@@ -11,9 +11,11 @@ using namespace app;
 
 draw_bar::draw_bar(
 	const draw_sprite& _draw_sprite,
+	const app::draw_info& _draw_info,
 	const bar& _bar
 ):
 	sprite_draw{_draw_sprite},
+	draw_info{_draw_info},
 	bar_ptr{&_bar}
 {
 
@@ -31,6 +33,21 @@ void draw_bar::draw(
 		_screen,
 		_camera
 	);
+
+	if(draw_info.interact_bar) {
+
+		auto box=bar_ptr->get_collision_box();
+		box.origin.x-=1;
+		box.origin.y-=1;
+
+		sprite_draw.draw(
+			app::resources::spr_bar_outline, 
+			box,
+			app::resources::tex_sprites,
+			_screen,
+			_camera
+		);
+	}
 }
 
 /////
@@ -38,11 +55,14 @@ void draw_bar::draw(
 
 draw_trash::draw_trash(
 	const draw_sprite& _draw_sprite,
+	const app::draw_info& _draw_info,
 	const trash& _trash
 ):
 	sprite_draw{_draw_sprite},
+	draw_info{_draw_info},
 	trash_ptr{&_trash}
 {
+
 }
 
 
@@ -58,6 +78,21 @@ void draw_trash::draw(
 		_screen,
 		_camera
 	);
+
+	if(draw_info.interact_trash) {
+
+		auto box=trash_ptr->get_collision_box();
+		box.origin.x-=1;
+		box.origin.y-=1;
+
+		sprite_draw.draw(
+			app::resources::spr_trash_outline, 
+			box,
+			app::resources::tex_sprites,
+			_screen,
+			_camera
+		);
+	}
 }
 
 /////
@@ -65,9 +100,11 @@ void draw_trash::draw(
 
 draw_table::draw_table(
 	const draw_sprite& _draw_sprite,
+	const app::draw_info& _draw_info,
 	const table& _table
 ):
 	sprite_draw{_draw_sprite},
+	draw_info{_draw_info},
 	table_ptr{&_table}
 {
 
@@ -85,6 +122,21 @@ void draw_table::draw(
 		_screen,
 		_camera
 	);
+
+	if(draw_info.interact_table && draw_info.current_table==table_ptr) {
+
+		auto box=table_ptr->get_collision_box();
+		box.origin.x-=1;
+		box.origin.y-=1;
+
+		sprite_draw.draw(
+			app::resources::spr_table_outline, 
+			box,
+			app::resources::tex_sprites,
+			_screen,
+			_camera
+		);
+	}
 }
 
 //////////////
@@ -93,10 +145,12 @@ void draw_table::draw(
 
 draw_player::draw_player(
 	const draw_sprite& _draw_sprite,
+	const app::draw_info& _draw_info,
 	const player& _player,
 	const tray& _tray
 ):
 	sprite_draw{_draw_sprite},
+	draw_info{_draw_info},
 	player_ptr{&_player},
 	tray_ptr{&_tray}
 {

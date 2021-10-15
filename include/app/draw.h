@@ -54,10 +54,8 @@ class draw {
 	const tools::i8n&			i8n;
 	const app::draw_sprite&		draw_sprite;
 	std::vector<std::shared_ptr<draw_component>>	sortable_components;
+	app::draw_info				draw_info;
 	bool						debug{false};
-
-
-
 };
 
 }

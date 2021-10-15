@@ -18,11 +18,19 @@ namespace app {
 
 struct draw_info {
 
-	bool	interact_bar{false},
-			interact_trash{false},
-			interact_table{false};
+	bool						interact_bar{false},
+								interact_trash{false},
+								interact_table{false};
 
-	table const * current_table{nullptr};
+	table const * 				current_table{nullptr};
+
+	void 						reset() {
+
+		interact_bar=false;
+		interact_trash=false;
+		interact_table=false;
+		current_table=nullptr;
+	}
 };
 
 /**
@@ -43,7 +51,7 @@ class draw_bar
 
 	public:
 
-								draw_bar(const draw_sprite&, const bar&);
+								draw_bar(const draw_sprite&, const draw_info&, const bar&);
 	virtual point				origin() const {return bar_ptr->get_collision_box().origin;}
 	virtual void				draw(ldv::screen&, const ldv::camera&) const;
 	virtual void				tick(double) {}
@@ -51,8 +59,8 @@ class draw_bar
 	private:
 
 	const app::draw_sprite		sprite_draw;
+	const app::draw_info&		draw_info;
 	bar const *					bar_ptr;
-
 };
 
 class draw_trash
@@ -60,7 +68,7 @@ class draw_trash
 
 	public:
 
-								draw_trash(const draw_sprite&, const trash&);
+								draw_trash(const draw_sprite&, const draw_info&, const trash&);
 	virtual point				origin() const {return trash_ptr->get_collision_box().origin;}
 	virtual void				draw(ldv::screen&, const ldv::camera&) const;
 	virtual void				tick(double) {}
@@ -68,8 +76,8 @@ class draw_trash
 	private:
 
 	const app::draw_sprite&		sprite_draw;
+	const app::draw_info&		draw_info;
 	trash const *				trash_ptr;
-
 };
 
 class draw_table
@@ -77,7 +85,7 @@ class draw_table
 
 	public:
 
-								draw_table(const draw_sprite&, const table&);
+								draw_table(const draw_sprite&, const draw_info&, const table&);
 	virtual point				origin() const {return table_ptr->get_collision_box().origin;}
 	virtual void				draw(ldv::screen&, const ldv::camera&) const;
 	virtual void				tick(double) {}
@@ -85,8 +93,8 @@ class draw_table
 	private:
 
 	const app::draw_sprite&		sprite_draw;
+	const app::draw_info&		draw_info;
 	table const *				table_ptr;
-
 };
 
 class draw_player
@@ -94,7 +102,7 @@ class draw_player
 
 	public:
 
-								draw_player(const draw_sprite&, const player&, const tray&);
+								draw_player(const draw_sprite&, const draw_info&, const player&, const tray&);
 	virtual point				origin() const {return player_ptr->get_collision_box().origin;}
 	virtual void				draw(ldv::screen&, const ldv::camera&) const;
 	virtual void				tick(double) {}
@@ -102,9 +110,9 @@ class draw_player
 	private:
 
 	const app::draw_sprite&		sprite_draw; 
+	const app::draw_info&		draw_info;
 	player const *				player_ptr;
 	tray const *				tray_ptr;
-
 };
 
 }

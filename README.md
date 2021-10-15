@@ -3,16 +3,14 @@
 A table-waiting game.
 
 # TODO:
-- Bar / Table / Trash bitmap gets a border to indicate interaction!!!
 - Graphics and sprite tables
 	- Bar
 	- Table
 	- Trash
 	- Player
 	- Customers
-- Draw world with depth:
-	- inject the lit up status
-	- inject a sprite drawer	[HERE WE ARE NOW!!!]
+	- HUD consumables
+	- Consumables in player tray and table
 - Add music
 - Add sounds
 - Help controller explaining the sytems
