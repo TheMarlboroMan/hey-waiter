@@ -3,7 +3,24 @@
 A table-waiting game.
 
 # TODO:
-- Graphics and sprite tables
+- Design HUD for serving and taking shit from the bar.
+	- Complete the layout for this.
+	- Make the view composer be able to render stuff from a different "origin",
+		as in draw(screen, point origin),
+		draw(screen, camera, origin);
+		auto old_pos=item->get_position();
+		auto new_pos=old_pos+=origin;
+		item->go_to(new_pos)
+		item->draw(...)
+		item->go_to(old_pos)
+
+- Placeholder Graphics and sprite tables
+	- Player
+	- Customers
+	- HUD consumables
+	- Consumables in player tray and table
+
+- Definitive graphics for
 	- Bar
 	- Table
 	- Trash

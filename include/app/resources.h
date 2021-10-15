@@ -36,7 +36,21 @@ struct resources {
 		spr_trash=3,
 		spr_bar_outline=4,
 		spr_table_outline=5,
-		spr_trash_outline=6
+		spr_trash_outline=6,
+		spr_hud_bar_top_left=7,
+		spr_hud_bar_top_right=8,
+		spr_hud_bar_bottom_right=9,
+		spr_hud_bar_bottom_left=10,
+		spr_hud_consumable_water=11,
+		spr_hud_consumable_soda=12,
+		spr_hud_consumable_beer_bottle=13,
+		spr_hud_consumable_beer_jar=14,
+		spr_hud_consumable_beer_cocktail=15,
+		spr_hud_consumable_beer_pineapple=16,
+		spr_hud_consumable_beer_melon=17,
+		spr_hud_consumable_beer_watermelon=18,
+		spr_hud_marker_red=19,
+		spr_hud_marker_gray=20
 	};
 };
 

@@ -263,6 +263,139 @@
 			"rgba":[255, 255, 255, 160],
 			"order": 20
 		}
+	],
+	"bar_selector": [
+		{
+			"__id":"overlay",
+			"type":"box",
+			"location":[0, 210, 400, 190],
+			"rgba":[0,0,0,128],
+			"order": 10
+		},
+		{
+			"__id":"bar_corner_tl",
+			"type":"bitmap",
+			"texture": "sprites",
+			"location":[0, 0, 0, 0],
+			"clip":[110, 100, 10, 10],
+			"order": 20
+		},
+		{
+			"__id":"bar_corner_tr",
+			"type":"bitmap",
+			"texture": "sprites",
+			"location":[0, 0, 0, 0],
+			"clip":[120, 100, 10, 10],
+			"order": 20
+		},
+		{
+			"id":"bar_corner_bl",
+			"type":"bitmap",
+			"texture": "sprites",
+			"location":[0, 0, 0, 0],
+			"clip":[110, 110, 10, 10],
+			"order": 20
+		},
+		{
+			"__id":"bar_corner_br",
+			"type":"bitmap",
+			"texture": "sprites",
+			"location":[0, 0, 0, 0],
+			"clip":[120, 110, 10, 10],
+			"order": 20
+		},
+		{
+			"__id":"bar_top",
+			"type":"box",
+			"location":[0, 210, 400, 10],
+			"rgba":[0,0,255,0],
+			"order": 20
+		},
+		{
+			"__id":"bar_bottom",
+			"type":"box",
+			"location":[0, 210, 400, 10],
+			"rgba":[0,0,255,0],
+			"order": 20
+		},
+		{
+			"__id":"bar_left",
+			"type":"box",
+			"location":[0, 210, 10, 190],
+			"rgba":[0,0,255,0],
+			"order": 20
+		},
+		{
+			"__id":"bar_right",
+			"type":"box",
+			"location":[0, 210, 10, 190],
+			"rgba":[0,0,255,0],
+			"order": 20
+		},
+		{
+			"id":"bar_slot_0",
+			"type":"bitmap",
+			"texture": "sprites",
+			"location":[0, 0, 0, 0],
+			"clip":[0, 120, 40, 40],
+			"order": 20
+		},
+		{
+			"id":"bar_slot_1",
+			"type":"bitmap",
+			"texture": "sprites",
+			"location":[0, 0, 0, 0],
+			"clip":[40, 120, 40, 40],
+			"order": 20
+		},
+		{
+			"id":"bar_slot_2",
+			"type":"bitmap",
+			"texture": "sprites",
+			"location":[0, 0, 0, 0],
+			"clip":[80, 120, 40, 40],
+			"order": 20
+		},
+		{
+			"id":"bar_slot_3",
+			"type":"bitmap",
+			"texture": "sprites",
+			"location":[0, 0, 0, 0],
+			"clip":[120, 120, 40, 40],
+			"order": 20
+		},
+		{
+			"id":"bar_slot_4",
+			"type":"bitmap",
+			"texture": "sprites",
+			"location":[0, 0, 0, 0],
+			"clip":[0, 160, 40, 40],
+			"order": 20
+		},
+		{
+			"id":"bar_slot_5",
+			"type":"bitmap",
+			"texture": "sprites",
+			"location":[0, 0, 0, 0],
+			"clip":[40, 160, 40, 40],
+			"order": 20
+		},
+		{
+			"id":"bar_slot_6",
+			"type":"bitmap",
+			"texture": "sprites",
+			"location":[0, 0, 0, 0],
+			"clip":[80, 160, 40, 40],
+			"order": 20
+		},
+		{
+			"id":"bar_slot_7",
+			"type":"bitmap",
+			"texture": "sprites",
+			"location":[0, 0, 0, 0],
+			"clip":[120, 160, 40, 40],
+			"order": 20
+		}
 	]
 }
 
