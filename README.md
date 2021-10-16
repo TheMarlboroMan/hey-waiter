@@ -4,19 +4,15 @@ A table-waiting game.
 
 # TODO:
 
-- Design HUD for serving
-
 - Sort the timer, so it's not behind the bar.
-
 
 - Placeholder Graphics and sprite tables
 	- Player
 	- Customers
-	- HUD consumables
 	- Consumables in player tray and table
 
 - Design table states so they can be understood:
-	- Customer arriving
+	- Customer arriving (an arrow when out of the screen!!!!)
 	- Customer calling (with timer!)
 	- Customer waiting (with timer!)
 	- Customer eating
