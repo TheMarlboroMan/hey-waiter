@@ -37,8 +37,14 @@ class draw {
 
 	private:
 
-	void				update_selector_position(const app::game&);
+	void				setup_bar();
 	void				update_tray(const app::game&);
+	void				update_table(const app::game&);
+	void				update_bar_selector_position(const app::game&);
+	void				update_tray_selector_position(const app::game&);
+	void				toggle_selector(ldtools::view_composer&, bool);
+	void				set_view_selector(ldtools::view_composer&, int);
+	void				fill_view_with_consumables(ldtools::view_composer&, const std::vector<consumable>);
 	void				draw_background(ldv::screen&, const ldv::camera&, const app::game&);
 	void				draw_table(ldv::screen&, const ldv::camera&, const table&);
 	void				draw_bar(ldv::screen&, const ldv::camera&, const app::bar&);
@@ -46,7 +52,7 @@ class draw {
 	void				draw_trash(ldv::screen&, const ldv::camera&, const trash&);
 	void				draw_interactions(ldv::screen&, const app::game&);
 	void				draw_fill_tray(ldv::screen&);
-	void				draw_serve(ldv::screen&, const app::game&);
+	void				draw_serve(ldv::screen&);
 	void				draw_take_order(ldv::screen&, const app::game&);
 	void				draw_score(ldv::screen&, const app::score&);
 	void				draw_timer(ldv::screen&, const app::game&);
@@ -61,11 +67,11 @@ class draw {
 	const tools::i8n&							i8n;
 	const app::draw_sprite&						draw_sprite;
 	ldtools::view_composer						consumable_selector,
-												tray_list;
+												tray_list,
+												table_list;
 	std::vector<std::shared_ptr<draw_component>>	sortable_components;
-	std::vector<ldv::bitmap_representation*>	tray_items;
-	//TODO: should be a vector.
-	std::map<consumable::types, std::string>	bar_item_order;
+//	std::vector<ldv::bitmap_representation*>	tray_items;
+	std::vector<consumable>		 				bar_item_order;
 	app::draw_info								draw_info;
 	bool										debug{false};
 };

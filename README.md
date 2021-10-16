@@ -3,8 +3,8 @@
 A table-waiting game.
 
 # TODO:
+
 - Design HUD for serving
-	- Should be able to reuse most stuff, actually... or to refactor it to be reused.
 
 - Sort the timer, so it's not behind the bar.
 

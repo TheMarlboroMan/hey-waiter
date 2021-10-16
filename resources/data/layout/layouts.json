@@ -369,7 +369,8 @@
 			"blend": "alpha",
 			"location":[40, 30, 40, 40],
 			"clip":[0, 120, 40, 40],
-			"order": 20
+			"order": 20,
+			"visible":false
 		},
 		{
 			"id":"bar_slot_1",
@@ -378,7 +379,8 @@
 			"blend": "alpha",
 			"location":[80, 30, 40, 40],
 			"clip":[40, 120, 40, 40],
-			"order": 20
+			"order": 20,
+			"visible":false
 		},
 		{
 			"id":"bar_slot_2",
@@ -387,7 +389,8 @@
 			"blend": "alpha",
 			"location":[120, 30, 40, 40],
 			"clip":[80, 120, 40, 40],
-			"order": 20
+			"order": 20,
+			"visible":false
 		},
 		{
 			"id":"bar_slot_3",
@@ -396,7 +399,8 @@
 			"blend": "alpha",
 			"location":[160, 30, 40, 40],
 			"clip":[120, 120, 40, 40],
-			"order": 20
+			"order": 20,
+			"visible":false
 		},
 		{
 			"id":"bar_slot_4",
@@ -405,7 +409,8 @@
 			"texture": "sprites",
 			"location":[200, 30, 40, 40],
 			"clip":[0, 160, 40, 40],
-			"order": 20
+			"order": 20,
+			"visible":false
 		},
 		{
 			"id":"bar_slot_5",
@@ -414,7 +419,8 @@
 			"texture": "sprites",
 			"location":[240, 30, 40, 40],
 			"clip":[40, 160, 40, 40],
-			"order": 20
+			"order": 20,
+			"visible":false
 		},
 		{
 			"id":"bar_slot_6",
@@ -423,7 +429,8 @@
 			"texture": "sprites",
 			"location":[280, 30, 40, 40],
 			"clip":[80, 160, 40, 40],
-			"order": 20
+			"order": 20,
+			"visible":false
 		},
 		{
 			"id":"bar_slot_7",
@@ -432,7 +439,8 @@
 			"texture": "sprites",
 			"location":[320, 30, 40, 40],
 			"clip":[120, 160, 40, 40],
-			"order": 20
+			"order": 20,
+			"visible":false
 		}
 	]
 }
