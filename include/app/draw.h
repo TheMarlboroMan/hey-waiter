@@ -4,11 +4,13 @@
 #include <app/definitions.h>
 #include <app/resources.h>
 #include <app/draw_component.h>
+#include <app/layout.h>
 
 #include <ldv/screen.h>
 #include <ldv/camera.h>
 #include <ldv/resource_manager.h>
 #include <ldtools/ttf_manager.h>
+#include <ldtools/view_composer.h>
 #include <tools/i8n.h>
 #include <string>
 #include <vector>
@@ -23,9 +25,11 @@ class draw {
 						draw(
 							const app::resources&, 
 							const ldv::resource_manager&,
-							const ldtools::ttf_manager&, 
+							const ldtools::ttf_manager&,
+							const ldtools::sprite_table&, 
 							const tools::i8n&,
-							const app::draw_sprite&
+							const app::draw_sprite&,
+							const app::layout&
 						);
 	void				do_draw(ldv::screen&, const ldv::camera&, const app::game&);
 	void				set_debug(bool _val) {debug=_val;}
@@ -33,13 +37,15 @@ class draw {
 
 	private:
 
+	void				update_selector_position(const app::game&);
+	void				update_tray(const app::game&);
 	void				draw_background(ldv::screen&, const ldv::camera&, const app::game&);
 	void				draw_table(ldv::screen&, const ldv::camera&, const table&);
 	void				draw_bar(ldv::screen&, const ldv::camera&, const app::bar&);
 	void				draw_obstacle(ldv::screen&, const ldv::camera&, const obstacle&);
 	void				draw_trash(ldv::screen&, const ldv::camera&, const trash&);
 	void				draw_interactions(ldv::screen&, const app::game&);
-	void				draw_fill_tray(ldv::screen&, const app::game&);
+	void				draw_fill_tray(ldv::screen&);
 	void				draw_serve(ldv::screen&, const app::game&);
 	void				draw_take_order(ldv::screen&, const app::game&);
 	void				draw_score(ldv::screen&, const app::score&);
@@ -48,14 +54,20 @@ class draw {
 	ldv::rect			to_video(const box&) const;
 	std::string			consumable_to_string(const app::consumable&) const;
 
-	const app::resources& 		resources;
-	const ldv::resource_manager& video_resource_manager;
-	const ldtools::ttf_manager&	ttf_manager;
-	const tools::i8n&			i8n;
-	const app::draw_sprite&		draw_sprite;
+	const app::resources& 						resources;
+	const ldv::resource_manager& 				video_resource_manager;
+	const ldtools::ttf_manager&					ttf_manager;
+	const ldtools::sprite_table&				sprite_table;
+	const tools::i8n&							i8n;
+	const app::draw_sprite&						draw_sprite;
+	ldtools::view_composer						consumable_selector,
+												tray_list;
 	std::vector<std::shared_ptr<draw_component>>	sortable_components;
-	app::draw_info				draw_info;
-	bool						debug{false};
+	std::vector<ldv::bitmap_representation*>	tray_items;
+	//TODO: should be a vector.
+	std::map<consumable::types, std::string>	bar_item_order;
+	app::draw_info								draw_info;
+	bool										debug{false};
 };
 
 }

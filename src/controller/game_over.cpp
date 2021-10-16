@@ -20,12 +20,11 @@ game_over::game_over(app::dependency_container& _dc)
 	layout.map_font(
 		"game_over_font", 
 		_dc.get_ttf_manager().get(
-			"game_over", 
+			"game_over",
 			_dc.get_resources().game_over_font_size
 		)
 	);
-
-	layout.parse(_dc.get_layout().get("game_over"));
+	_dc.get_layout().parse_into("game_over", layout);
 
 	auto set_text=[this](const std::string& _id, const std::string& _key) {
 

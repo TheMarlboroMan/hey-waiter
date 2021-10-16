@@ -74,6 +74,10 @@ app::resources& dependency_container::get_resources() {
 				
 				ss>>resources->how_to_play_ttf;
 			}
+			else if(title=="consumable_selector_ttf") {
+				
+				ss>>resources->consumable_selector_ttf;
+			}
 			else if(title=="main_menu_font_size") {
 
 				ss>>resources->game_hud_font_size;
@@ -93,6 +97,10 @@ app::resources& dependency_container::get_resources() {
 			else if(title=="how_to_play_font_size") {
 
 				ss>>resources->how_to_play_font_size;
+			}
+			else if(title=="consumable_selector_font_size") {
+
+				ss>>resources->consumable_selector_font_size;
 			}
 			else {
 
@@ -160,6 +168,12 @@ ldtools::ttf_manager& dependency_container::get_ttf_manager() {
 			"how_to_play",
 			get_resources().how_to_play_font_size,
 			get_env().build_data_path(std::string{"fonts/"}+get_resources().how_to_play_ttf)
+		);
+
+		ttf_manager->insert(
+			"consumable_selector_font",
+			get_resources().consumable_selector_font_size,
+			get_env().build_data_path(std::string{"fonts/"}+get_resources().consumable_selector_ttf)
 		);
 	}
 

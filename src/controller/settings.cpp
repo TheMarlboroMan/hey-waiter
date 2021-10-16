@@ -36,15 +36,13 @@ settings::settings(app::dependency_container& _dc)
 	);
 
 	layout.map_font(
-		"settings", 
+		"settings_font", 
 		_dc.get_ttf_manager().get(
-			"settings", 
+			"settings",
 			_dc.get_resources().settings_font_size
 		)
 	);
-
-	layout.parse(_dc.get_layout().get("settings"));
-
+	_dc.get_layout().parse_into("settings", layout);
 
 	auto set_text=[this](const std::string& _id, const std::string& _key) {
 

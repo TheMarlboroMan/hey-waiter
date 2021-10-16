@@ -25,12 +25,11 @@ menu::menu(
 	layout.map_font(
 		"main_menu_font", 
 		_dependency_container.get_ttf_manager().get(
-			"menu", 
+			"menu",
 			resources.main_menu_font_size
 		)
 	);
-
-	layout.parse(_dependency_container.get_layout().get("main_menu"));
+	_dependency_container.get_layout().parse_into("main_menu", layout);
 
 	auto set_text=[this](const std::string& _id, const std::string& _key) {
 

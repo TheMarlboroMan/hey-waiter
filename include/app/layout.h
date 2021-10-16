@@ -2,6 +2,7 @@
 
 #include <app/env.h>
 
+#include <ldtools/view_composer.h>
 #include <rapidjson/document.h>
 #include <string>
 
@@ -14,7 +15,10 @@ class layout {
 
 								layout(const app::env&);
 
-	const rapidjson::Value& 	get(const std::string&) const;
+/**
+*this is so because stuff can't be parsed if we don't assign fonts and stuff...
+*/
+	void						parse_into(const std::string&, ldtools::view_composer&) const;
 
 	private:
 

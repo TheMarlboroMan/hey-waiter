@@ -17,16 +17,89 @@ draw::draw(
 	const app::resources& _resources,
 	const ldv::resource_manager& _vrm,
 	const ldtools::ttf_manager& _ttf_manager,
+	const ldtools::sprite_table& _sprite_table,  
 	const tools::i8n& _i8n,
-	const app::draw_sprite& _draw_sprite
+	const app::draw_sprite& _draw_sprite,
+	const app::layout& _layout
 ):
 	resources{_resources},
 	video_resource_manager{_vrm},
 	ttf_manager{_ttf_manager},
+	sprite_table{_sprite_table},
 	i8n{_i8n},
-	draw_sprite{_draw_sprite}
+	draw_sprite{_draw_sprite},
+	bar_item_order{
+		{consumable::types::water_bottle, "water"},
+		{consumable::types::soda_bottle, "soda"},
+		{consumable::types::beer_bottle, "beer"},
+		{consumable::types::beer_jar, "beer jar"},
+		{consumable::types::cocktail, "cocktail"},
+		{consumable::types::pinneaple, "pineapple"},
+		{consumable::types::melon, "melon"},
+		{consumable::types::watermelon, "watermelon"}
+	}
 {
 
+	consumable_selector.map_font(
+		"consumable_selector_font", 
+		_ttf_manager.get(
+			"consumable_selector_font",
+			_resources.consumable_selector_font_size
+		)
+	);
+	consumable_selector.map_texture("sprites", _vrm.get_texture(app::resources::tex_sprites));
+	_layout.parse_into("consumable_list", consumable_selector);
+	static_cast<ldv::ttf_representation*>(consumable_selector.get_by_id("bar_text"))->set_text(_i8n.get("game-hud_bar"));
+	consumable_selector.get_by_id("bar_text")->align(
+		*consumable_selector.get_by_id("bar_top"),
+		{
+			ldv::representation_alignment::h::center,
+			ldv::representation_alignment::v::center
+		}
+	);
+	consumable_selector.get_by_id("bar_text_background")->align(
+		*consumable_selector.get_by_id("bar_top"),
+		{
+			ldv::representation_alignment::h::center,
+			ldv::representation_alignment::v::center
+		}
+	);
+
+	tray_list.map_font(
+		"consumable_selector_font", 
+		_ttf_manager.get(
+			"consumable_selector_font",
+			_resources.consumable_selector_font_size
+		)
+	);
+	tray_list.map_texture("sprites", _vrm.get_texture(app::resources::tex_sprites));
+	_layout.parse_into("consumable_list", tray_list);
+	static_cast<ldv::ttf_representation*>(tray_list.get_by_id("bar_text"))->set_text(_i8n.get("game-hud_tray"));
+	tray_list.get_by_id("bar_slot_selector")->set_visible(false);
+	tray_list.get_by_id("bar_text")->align(
+		*tray_list.get_by_id("bar_top"),
+		{
+			ldv::representation_alignment::h::center,
+			ldv::representation_alignment::v::center
+		}
+	);
+	tray_list.get_by_id("bar_text_background")->align(
+		*tray_list.get_by_id("bar_top"),
+		{
+			ldv::representation_alignment::h::center,
+			ldv::representation_alignment::v::center
+		}
+	);
+
+	for(int i=0; i<8; i++) {
+
+		std::string id{"bar_slot_"};
+		id+=std::to_string(i);
+
+		tray_items.push_back(
+			static_cast<ldv::bitmap_representation*>(tray_list.get_by_id(id))
+		);
+	}
 }
 
 ldv::rect draw::to_video(
@@ -89,6 +162,8 @@ void draw::do_draw(
 	//TODO: come on, just pass the rect.
 	draw_background(_screen, _camera, _game);
 	draw_score(_screen, _game.player_score);
+
+	//TODO.... hmmm... the timer should be... sortable. It does not appear now!
 	draw_timer(_screen, _game);
 
 	if(debug) {
@@ -100,7 +175,6 @@ void draw::do_draw(
 
 		dr->draw(_screen, _camera);
 	}
-
 
 	if(debug) {
 
@@ -132,7 +206,9 @@ void draw::do_draw(
 		break;
 		case game::modes::fill_tray:
 
-			draw_fill_tray(_screen, _game);
+			update_tray(_game);
+			update_selector_position(_game);
+			draw_fill_tray(_screen);
 		break;
 		case game::modes::serve:
 
@@ -146,7 +222,65 @@ void draw::do_draw(
 
 	if(debug) {
 
+	}
+}
 
+void draw::update_selector_position(
+	const app::game& _game
+) {
+
+	int i=0;
+
+	//draw bar selector...
+	for(const auto& pair : bar_item_order) {
+
+		if(pair.first==_game.bar_selector_instance.get()) {
+
+			break;
+		}
+
+		i++;
+	}
+
+	auto base=consumable_selector.get_by_id("bar_slot_0")->get_position();
+	base.x+=(i * 40);
+	consumable_selector.get_by_id("bar_slot_selector")->go_to(base);
+}
+
+void draw::update_tray(
+	const app::game& _game
+) {
+
+	//Hide everything...
+	for(auto& item : tray_items) {
+
+		item->set_visible(false);
+	}
+
+	//And now fill out stuff.
+	auto get_sprite_rect=[this](const app::consumable& _consumable) {
+
+		switch(_consumable.type) {
+
+			case consumable::types::water_bottle: return sprite_table.get(app::resources::spr_hud_consumable_water);
+			case consumable::types::soda_bottle: return sprite_table.get(app::resources::spr_hud_consumable_soda);
+			case consumable::types::beer_bottle: return sprite_table.get(app::resources::spr_hud_consumable_beer_bottle);
+			case consumable::types::beer_jar: return sprite_table.get(app::resources::spr_hud_consumable_beer_jar);
+			case consumable::types::cocktail: return sprite_table.get(app::resources::spr_hud_consumable_cocktail);
+			case consumable::types::pinneaple: return sprite_table.get(app::resources::spr_hud_consumable_pineapple);
+			case consumable::types::melon: return sprite_table.get(app::resources::spr_hud_consumable_melon);
+			case consumable::types::watermelon: return sprite_table.get(app::resources::spr_hud_consumable_watermelon);
+		}
+
+		return sprite_table.get(app::resources::spr_hud_consumable_water);
+	};
+
+	std::size_t i=0;
+	for(const auto& consumable : _game.player_tray.get()) {
+
+		tray_items[i]->set_visible(true);
+		tray_items[i]->set_clip(get_sprite_rect(consumable).box);
+		i++;
 	}
 }
 
@@ -260,51 +394,11 @@ void draw::draw_interactions(
 }
 
 void draw::draw_fill_tray(
-	ldv::screen& _screen,
-	const app::game& _game
+	ldv::screen& _screen
 ) {
 
-	//draw bar selector...
-	std::map<consumable::types, std::string> bar{
-{consumable::types::water_bottle, "water"},
-{consumable::types::soda_bottle, "soda"},
-{consumable::types::beer_bottle, "beer"},
-{consumable::types::beer_jar, "beer jar"},
-{consumable::types::cocktail, "cocktail"},
-{consumable::types::pinneaple, "pineapple"},
-{consumable::types::melon, "melon"},
-{consumable::types::watermelon, "watermelon"},
-	};
-
-	std::stringstream ss;
-	for(const auto& pair : bar) {
-
-		if(pair.first==_game.bar_selector_instance.get()) {
-
-			ss<<" [ "<<pair.second<<" ]\n";
-		}
-		else {
-
-			ss<<pair.second<<"\n";
-		}
-	}
-	
-	ss<<"\n\n"<<"------------------"<<std::endl;
-
-	//draw current tray contents...
-	ss<<_game.player_tray.size()<<" / 8"<<std::endl;
-	for(const auto& consumable : _game.player_tray.get()) {
-
-		ss<<consumable_to_string(consumable)<<", ";
-	}
-
-	ldv::ttf_representation txt{
-		ttf_manager.get("hud", resources.game_hud_font_size),
-		ldv::rgba8(255, 255, 255, 255),
-		ss.str()
-	};
-
-	txt.draw(_screen);
+	consumable_selector.draw(_screen, {0, 200});
+	tray_list.draw(_screen, {0, 320});
 }
 
 void draw::draw_serve(

@@ -10,12 +10,14 @@ struct resources {
 				game_hud_ttf,
 				game_over_ttf,
 				settings_ttf,
-				how_to_play_ttf;
+				how_to_play_ttf,
+				consumable_selector_ttf;
 	int			main_menu_font_size{16},
 				game_hud_font_size{16},
 				game_over_font_size{16},
 				settings_font_size{16},
-				how_to_play_font_size{16};
+				how_to_play_font_size{16},
+				consumable_selector_font_size{16};
 
 	enum sounds {
 		snd_default=1
@@ -45,10 +47,10 @@ struct resources {
 		spr_hud_consumable_soda=12,
 		spr_hud_consumable_beer_bottle=13,
 		spr_hud_consumable_beer_jar=14,
-		spr_hud_consumable_beer_cocktail=15,
-		spr_hud_consumable_beer_pineapple=16,
-		spr_hud_consumable_beer_melon=17,
-		spr_hud_consumable_beer_watermelon=18,
+		spr_hud_consumable_cocktail=15,
+		spr_hud_consumable_pineapple=16,
+		spr_hud_consumable_melon=17,
+		spr_hud_consumable_watermelon=18,
 		spr_hud_marker_red=19,
 		spr_hud_marker_gray=20
 	};

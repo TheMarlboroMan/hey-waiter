@@ -20,9 +20,11 @@ game::game(
 	draw_instance{
 		_dc.get_resources(), 
 		_dc.get_video_resource_manager(), 
-		_dc.get_ttf_manager(), 
+		_dc.get_ttf_manager(),
+		_dc.get_sprite_table(),  
 		_dc.get_i8n(),
-		_dc.get_draw_sprite()
+		_dc.get_draw_sprite(),
+		_dc.get_layout()
 	}
 {
 

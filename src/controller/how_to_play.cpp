@@ -14,15 +14,13 @@ how_to_play::how_to_play(app::dependency_container& _dc)
 	i8n{_dc.get_i8n()} {
 
 	layout.map_font(
-		"how_to_play", 
+		"how_to_play_font", 
 		_dc.get_ttf_manager().get(
 			"how_to_play", 
 			_dc.get_resources().settings_font_size
 		)
 	);
-
-	layout.parse(_dc.get_layout().get("how_to_play"));
-
+	_dc.get_layout().parse_into("how_to_play", layout);
 
 	auto set_text=[this](const std::string& _id, const std::string& _key) {
 

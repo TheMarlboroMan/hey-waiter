@@ -8,3 +8,5 @@ settings_ttf OrigamiMommy.ttf
 settings_font_size 16
 how_to_play_ttf OrigamiMommy.ttf
 how_to_play_font_size 16
+consumable_selector_ttf OrigamiMommy.ttf
+consumable_selector_font_size 16

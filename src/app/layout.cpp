@@ -13,9 +13,10 @@ layout::layout(const app::env& _env) {
 	);
 }
 
-const rapidjson::Value& layout::get(
-	const std::string& _key
+void layout::parse_into(
+	const std::string& _key,
+	ldtools::view_composer& _view_composer
 ) const {
 
-	return doc[_key.c_str()];
+	_view_composer.parse(doc[_key.c_str()]);
 }

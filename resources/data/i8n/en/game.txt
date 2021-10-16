@@ -30,4 +30,7 @@
 [[game-serve_order]]{{Serve}}
 [[game-clean_table]]{{Clean table}}
 [[game-drop_trash]]{{Drop trash}}
+[[game-hud_tray]]{{Tray}}
+[[game-hud_bar]]{{Bar}}
+[[game-hud_table]]{{Table}}
 
