@@ -149,9 +149,6 @@ void draw::do_draw(
 	draw_background(_screen, _camera, _game);
 	draw_score(_screen, _game.player_score);
 
-	//TODO.... hmmm... the timer should be... sortable. It does not appear now!
-	draw_timer(_screen, _game);
-
 	if(debug) {
 
 		draw_level_number(_screen, _game);
@@ -511,26 +508,6 @@ void draw::draw_score(
 	txt.draw(_screen);
 }
 
-void draw::draw_timer(
-	ldv::screen& _screen, 
-	const app::game& _game
-) {
-
-	int timer=_game.game_seconds - std::floor(_game.current_game_seconds);
-	
-	std::stringstream ss;
-	ss<<std::setw(3)<<std::setfill('0')<<std::to_string(timer);
-
-	ldv::ttf_representation txt{
-		ttf_manager.get("hud", resources.game_hud_font_size),
-		ldv::rgba8(255, 255, 255, 255),
-		ss.str()
-	};
-
-	txt.go_to({160, 52});
-	txt.draw(_screen);
-}
-
 void draw::draw_level_number(
 	ldv::screen& _screen, 
 	const app::game& _game
@@ -620,6 +597,11 @@ void draw::populate(
 ) {
 
 	sortable_components.clear();
+
+	auto timer=new app::draw_timer(_game, ttf_manager, resources);
+	sortable_components.push_back(
+		std::shared_ptr<draw_component>(timer)
+	);
 
 	auto player=new app::draw_player(draw_sprite, draw_info, _game.player_instance, _game.player_tray);
 	sortable_components.push_back(

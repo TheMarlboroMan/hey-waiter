@@ -34,6 +34,7 @@ class game {
 	const world&	get_world() const {return world_instance;}
 	void			reset();
 	bool			is_game_over() const {return current_game_seconds > game_seconds;}
+	int				get_remaining_seconds() const {return game_seconds - std::floor(current_game_seconds);}
 
 	private:
 

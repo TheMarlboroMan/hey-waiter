@@ -1,10 +1,41 @@
 #include <app/draw_component.h>
 #include <app/resources.h>
 
-
 #include <ldv/box_representation.h>
+#include <sstream>
 
 using namespace app;
+
+/////
+//draw timer
+draw_timer::draw_timer(
+	const game& _game, 
+	const ldtools::ttf_manager& _ttf_manager, 
+	const resources& _resources
+):
+	txt_rep{
+		_ttf_manager.get("hud", _resources.game_hud_font_size),
+		ldv::rgba8(255, 255, 255, 255),
+		"..."
+	}
+ {
+
+	timer_fn=[&]() {
+
+		return _game.get_remaining_seconds();
+	};
+}
+
+void draw_timer::draw(
+	ldv::screen& _screen, 
+	const ldv::camera& /*_camera*/
+) const {
+
+	txt_rep.set_text(std::to_string(timer_fn()));
+	//TODO: no magic, please.
+	txt_rep.go_to({150, 56});
+	txt_rep.draw(_screen);
+}
 
 /////
 //draw bar

@@ -5,10 +5,16 @@
 #include <app/trash.h>
 #include <app/player.h>
 #include <app/tray.h>
+#include <app/game.h>
+#include <app/resources.h>
 #include <app/draw_sprite.h>
 
+#include <ldtools/ttf_manager.h>
 #include <ldv/screen.h>
 #include <ldv/camera.h>
+#include <ldv/ttf_representation.h>
+
+#include <functional>
 
 namespace app {
 
@@ -44,6 +50,24 @@ class draw_component {
 	virtual point				origin() const=0;
 	virtual void				draw(ldv::screen&, const ldv::camera&) const=0;
 	virtual void				tick(double)=0;
+};
+
+class draw_timer
+	: public draw_component {
+
+	public:
+
+										draw_timer(const game&, const ldtools::ttf_manager&, const resources&);
+	virtual point						origin() const {return origin_pt;}
+	virtual void						draw(ldv::screen&, const ldv::camera&) const;
+	virtual void						tick(double) {}
+
+	private:
+
+	//TODO: please, no magic!
+	point								origin_pt{0, 424};
+	mutable ldv::ttf_representation	txt_rep;
+	std::function<int ()>				timer_fn;
 };
 
 class draw_bar

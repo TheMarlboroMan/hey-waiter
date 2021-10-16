@@ -4,12 +4,12 @@ A table-waiting game.
 
 # TODO:
 
-- Sort the timer, so it's not behind the bar.
-
 - Placeholder Graphics and sprite tables
 	- Player
 	- Customers
 	- Consumables in player tray and table
+		- This is gonna be VERY interesting, we'd need a set of coordinates
+		per player orientation!
 
 - Design table states so they can be understood:
 	- Customer arriving (an arrow when out of the screen!!!!)
