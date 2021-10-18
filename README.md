@@ -4,6 +4,10 @@ A table-waiting game.
 
 # TODO:
 
+- Draw debug boxes, turn shit on and off somehow.
+- Check what is happening with the order of table and player, looks weird.
+- Check alignment of player.
+
 - Placeholder Graphics and sprite tables
 	- Player
 	- Customers

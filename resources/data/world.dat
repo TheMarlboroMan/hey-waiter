@@ -1,24 +1,21 @@
 world 400 500
 table_margin 10
 table_size 40 40
-player 0 0 30 30
+player 0 0 18 18
 player_speed 200
-table 20 50 L
-table 20 150 L
-table 20 250 L
-table 340 50 R
-table 340 150 R
-table 340 250 R
+table 18 50 L
+table 18 150 L
+table 18 250 L
+table 342 50 R
+table 342 150 R
+table 342 250 R
 bar 140 425 100 30 10
 trash 190 15 20 20 10
 
 obstacle 0 440 400 40
-#obstacle 150 430 110 30
 obstacle 0 370 50 20
 obstacle 100 370 200 20
 obstacle 350 370 50 20
-
-
 
 game_length 180
 score_consumable 300

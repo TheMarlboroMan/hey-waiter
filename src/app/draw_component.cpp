@@ -193,8 +193,17 @@ void draw_player::draw(
 	const ldv::camera& _camera
 ) const {
 
+	int index=0;
+	switch(player_ptr->get_current_face()) {
+
+		case player::facing::north: index=app::resources::spr_player_north; break;
+		case player::facing::south: index=app::resources::spr_player_south; break;
+		case player::facing::east: index=app::resources::spr_player_east; break;
+		case player::facing::west: index=app::resources::spr_player_west; break;
+	}
+
 	sprite_draw.draw(
-		app::resources::spr_table, 
+		index,
 		player_ptr->get_collision_box(), 
 		app::resources::tex_sprites, 
 		_screen,

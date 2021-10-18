@@ -52,7 +52,11 @@ struct resources {
 		spr_hud_consumable_melon=17,
 		spr_hud_consumable_watermelon=18,
 		spr_hud_marker_red=19,
-		spr_hud_marker_gray=20
+		spr_hud_marker_gray=20,
+		spr_player_south=21,
+		spr_player_north=22,
+		spr_player_east=23,
+		spr_player_west=24,
 	};
 };
 

@@ -7,6 +7,9 @@ namespace app {
 class player {
 
 	public:
+	
+	enum class facing {north, south, east, west};
+
 					player(int, int, int, int);
 	void			tick(float);
 	void			set_size(int, int);
@@ -19,6 +22,7 @@ class player {
 	void			set_speed(double _speed) {speed=_speed;}
 	void			reset();
 	void			set_start_position(int, int);
+	facing			get_current_face() const {return current_face;}
 	
 
 	const box&		get_collision_box() const {return collision_box;}
@@ -27,6 +31,7 @@ class player {
 
 	private:
 
+	facing			 current_face{facing::north};
 	box				collision_box,
 					previous_collision_box;
 	point			start_position;

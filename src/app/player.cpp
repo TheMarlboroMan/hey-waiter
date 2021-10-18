@@ -74,6 +74,21 @@ void player::set_motion(
 	double _y
 ) {
 	motion={_x*speed, _y*speed};
+
+	if(_x) {
+
+		current_face=_x < 0
+			? facing::west
+			: facing::east;
+	}
+
+	//north-south prevails over east west.
+	if(_y) {
+
+		current_face=_y < 0
+			? facing::south
+			: facing::north;
+	}
 }
 
 void player::set_start_position(
@@ -87,6 +102,7 @@ void player::set_start_position(
 
 void player::reset() {
 
+	current_face=facing::north;
 	set_position(start_position.x, start_position.y);
 	previous_collision_box=collision_box;
 	motion={0.,0.};

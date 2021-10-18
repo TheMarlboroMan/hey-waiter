@@ -24,8 +24,10 @@ void draw_sprite::draw(
 ) const {
 
 
-	const auto sprite_box=sprite_table.get(_sprite).box;
+	const auto& sprite=sprite_table.get(_sprite);
+	const auto sprite_box=sprite.box;
 	auto origin=to_sprite_point(_position, sprite_box);
+	origin.x+=sprite.disp_x;
 
 	bmp.set_texture(vrm.get_texture(_tex));
 	bmp.set_location({origin, sprite_box.w, sprite_box.h});
