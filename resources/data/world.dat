@@ -1,7 +1,7 @@
 world 400 500
 table_margin 10
 table_size 40 40
-player 0 0 18 18
+player 0 0 23 23
 player_speed 200
 table 18 50 L
 table 18 150 L

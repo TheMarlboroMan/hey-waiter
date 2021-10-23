@@ -93,6 +93,11 @@ void game::loop(
 		i.interact=true;
 	}
 
+	if(_input.is_input_down(input::toggle_debug)) {
+
+		draw_instance.set_debug(!draw_instance.get_debug());
+	}
+
 	game_instance.set_input(i);
 	game_instance.tick(_lid.delta);
 

@@ -33,6 +33,7 @@ class draw {
 						);
 	void				do_draw(ldv::screen&, const ldv::camera&, const app::game&);
 	void				set_debug(bool _val) {debug=_val;}
+	bool				get_debug() const {return debug;}
 	void				populate(const app::game&);
 
 	private:
@@ -46,18 +47,20 @@ class draw {
 	void				set_view_selector(ldtools::view_composer&, int);
 	void				fill_view_with_consumables(ldtools::view_composer&, const std::vector<consumable>);
 	void				draw_background(ldv::screen&, const ldv::camera&, const app::game&);
-	void				draw_table(ldv::screen&, const ldv::camera&, const table&);
-	void				draw_bar(ldv::screen&, const ldv::camera&, const app::bar&);
-	void				draw_obstacle(ldv::screen&, const ldv::camera&, const obstacle&);
-	void				draw_trash(ldv::screen&, const ldv::camera&, const trash&);
-	void				draw_interactions(ldv::screen&, const app::game&);
 	void				draw_fill_tray(ldv::screen&);
 	void				draw_serve(ldv::screen&);
-	void				draw_take_order(ldv::screen&, const app::game&);
 	void				draw_score(ldv::screen&, const app::score&);
-	void				draw_level_number(ldv::screen&, const app::game&);
+
+	void				debug_draw_bar(ldv::screen&, const ldv::camera&, const app::bar&);
+	void				debug_draw_trash(ldv::screen&, const ldv::camera&, const trash&);
+	void				debug_draw_interactions(ldv::screen&, const app::game&);
+	void				debug_draw_take_order(ldv::screen&, const app::game&);
+	std::string			debug_consumable_to_string(const app::consumable&) const;
+	void				debug_draw_player(ldv::screen&, const ldv::camera&, const player&);
+	void				debug_draw_table(ldv::screen&, const ldv::camera&, const table&);
+	void				debug_draw_obstacle(ldv::screen&, const ldv::camera&, const obstacle&);
+	void				debug_draw_level_number(ldv::screen&, const app::game&);
 	ldv::rect			to_video(const box&) const;
-	std::string			consumable_to_string(const app::consumable&) const;
 
 	const app::resources& 						resources;
 	const ldv::resource_manager& 				video_resource_manager;

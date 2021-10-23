@@ -4,23 +4,31 @@ A table-waiting game.
 
 # TODO:
 
-- Draw debug boxes, turn shit on and off somehow.
 - Check what is happening with the order of table and player, looks weird.
-- Check alignment of player.
+
+- Design table states so they can be understood:
+	- Customer arriving (an arrow when out of the screen!!!!)
+		No words, very important, just an arrow with exclamation points, for example!
+	- When the customer arrives, it should come into the table.
+	- Customer calling 
+		- Exclamation bubble?? 
+	 	- with timer!
+	- Customer waiting 
+		- clock thinking bubble
+		- with timer!
+	- Customer eating
+	- Customer leaving
+	- Consumables in bubble, to know what the customer is asking for!!!
+	- Dirty table.
 
 - Placeholder Graphics and sprite tables
 	- Player
+		- Carrying food, maybe separate sprites
+		- Carrying trash! Definitely a separate sprite.
 	- Customers
 	- Consumables in player tray and table
 		- This is gonna be VERY interesting, we'd need a set of coordinates
 		per player orientation!
-
-- Design table states so they can be understood:
-	- Customer arriving (an arrow when out of the screen!!!!)
-	- Customer calling (with timer!)
-	- Customer waiting (with timer!)
-	- Customer eating
-	- Customer leaving
 
 - Definitive graphics for
 	- Bar
@@ -30,6 +38,7 @@ A table-waiting game.
 	- Customers
 	- HUD consumables
 	- Consumables in player tray and table
+
 - Add music
 - Add sounds
 - Help controller explaining the sytems

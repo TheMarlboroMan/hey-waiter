@@ -87,7 +87,8 @@ void state_driver::prepare_input(dfw::kernel& kernel) {
 		{input_description_from_config_token(config.token_from_path("input:right")), input::right},
 		{input_description_from_config_token(config.token_from_path("input:up")), input::up},
 		{input_description_from_config_token(config.token_from_path("input:down")), input::down},
-		{input_description_from_config_token(config.token_from_path("input:interact")), input::interact}
+		{input_description_from_config_token(config.token_from_path("input:interact")), input::interact},
+		{input_description_from_config_token(config.token_from_path("input:toggle_debug")), input::toggle_debug},
 	};
 
 	kernel.init_input_system(pairs);

@@ -151,7 +151,7 @@ void draw::do_draw(
 
 	if(debug) {
 
-		draw_level_number(_screen, _game);
+		debug_draw_level_number(_screen, _game);
 	}
 
 	for(const auto& dr : sortable_components) {
@@ -163,16 +163,17 @@ void draw::do_draw(
 
 		for(const auto& table : _game.tables) {
 
-			draw_table(_screen, _camera, table);
+			debug_draw_table(_screen, _camera, table);
 		}
 
 		for(const auto& obstacle : _game.obstacles) {
 
-			draw_obstacle(_screen, _camera, obstacle);
+			debug_draw_obstacle(_screen, _camera, obstacle);
 		}
 
-		draw_bar(_screen, _camera, _game.bar_instance);
-		draw_trash(_screen, _camera, _game.trash_instance);
+		debug_draw_bar(_screen, _camera, _game.bar_instance);
+		debug_draw_trash(_screen, _camera, _game.trash_instance);
+		debug_draw_player(_screen, _camera, _game.player_instance);
 	}
 
 	//If the game is over, we just want the world drawn.
@@ -185,7 +186,9 @@ void draw::do_draw(
 
 		case game::modes::movement:
 
-			draw_interactions(_screen, _game);
+			if(debug) {
+				debug_draw_interactions(_screen, _game);
+			}
 		break;
 		case game::modes::fill_tray:
 
@@ -205,12 +208,11 @@ void draw::do_draw(
 		break;
 		case game::modes::take_order:
 
-			draw_take_order(_screen, _game);
+			if(debug) {
+
+				debug_draw_take_order(_screen, _game);
+			}
 		break;
-	}
-
-	if(debug) {
-
 	}
 }
 
@@ -249,7 +251,85 @@ void draw::set_view_selector(
 	auto base=_view.get_by_id("bar_slot_0")->get_position();
 	base.x+=(_index * 40);
 	_view.get_by_id("bar_slot_selector")->go_to(base);
+}
 
+void draw::draw_fill_tray(
+	ldv::screen& _screen
+) {
+
+	consumable_selector.draw(_screen, {0, 200});
+	tray_list.draw(_screen, {0, 320});
+}
+
+void draw::update_table(
+	const app::game& _game
+) {
+
+	fill_view_with_consumables(table_list, _game.table_serving.get());
+}	
+
+void draw::draw_serve(
+	ldv::screen& _screen
+) {
+
+	tray_list.draw(_screen, {0, 200});
+	table_list.draw(_screen, {0, 320});
+}
+
+void draw::draw_score(
+	ldv::screen& _screen, 
+	const app::score& _score
+) {
+
+	std::stringstream ss;
+	ss<<std::setw(8)<<std::setfill('0')<<std::to_string(_score.get());
+
+	ldv::ttf_representation txt{
+		ttf_manager.get("hud", resources.game_hud_font_size),
+		ldv::rgba8(255, 255, 255, 255),
+		ss.str()
+	};
+
+	//TODO: it would be great if there was a layout for this and others,
+	//so we can do this shit better.
+	txt.go_to({278, 17});
+	txt.draw(_screen);
+}
+
+
+void draw::populate(
+	const app::game& _game
+) {
+
+	sortable_components.clear();
+
+	auto timer=new app::draw_timer(_game, ttf_manager, resources);
+	sortable_components.push_back(
+		std::shared_ptr<draw_component>(timer)
+	);
+
+	auto player=new app::draw_player(draw_sprite, draw_info, _game.player_instance, _game.player_tray);
+	sortable_components.push_back(
+		std::shared_ptr<draw_component>(player)
+	);
+
+	auto bar=new app::draw_bar{draw_sprite, draw_info, _game.bar_instance};
+	sortable_components.push_back(
+		std::shared_ptr<draw_component>(bar)
+	);
+
+	auto trash=new app::draw_trash{draw_sprite, draw_info, _game.trash_instance};
+	sortable_components.push_back(
+		std::shared_ptr<draw_component>(trash)
+	);
+
+	for(const auto& table_instance : _game.tables) {
+
+		auto table=new app::draw_table{draw_sprite, draw_info, table_instance};
+		sortable_components.push_back(
+			std::shared_ptr<draw_component>(table)
+		);
+	}
 }
 
 void draw::fill_view_with_consumables(
@@ -313,7 +393,10 @@ void draw::update_tray(
 	fill_view_with_consumables(tray_list, _game.player_tray.get());
 }
 
-void draw::draw_obstacle(
+////////////////////////////////////
+//debug methods
+
+void draw::debug_draw_obstacle(
 	ldv::screen& _screen, 
 	const ldv::camera& _camera, 
 	const obstacle& _obstacle
@@ -330,55 +413,67 @@ void draw::draw_obstacle(
 	collision_box.draw(_screen, _camera);
 }
 
-void draw::draw_table(
+void draw::debug_draw_player(
+	ldv::screen& _screen,
+	const ldv::camera& _camera, 
+	const player& _player
+) {
+
+	ldv::box_representation collision_box(
+		to_video(_player.get_collision_box()),
+		ldv::rgba8(255, 255, 255, 128)
+	);
+
+	collision_box.set_blend(ldv::representation::blends::alpha);
+	collision_box.draw(_screen, _camera);
+}
+
+void draw::debug_draw_table(
 	ldv::screen& _screen,
 	const ldv::camera& _camera,
 	const table& _table
 ) {
 	
-	if(debug) {
+	auto table_color=ldv::rgba8(64, 64, 64, 128);
 
-		auto table_color=ldv::rgba8(64, 64, 64, 128);
-
-		if(_table.is_demanding_attention()) {
-			//demanding table: blue,
-			table_color=ldv::rgba8(0, 0, 192, 128);
-		}
-		else if(_table.is_waiting_order()) {
-			//waiting table: yellow
-			table_color=ldv::rgba8(192, 192, 0, 128);
-		}
-		else if(_table.is_dirty()) {
-			//dirty table: red
-			table_color=ldv::rgba8(192, 0, 0, 128);
-		}
-		else if(_table.is_consuming()) {
-			//eating table: green
-			table_color=ldv::rgba8(0, 192, 0, 128);
-		}
-		else if(_table.is_customer_arriving()) {
-
-			//a customer is coming: white
-			table_color=ldv::rgba8(255, 255, 255, 128);
-		}
-		else if(_table.is_customer_leaving()) {
-
-			//a customer is coming: black
-			table_color=ldv::rgba8(0, 0, 0, 128);
-		}
-
-		ldv::box_representation collision_box(
-			to_video(_table.get_collision_box()),
-			table_color
-		);
-
-		collision_box.set_blend(ldv::representation::blends::alpha);
-		collision_box.draw(_screen, _camera);
+	if(_table.is_demanding_attention()) {
+		//demanding table: blue,
+		table_color=ldv::rgba8(0, 0, 192, 128);
 	}
+	else if(_table.is_waiting_order()) {
+		//waiting table: yellow
+		table_color=ldv::rgba8(192, 192, 0, 128);
+	}
+	else if(_table.is_dirty()) {
+		//dirty table: red
+		table_color=ldv::rgba8(192, 0, 0, 128);
+	}
+	else if(_table.is_consuming()) {
+		//eating table: green
+		table_color=ldv::rgba8(0, 192, 0, 128);
+	}
+	else if(_table.is_customer_arriving()) {
+
+		//a customer is coming: white
+		table_color=ldv::rgba8(255, 255, 255, 128);
+	}
+	else if(_table.is_customer_leaving()) {
+
+		//a customer is coming: black
+		table_color=ldv::rgba8(0, 0, 0, 128);
+	}
+
+	ldv::box_representation collision_box(
+		to_video(_table.get_collision_box()),
+		table_color
+	);
+
+	collision_box.set_blend(ldv::representation::blends::alpha);
+	collision_box.draw(_screen, _camera);
 }
 
 
-void draw::draw_interactions(
+void draw::debug_draw_interactions(
 	ldv::screen& _screen,
 	const app::game& _game
 ) {
@@ -422,30 +517,8 @@ void draw::draw_interactions(
 	txt.draw(_screen);
 }
 
-void draw::draw_fill_tray(
-	ldv::screen& _screen
-) {
 
-	consumable_selector.draw(_screen, {0, 200});
-	tray_list.draw(_screen, {0, 320});
-}
-
-void draw::update_table(
-	const app::game& _game
-) {
-
-	fill_view_with_consumables(table_list, _game.table_serving.get());
-}	
-
-void draw::draw_serve(
-	ldv::screen& _screen
-) {
-
-	tray_list.draw(_screen, {0, 200});
-	table_list.draw(_screen, {0, 320});
-}
-
-void draw::draw_take_order(
+void draw::debug_draw_take_order(
 	ldv::screen& _screen, 
 	const app::game& _game
 ) {
@@ -457,7 +530,7 @@ void draw::draw_take_order(
 	ss<<"just get me ";
 	for(const auto& consumable : order.products) {
 
-		ss<<consumable_to_string(consumable)<<", ";
+		ss<<debug_consumable_to_string(consumable)<<", ";
 	}
 
 	ldv::ttf_representation txt{
@@ -469,7 +542,7 @@ void draw::draw_take_order(
 	txt.draw(_screen);
 }
 
-std::string draw::consumable_to_string(
+std::string draw::debug_consumable_to_string(
 	const app::consumable& _consumable
 ) const {
 
@@ -488,27 +561,7 @@ std::string draw::consumable_to_string(
 	return "???";
 }
 
-void draw::draw_score(
-	ldv::screen& _screen, 
-	const app::score& _score
-) {
-
-	std::stringstream ss;
-	ss<<std::setw(8)<<std::setfill('0')<<std::to_string(_score.get());
-
-	ldv::ttf_representation txt{
-		ttf_manager.get("hud", resources.game_hud_font_size),
-		ldv::rgba8(255, 255, 255, 255),
-		ss.str()
-	};
-
-	//TODO: it would be great if there was a layout for this and others,
-	//so we can do this shit better.
-	txt.go_to({278, 17});
-	txt.draw(_screen);
-}
-
-void draw::draw_level_number(
+void draw::debug_draw_level_number(
 	ldv::screen& _screen, 
 	const app::game& _game
 ) {
@@ -543,87 +596,45 @@ void draw::draw_background(
 	bg.draw(_screen, _camera);
 }
 
-void draw::draw_bar(
+void draw::debug_draw_bar(
 	ldv::screen& _screen,
 	const ldv::camera& _camera,
 	const app::bar& _bar
 ) {
 
-	if(debug) {
+	ldv::box_representation bar_box(
+		to_video(_bar.get_interaction_box()),
+		ldv::rgba8(255, 0, 0, 128)
+	);
+	bar_box.set_blend(ldv::representation::blends::alpha);
+	bar_box.draw(_screen, _camera);
 
-		ldv::box_representation bar_box(
-			to_video(_bar.get_interaction_box()),
-			ldv::rgba8(255, 0, 0, 128)
-		);
-		bar_box.set_blend(ldv::representation::blends::alpha);
-		bar_box.draw(_screen, _camera);
-
-		ldv::box_representation collision_box(
-			to_video(_bar.get_collision_box()),
-			ldv::rgba8(0, 0, 0, 128)
-		);
-		collision_box.set_blend(ldv::representation::blends::alpha);
-		collision_box.draw(_screen, _camera);
-	}
+	ldv::box_representation collision_box(
+		to_video(_bar.get_collision_box()),
+		ldv::rgba8(0, 0, 0, 128)
+	);
 }
 
-void draw::draw_trash(
+void draw::debug_draw_trash(
 	ldv::screen& _screen, 
 	const ldv::camera& _camera, 
 	const trash& _trash
 ) {
 
-	if(debug) {
+	ldv::box_representation trash_box(
+		to_video(_trash.get_collision_box()),
+		ldv::rgba8(128, 0, 0, 128)
+	);
+	trash_box.set_blend(ldv::representation::blends::alpha);
+	trash_box.draw(_screen, _camera);
 
-		ldv::box_representation trash_box(
-			to_video(_trash.get_collision_box()),
-			ldv::rgba8(128, 0, 0, 128)
-		);
-		trash_box.set_blend(ldv::representation::blends::alpha);
-		trash_box.draw(_screen, _camera);
+	ldv::box_representation collision_box(
+		to_video(_trash.get_collision_box()),
+		ldv::rgba8(0, 0, 0, 128)
+	);
+	collision_box.set_blend(ldv::representation::blends::alpha);
+	collision_box.draw(_screen, _camera);
 
-		ldv::box_representation collision_box(
-			to_video(_trash.get_collision_box()),
-			ldv::rgba8(0, 0, 0, 128)
-		);
-		collision_box.set_blend(ldv::representation::blends::alpha);
-		collision_box.draw(_screen, _camera);
-
-	}
 }
 
-void draw::populate(
-	const app::game& _game
-) {
-
-	sortable_components.clear();
-
-	auto timer=new app::draw_timer(_game, ttf_manager, resources);
-	sortable_components.push_back(
-		std::shared_ptr<draw_component>(timer)
-	);
-
-	auto player=new app::draw_player(draw_sprite, draw_info, _game.player_instance, _game.player_tray);
-	sortable_components.push_back(
-		std::shared_ptr<draw_component>(player)
-	);
-
-	auto bar=new app::draw_bar{draw_sprite, draw_info, _game.bar_instance};
-	sortable_components.push_back(
-		std::shared_ptr<draw_component>(bar)
-	);
-
-	auto trash=new app::draw_trash{draw_sprite, draw_info, _game.trash_instance};
-	sortable_components.push_back(
-		std::shared_ptr<draw_component>(trash)
-	);
-
-	for(const auto& table_instance : _game.tables) {
-
-		auto table=new app::draw_table{draw_sprite, draw_info, table_instance};
-		sortable_components.push_back(
-			std::shared_ptr<draw_component>(table)
-		);
-	}
-}
 

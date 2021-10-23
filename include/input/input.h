@@ -9,7 +9,8 @@ up,
 down,
 left,
 right,
-interact
+interact,
+toggle_debug
 };
 
 }
