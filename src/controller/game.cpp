@@ -21,7 +21,8 @@ game::game(
 		_dc.get_resources(), 
 		_dc.get_video_resource_manager(), 
 		_dc.get_ttf_manager(),
-		_dc.get_sprite_table(),  
+		_dc.get_sprite_table(),
+		_dc.get_animation_table(),
 		_dc.get_i8n(),
 		_dc.get_draw_sprite(),
 		_dc.get_layout()
@@ -100,6 +101,7 @@ void game::loop(
 
 	game_instance.set_input(i);
 	game_instance.tick(_lid.delta);
+	draw_instance.tick(_lid.delta);
 
 	if(game_instance.is_game_over()) {
 

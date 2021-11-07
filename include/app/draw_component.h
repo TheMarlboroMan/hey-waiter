@@ -129,7 +129,7 @@ class draw_player
 								draw_player(const draw_sprite&, const draw_info&, const player&, const tray&);
 	virtual point				origin() const {return player_ptr->get_collision_box().origin;}
 	virtual void				draw(ldv::screen&, const ldv::camera&) const;
-	virtual void				tick(double) {}
+	virtual void				tick(double);
 
 	private:
 
@@ -137,6 +137,7 @@ class draw_player
 	const app::draw_info&		draw_info;
 	player const *				player_ptr;
 	tray const *				tray_ptr;
+	double						time;
 };
 
 }

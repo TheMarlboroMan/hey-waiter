@@ -183,9 +183,25 @@ draw_player::draw_player(
 	sprite_draw{_draw_sprite},
 	draw_info{_draw_info},
 	player_ptr{&_player},
-	tray_ptr{&_tray}
+	tray_ptr{&_tray},
+	time{0.0f}
 {
 
+}
+
+void draw_player::tick(
+	double _delta
+) {
+
+	const auto& motion=player_ptr->get_motion();
+	if(!motion.x && !motion.y) {
+	
+		time=0.f;
+	}
+	else {
+
+		time+=_delta;
+	}
 }
 
 void draw_player::draw(
@@ -194,39 +210,44 @@ void draw_player::draw(
 ) const {
 
 	int index=0;
-	switch(player_ptr->get_current_face()) {
 
-		case player::facing::north: index=app::resources::spr_player_north; break;
-		case player::facing::south: index=app::resources::spr_player_south; break;
-		case player::facing::east: index=app::resources::spr_player_east; break;
-		case player::facing::west: index=app::resources::spr_player_west; break;
+	//Static player...
+	if(!time) {
+
+		switch(player_ptr->get_current_face()) {
+
+			case player::facing::north: index=app::resources::spr_player_north; break;
+			case player::facing::south: index=app::resources::spr_player_south; break;
+			case player::facing::east: index=app::resources::spr_player_east; break;
+			case player::facing::west: index=app::resources::spr_player_west; break;
+		}
+
+		sprite_draw.draw(
+			index,
+			player_ptr->get_collision_box(), 
+			app::resources::tex_sprites, 
+			_screen,
+			_camera
+		);
 	}
+	else{
 
-	sprite_draw.draw(
-		index,
-		player_ptr->get_collision_box(), 
-		app::resources::tex_sprites, 
-		_screen,
-		_camera
-	);
+		switch(player_ptr->get_current_face()) {
 
-/*
-	auto player_color=ldv::rgba8(255, 255, 255, 255);
-	if(tray_ptr->has_trash()) {
+			case player::facing::north: index=app::resources::anm_player_north; break;
+			case player::facing::south: index=app::resources::anm_player_south; break;
+			case player::facing::east: index=app::resources::anm_player_east; break;
+			case player::facing::west: index=app::resources::anm_player_west; break;
+		}
 
-		player_color=ldv::rgba8(255, 0, 0, 255);
+		sprite_draw.anim(
+			index,
+			time,
+			player_ptr->get_collision_box(), 
+			app::resources::tex_sprites, 
+			_screen,
+			_camera
+		);
 	}
-	else if(!tray_ptr->is_empty()) {
-
-		player_color=ldv::rgba8(0, 255, 0, 255);
-	}
-
-TODO: There's no "to video".
-	ldv::box_representation player_box(
-		to_video(player_ptr->get_collision_box()),
-		player_color
-	);
-	player_box.draw(_screen, _camera);
-*/
 }
 

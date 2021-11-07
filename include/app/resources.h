@@ -54,9 +54,16 @@ struct resources {
 		spr_hud_marker_red=19,
 		spr_hud_marker_gray=20,
 		spr_player_south=21,
-		spr_player_north=22,
-		spr_player_east=23,
-		spr_player_west=24,
+		spr_player_north=24,
+		spr_player_east=27,
+		spr_player_west=30,
+	};
+
+	enum animations {
+		anm_player_south=1,
+		anm_player_north=2,
+		anm_player_east=3,
+		anm_player_west=4
 	};
 };
 

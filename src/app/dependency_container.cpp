@@ -15,6 +15,7 @@
 #include <lm/logger.h>
 #include <ldtools/ttf_manager.h>
 #include <ldtools/sprite_table.h>
+#include <ldtools/animation_table.h>
 #include <tools/i8n.h>
 
 #include <fstream>
@@ -134,6 +135,19 @@ ldtools::sprite_table& dependency_container::get_sprite_table() {
 	return *sprite_table;
 }
 
+ldtools::animation_table& dependency_container::get_animation_table() {
+
+	if(nullptr==animation_table.get()) {
+
+		animation_table.reset(new ldtools::animation_table{
+			get_sprite_table(),
+			get_env().build_data_path("animations.txt")}
+		);
+	}
+
+	return *animation_table;
+}
+
 ldtools::ttf_manager& dependency_container::get_ttf_manager() {
 
 	if(nullptr==ttf_manager.get()) {
@@ -216,6 +230,7 @@ app::draw_sprite& dependency_container::get_draw_sprite() {
 
 		draw_sprite.reset(new app::draw_sprite{
 			get_sprite_table(),
+			get_animation_table(),
 			get_video_resource_manager()
 		});
 	}

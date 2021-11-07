@@ -5,7 +5,7 @@
 namespace lm {class logger;}
 namespace dfw {class audio; class input;}
 namespace dfwimpl {class config;}
-namespace ldtools {class ttf_manager; class sprite_table;}
+namespace ldtools {class ttf_manager; class sprite_table; class animation_table;}
 namespace lda {class resource_manager;}
 namespace tools {class i8n;}
 namespace ldv {class screen; class resource_manager;}
@@ -34,6 +34,7 @@ class dependency_container {
 	app::layout&							get_layout();
 	app::draw_sprite&						get_draw_sprite();
 	ldtools::sprite_table&					get_sprite_table();
+	ldtools::animation_table&				get_animation_table();
 
 	const app::env&							get_env() const {return *env;}
 	const ldv::screen&						get_screen() const {return *screen;}
@@ -65,6 +66,7 @@ class dependency_container {
 	std::unique_ptr<app::layout>			layout;
 	std::unique_ptr<app::draw_sprite>		draw_sprite;
 	std::unique_ptr<ldtools::sprite_table>	sprite_table;
+	std::unique_ptr<ldtools::animation_table> animation_table;
 
 	//injected deps.
 	app::env const *						env{nullptr};

@@ -6,9 +6,11 @@ using namespace app;
 
 draw_sprite::draw_sprite(
 	const ldtools::sprite_table& _sprite_table,
+	const ldtools::animation_table& _animation_table,
 	const ldv::resource_manager& _vrm
 ):
 	sprite_table{_sprite_table},
+	animation_table{_animation_table},
 	vrm{_vrm}
 {
 
@@ -25,6 +27,28 @@ void draw_sprite::draw(
 
 
 	const auto& sprite=sprite_table.get(_sprite);
+	const auto sprite_box=sprite.box;
+	auto origin=to_sprite_point(_position, sprite_box);
+	origin.x-=sprite.disp_x;
+
+	bmp.set_texture(vrm.get_texture(_tex));
+	bmp.set_location({origin, sprite_box.w, sprite_box.h});
+	bmp.set_clip(sprite_box);
+	bmp.draw(_screen, _camera);
+}
+
+void draw_sprite::anim(
+	int _index, 
+	float _time, 
+	const box& _position, 
+	int _tex, 
+	ldv::screen& _screen, 
+	const ldv::camera& _camera
+) const {
+
+	const auto& anim=animation_table.get(_index);
+	const auto& line=anim.get_for_time(_time);
+	const auto& sprite=line.frame;
 	const auto sprite_box=sprite.box;
 	auto origin=to_sprite_point(_position, sprite_box);
 	origin.x-=sprite.disp_x;

@@ -4,8 +4,6 @@ A table-waiting game.
 
 # TODO:
 
-- Check what is happening with the order of table and player, looks weird.
-
 - Design table states so they can be understood:
 	- Customer arriving (an arrow when out of the screen!!!!)
 		No words, very important, just an arrow with exclamation points, for example!
@@ -20,6 +18,8 @@ A table-waiting game.
 	- Customer leaving
 	- Consumables in bubble, to know what the customer is asking for!!!
 	- Dirty table.
+
+- Redesign items so they are all age-appropriate.
 
 - Placeholder Graphics and sprite tables
 	- Player

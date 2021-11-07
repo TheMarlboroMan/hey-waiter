@@ -26,7 +26,8 @@ class draw {
 							const app::resources&, 
 							const ldv::resource_manager&,
 							const ldtools::ttf_manager&,
-							const ldtools::sprite_table&, 
+							const ldtools::sprite_table&,
+							const ldtools::animation_table&,  
 							const tools::i8n&,
 							const app::draw_sprite&,
 							const app::layout&
@@ -35,6 +36,7 @@ class draw {
 	void				set_debug(bool _val) {debug=_val;}
 	bool				get_debug() const {return debug;}
 	void				populate(const app::game&);
+	void				tick(float);
 
 	private:
 
@@ -66,12 +68,14 @@ class draw {
 	const ldv::resource_manager& 				video_resource_manager;
 	const ldtools::ttf_manager&					ttf_manager;
 	const ldtools::sprite_table&				sprite_table;
+	const ldtools::animation_table&				animation_table;
 	const tools::i8n&							i8n;
 	const app::draw_sprite&						draw_sprite;
 	ldtools::view_composer						consumable_selector,
 												tray_list,
 												table_list;
 	std::vector<std::shared_ptr<draw_component>>	sortable_components;
+	std::shared_ptr<draw_player>				draw_player_instance;
 //	std::vector<ldv::bitmap_representation*>	tray_items;
 	std::vector<consumable>		 				bar_item_order;
 	app::draw_info								draw_info;

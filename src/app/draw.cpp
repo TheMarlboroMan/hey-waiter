@@ -17,7 +17,8 @@ draw::draw(
 	const app::resources& _resources,
 	const ldv::resource_manager& _vrm,
 	const ldtools::ttf_manager& _ttf_manager,
-	const ldtools::sprite_table& _sprite_table,  
+	const ldtools::sprite_table& _sprite_table,
+	const ldtools::animation_table& _animation_table, 
 	const tools::i8n& _i8n,
 	const app::draw_sprite& _draw_sprite,
 	const app::layout& _layout
@@ -26,6 +27,7 @@ draw::draw(
 	video_resource_manager{_vrm},
 	ttf_manager{_ttf_manager},
 	sprite_table{_sprite_table},
+	animation_table{_animation_table},
 	i8n{_i8n},
 	draw_sprite{_draw_sprite},
 	bar_item_order{
@@ -308,10 +310,8 @@ void draw::populate(
 		std::shared_ptr<draw_component>(timer)
 	);
 
-	auto player=new app::draw_player(draw_sprite, draw_info, _game.player_instance, _game.player_tray);
-	sortable_components.push_back(
-		std::shared_ptr<draw_component>(player)
-	);
+	draw_player_instance.reset(new app::draw_player(draw_sprite, draw_info, _game.player_instance, _game.player_tray));
+	sortable_components.push_back(draw_player_instance);
 
 	auto bar=new app::draw_bar{draw_sprite, draw_info, _game.bar_instance};
 	sortable_components.push_back(
@@ -637,4 +637,10 @@ void draw::debug_draw_trash(
 
 }
 
+void draw::tick(
+	float _delta
+) {
 
+	//will work as long as populate() is called before tick...
+	draw_player_instance->tick(_delta);
+}

@@ -23,6 +23,7 @@ class player {
 	void			reset();
 	void			set_start_position(int, int);
 	facing			get_current_face() const {return current_face;}
+	const vector&	get_motion() const {return motion;}
 	
 
 	const box&		get_collision_box() const {return collision_box;}
